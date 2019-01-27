@@ -10,7 +10,6 @@ import UIKit
 import WebKit
 import ios_system
 
-public weak var viewController: ViewController!
 public var serverAddress: URL!
 var progressView: UIProgressView!
 
@@ -49,9 +48,9 @@ func convertCArguments(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutablePoin
 @_cdecl("openURL")
 public func openURL(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>?) -> Int32 {
     let usage = """
-                usage: open-file /path/to/file
+                usage: openURL url
 
-                loads the specified file as a web page
+                loads the specified url in the WkWebView of the application
                 """
 
     guard let args = convertCArguments(argc: argc, argv: argv) else {
@@ -73,11 +72,11 @@ public func openURL(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutablePointer
     return 0
 }
 
-public class ViewController: UIViewController, WKNavigationDelegate {
+class ViewController: UIViewController, WKNavigationDelegate {
 
     var webView: WKWebView!
     
-    public override func loadView() {
+    override func loadView() {
         webView = WKWebView()
         webView.configuration.preferences.javaScriptEnabled = true
         webView.configuration.preferences.javaScriptCanOpenWindowsAutomatically = true
@@ -85,16 +84,25 @@ public class ViewController: UIViewController, WKNavigationDelegate {
         webView.configuration.preferences.setValue(true, forKey: "shouldAllowUserInstalledFonts")
 
         webView.navigationDelegate = self
+        webView.uiDelegate = self
         view = webView
     }
     
-    public override func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
-        viewController = self
-        
+        // Wait until the Jupyter notebook has started
         while (serverAddress == nil) { }
         webView.load(URLRequest(url: serverAddress))
         webView.allowsBackForwardNavigationGestures = true
     }
+    
 }
 
+extension ViewController: WKUIDelegate {
+    func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+        if navigationAction.targetFrame == nil {
+            webView.load(navigationAction.request)
+        }
+        return nil
+    }
+}

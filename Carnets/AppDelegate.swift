@@ -27,7 +27,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ios_system("cd $HOME/Documents/")
         jupyterQueue.async {
             // start the Jupyter notebook server:
-            ios_system("jupyter-notebook &> notebook.log")
+            // Final version: with logging (maybe in ~/Library?)
+            // ios_system("jupyter-notebook &> notebook.log")
+            // Debug version: output to console:
+            ios_system("jupyter-notebook")
         }
         // (the server will call openURL with the name of the local file)
         return true
