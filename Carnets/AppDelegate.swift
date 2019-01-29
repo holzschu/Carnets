@@ -26,6 +26,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         replaceCommand("openurl", "openURL", true)
         // having multiple file managers makes the app unstable, so use ios_system calls:
         ios_system("cd $HOME/Documents/")
+        // When it quits normally, the Jupyter server removes these files
+        // If it crashes, it doesn't. So we do some cleanup before the start.
+        ios_system("rm $HOME/Library/Jupyter/runtime/*.html")
+        ios_system("rm $HOME/Library/Jupyter/runtime/*.json")
         startNotebookServer()
         return true
     }
