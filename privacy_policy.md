@@ -1,4 +1,4 @@
-#Privacy policy for Carnets
+# Privacy policy for Carnets
 
 	**Carnets** is a Jupyter notebook. It runs entirely locally, on your iOS device. It does not need a network connection. 
 	
