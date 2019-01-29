@@ -72,16 +72,33 @@ public func openURL(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutablePointer
     return 0
 }
 
-class ViewController: UIViewController, WKNavigationDelegate {
+class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
+
+
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        // For debugging:
+        // print("JavaScript is sending a message.body: \(message.body)") // (quit)
+        // print("JavaScript is sending a message.name: \(message.name)") // (Carnets)
+        let cmd:NSString = message.body as! NSString
+        if (cmd == "quit") {
+            UIControl().sendAction(#selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)
+        }
+    }
+    
 
     var webView: WKWebView!
     
     override func loadView() {
-        webView = WKWebView()
-        webView.configuration.preferences.javaScriptEnabled = true
-        webView.configuration.preferences.javaScriptCanOpenWindowsAutomatically = true
-        webView.configuration.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
-        webView.configuration.preferences.setValue(true, forKey: "shouldAllowUserInstalledFonts")
+        let contentController = WKUserContentController();
+        contentController.add(self, name: "Carnets")
+        let config = WKWebViewConfiguration()
+        config.userContentController = contentController
+        config.preferences.javaScriptEnabled = true
+        config.preferences.javaScriptCanOpenWindowsAutomatically = true
+        config.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
+        config.preferences.setValue(true, forKey: "shouldAllowUserInstalledFonts")
+
+        webView = WKWebView(frame: .zero, configuration: config)
 
         webView.navigationDelegate = self
         webView.uiDelegate = self
