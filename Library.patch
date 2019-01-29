@@ -1,0 +1,270 @@
+diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/edit/js/main.min.js Library/lib/python3.7/site-packages/notebook/static/edit/js/main.min.js
+--- Library_orig/lib/python3.7/site-packages/notebook/static/edit/js/main.min.js	2019-01-06 20:47:45.000000000 +0100
++++ Library/lib/python3.7/site-packages/notebook/static/edit/js/main.min.js	2019-01-29 16:04:08.000000000 +0100
+@@ -35216,17 +35216,22 @@
+         
+         //  File
+         this.element.find('#new-file').click(function () {
+-            var w = window.open(undefined, IPython._target);
++        	// iOS: don't open a window until you know the URL
++            // var w = window.open(undefined, IPython._target);
+             // Create a new file in the current directory
+             var parent = utils.url_path_split(editor.file_path)[0];
+             editor.contents.new_untitled(parent, {type: "file"}).then(
+                 function (data) {
+-                    w.location = utils.url_path_join(
+-                        that.base_url, 'edit', utils.encode_uri_components(data.path)
++                    // w.location = utils.url_path_join(
++                    //     that.base_url, 'edit', utils.encode_uri_components(data.path)
++                    // );
++                    var w = window.open(utils.url_path_join(
++                        that.base_url, 'edit', utils.encode_uri_components(data.path))
+                     );
+                 },
+                 function(error) {
+-                    w.close();
++                    // w.close();
++                    window.webkit.messageHandlers.Carnets.postMessage("exception:new-fileFailed"); 
+                     dialog.modal({
+                         title : 'Creating New File Failed',
+                         body : "The error was: " + error.message,
+@@ -36587,4 +36592,4 @@
+ define("edit/js/main", function(){});
+ 
+ 
+-//# sourceMappingURL=main.min.js.map
+\ No newline at end of file
++//# sourceMappingURL=main.min.js.map
+diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/notebook/js/main.min.js Library/lib/python3.7/site-packages/notebook/static/notebook/js/main.min.js
+--- Library_orig/lib/python3.7/site-packages/notebook/static/notebook/js/main.min.js	2019-01-06 20:47:45.000000000 +0100
++++ Library/lib/python3.7/site-packages/notebook/static/notebook/js/main.min.js	2019-01-29 15:58:44.000000000 +0100
+@@ -45357,7 +45357,8 @@
+     Notebook.prototype.copy_notebook = function () {
+         var that = this;
+         var base_url = this.base_url;
+-        var w = window.open('', IPython._target);
++        // iOS: don't open a window until you know the URL
++        // var w = window.open('', IPython._target);
+         var parent = utils.url_path_split(this.notebook_path)[0];
+         var p;
+         if (this.dirty && this.writable) {
+@@ -45368,12 +45369,17 @@
+         return p.then(function () {
+             return that.contents.copy(that.notebook_path, parent).then(
+                 function (data) {
+-                    w.location = utils.url_path_join(
++                	url = utils.url_path_join(
+                         base_url, 'notebooks', utils.encode_uri_components(data.path)
+                     );
++                    var w = window.open(url);
++                    // w.location = utils.url_path_join(
++                    //    base_url, 'notebooks', utils.encode_uri_components(data.path)
++                    // );
+                 },
+                 function(error) {
+-                    w.close();
++                    // w.close();
++                    window.webkit.messageHandlers.Carnets.postMessage("exception:prototype.copy_notebook"); 
+                     that.events.trigger('notebook_copy_failed', error);
+                 }
+             );
+@@ -46774,13 +46780,16 @@
+     };
+ 
+     MenuBar.prototype._new_window = function(url) {
+-        var w = window.open('', IPython._target);
++        // iOS: don't open a window until you know its url
++        // var w = window.open('', IPython._target);
+         if (this.notebook.dirty && this.notebook.writable) {
+             this.notebook.save_notebook().then(function() {
+-                w.location = url;
++                // w.location = url;
++                var w = window.open(url);
+             });
+         } else {
+-            w.location = url;
++            // w.location = url;
++            var w = window.open(url);
+         }
+     };
+     
+@@ -49682,8 +49691,8 @@
+     };
+ 
+     KernelSelector.prototype.new_notebook = function (kernel_name) {
+-        
+-        var w = window.open('', IPython._target);
++        // iOS: don't open the window until you know the URL
++        // var w = window.open('', IPython._target);
+         // Create a new notebook in the same path as the current
+         // notebook's path.
+         var that = this;
+@@ -49695,10 +49704,12 @@
+                     utils.encode_uri_components(data.path)
+                 );
+                 url += "?kernel_name=" + kernel_name;
+-                w.location = url;
++                var w = window.open(url);
++                // w.location = url;
+             },
+             function(error) {
+-                w.close();
++                // w.close();
++                window.webkit.messageHandlers.Carnets.postMessage("exception:prototype.new_notebook"); 
+                 dialog.modal({
+                     title : i18n.msg._('Creating Notebook Failed'),
+                     body : i18n.msg.sprintf(i18n.msg._("The error was: %s"), error.message),
+@@ -50591,4 +50602,4 @@
+ define("notebook/js/main", function(){});
+ 
+ 
+-//# sourceMappingURL=main.min.js.map
+\ No newline at end of file
++//# sourceMappingURL=main.min.js.map
+diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/tree/js/main.min.js Library/lib/python3.7/site-packages/notebook/static/tree/js/main.min.js
+--- Library_orig/lib/python3.7/site-packages/notebook/static/tree/js/main.min.js	2019-01-06 20:47:46.000000000 +0100
++++ Library/lib/python3.7/site-packages/notebook/static/tree/js/main.min.js	2019-01-29 16:05:05.000000000 +0100
+@@ -27877,14 +27877,20 @@
+         if (!NotebookList._bound_singletons) {
+             NotebookList._bound_singletons = true;
+             $('#new-file').click(function(e) {
+-                var w = window.open('', IPython._target);
++                // iOS: don't open a window until you know the URL
++                // var w = window.open('', IPython._target);
+                 that.contents.new_untitled(that.notebook_path || '', {type: 'file', ext: '.txt'}).then(function(data) {
+-                    w.location = utils.url_path_join(
++                    var url = utils.url_path_join(
+                         that.base_url, 'edit',
+-                        utils.encode_uri_components(data.path)
+-                    );
++                        utils.encode_uri_components(data.path));
++                    var w = window.open(url);
++                    // w.location = utils.url_path_join(
++                    //     that.base_url, 'edit',
++                    //     utils.encode_uri_components(data.path)
++                    // );
+                 }).catch(function (e) {
+-                    w.close();
++                    // w.close();
++                    window.webkit.messageHandlers.Carnets.postMessage("exception:fileCreateFailed"); 
+                     dialog.modal({
+                         title: i18n.msg._('Creating File Failed'),
+                         body: $('<div/>')
+@@ -29508,18 +29514,26 @@
+         if (event) {
+             event.preventDefault();
+         }
+-        var w = window.open('#', IPython._target);
++        // iOS: don't open a window until you know its URL.
++        // var w = window.open('#', IPython._target);
+         var base_url = this.base_url;
+         var settings = {
+             type : "POST",
+             dataType: "json",
+             success : function (data, status, xhr) {
+                 var name = data.name;
+-                w.location = utils.url_path_join(base_url, 'terminals', 
++                // iOS:
++                var urlw = utils.url_path_join(base_url, 'terminals', 
+                     utils.encode_uri_components(name));
++                window.webkit.messageHandlers.Carnets.postMessage(urlw); 
++                var w = window.open(urlw);
++                // not iOS:
++                // w.location = utils.url_path_join(base_url, 'terminals', 
++                //    utils.encode_uri_components(name));
+             },
+             error : function(jqXHR, status, error){
+-                w.close();
++                // w.close();
++                window.webkit.messageHandlers.Carnets.postMessage("exception:terminalOpenFailed"); 
+                 utils.log_ajax_error(jqXHR, status, error);
+             },
+         };
+@@ -29668,7 +29682,9 @@
+         /** create and open a new notebook */
+         var that = this;
+         kernel_name = kernel_name || this.default_kernel;
+-        var w = window.open(undefined, IPython._target);
++		window.webkit.messageHandlers.Carnets.postMessage("new_notebook"); 
++		// iOS: don't open a window until you know the URL
++        // var w = window.open(undefined, IPython._target);
+         var dir_path = $('body').attr('data-notebook-path');
+         this.contents.new_untitled(dir_path, {type: "notebook"}).then(
+             function (data) {
+@@ -29679,9 +29695,12 @@
+                 if (kernel_name) {
+                     url += "?kernel_name=" + kernel_name;
+                 }
+-                w.location = url;
++                // iOS: we open the webView only once we have the actual URL:
++                var w = window.open(url)
++                // w.location = url;
+         }).catch(function (e) {
+-            w.close();
++			// w.close();
++			window.webkit.messageHandlers.Carnets.postMessage("exception:NotebookCreationFailed"); 
+             // This statement is used simply so that message extraction
+             // will pick up the strings.  The actual setting of the text
+             // for the button is in dialog.js.
+@@ -29723,10 +29742,12 @@
+     "use strict";
+ 
+     function display_shutdown_dialog() {
++    	// iOS: send shutdown message to the main application:
++    	window.webkit.messageHandlers.Carnets.postMessage("quit"); 
+         var body = $('<div/>').append(
+             $('<p/>').text(i18n.msg._("You have shut down Jupyter. You can now close this tab."))
+         ).append(
+-            $('<p/>').text(i18n.msg._("To use Jupyter again, you will need to relaunch it."))
++            $('<p/>').text(i18n.msg._("To use Jupyter again, you will have to relaunch it."))
+         );
+ 
+         dialog.modal({
+@@ -30014,4 +30035,4 @@
+ define("tree/js/main", function(){});
+ 
+ 
+-//# sourceMappingURL=main.min.js.map
+\ No newline at end of file
++//# sourceMappingURL=main.min.js.map
+diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/tree/js/newnotebook.js Library/lib/python3.7/site-packages/notebook/static/tree/js/newnotebook.js
+--- Library_orig/lib/python3.7/site-packages/notebook/static/tree/js/newnotebook.js	2019-01-06 20:47:46.000000000 +0100
++++ Library/lib/python3.7/site-packages/notebook/static/tree/js/newnotebook.js	2019-01-29 11:25:25.000000000 +0100
+@@ -89,6 +89,7 @@
+                     url += "?kernel_name=" + kernel_name;
+                 }
+                 w.location = url;
++                window.webkit.messageHandlers.Carnets.postMessage(url);
+         }).catch(function (e) {
+             w.close();
+             // This statement is used simply so that message extraction
+diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/tree/js/shutdownbutton.js Library/lib/python3.7/site-packages/notebook/static/tree/js/shutdownbutton.js
+--- Library_orig/lib/python3.7/site-packages/notebook/static/tree/js/shutdownbutton.js	2019-01-06 20:47:46.000000000 +0100
++++ Library/lib/python3.7/site-packages/notebook/static/tree/js/shutdownbutton.js	2019-01-29 12:23:44.000000000 +0100
+@@ -15,6 +15,9 @@
+     "use strict";
+ 
+     function display_shutdown_dialog() {
++    	// iOS: send a message to the application:
++    	window.webkit.messageHandlers.Carnets.postMessage("quit");
++    	// otherwise, display a dialog window
+         var body = $('<div/>').append(
+             $('<p/>').text(i18n.msg._("You have shut down Jupyter. You can now close this tab."))
+         ).append(
+diff -Naur Library_orig/lib/python3.7/site-packages/notebook/templates/page.html Library/lib/python3.7/site-packages/notebook/templates/page.html
+--- Library_orig/lib/python3.7/site-packages/notebook/templates/page.html	2019-01-06 20:47:46.000000000 +0100
++++ Library/lib/python3.7/site-packages/notebook/templates/page.html	2019-01-28 12:23:45.000000000 +0100
+@@ -137,11 +137,13 @@
+   {% block login_widget %}
+ 
+     <span id="login_widget">
++  <!--  iOS: commented out
+       {% if logged_in %}
+         <button id="logout" class="btn btn-sm navbar-btn">{% trans %}Logout{% endtrans %}</button>
+       {% elif login_available and not logged_in %}
+         <button id="login" class="btn btn-sm navbar-btn">{% trans %}Login{% endtrans %}</button>
+       {% endif %}
++  -->
+     </span>
+ 
+   {% endblock %}
