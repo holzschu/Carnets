@@ -9,14 +9,19 @@ Carnets is a stand-alone Jupyter notebook server and client. Edit your notebooks
 # Known bugs:
 
 - "Terminals" don't work. I will probably remove the option from the menus.
-- Starting the 6th or so kernel fails with `zmq.error.ZMQError: Too many open files`
-- Issue #3: "Kernel / restart and run all" does not work (kernel shudown followed by kernel restart does). Possibly related to the previous one.
-- Issue #2: `pip install` does not work (the package is unavailable, but the install appears to have worked).
+- Starting the 10th or so kernel fails with `zmq.error.ZMQError: Too many open files`
 
+# To fix before testflight:
+
+- icon
+- screen capture
+- screen shots
 
 # Recently fixed bugs:
 
 - "new file", "new notebook", "copy notebook" now open a new window (instead of opening a blank window).
+- Issue #3: "Kernel / restart and run all" does not work (kernel shudown followed by kernel restart does). Fixed with 9e3faa7
+- Issue #2: `pip install` does not work (the package is unavailable, but the install process appears to have worked). Fixed with ee4cdc7
 
 # To install new packages:
 
