@@ -1,3 +1,64 @@
+diff -Naur Library_orig/lib/python3.7/site-packages/ipykernel/heartbeat.py Library/lib/python3.7/site-packages/ipykernel/heartbeat.py
+--- Library_orig/lib/python3.7/site-packages/ipykernel/heartbeat.py	2019-01-06 20:47:44.000000000 +0100
++++ Library/lib/python3.7/site-packages/ipykernel/heartbeat.py	2019-01-30 15:17:25.000000000 +0100
+@@ -66,3 +66,7 @@
+                     raise
+             else:
+                 break
++
++    def close(self):
++        self.socket.close()
++
+diff -Naur Library_orig/lib/python3.7/site-packages/ipykernel/kernelapp.py Library/lib/python3.7/site-packages/ipykernel/kernelapp.py
+--- Library_orig/lib/python3.7/site-packages/ipykernel/kernelapp.py	2019-01-06 20:47:44.000000000 +0100
++++ Library/lib/python3.7/site-packages/ipykernel/kernelapp.py	2019-01-30 15:32:52.000000000 +0100
+@@ -456,6 +456,37 @@
+         handler.setFormatter(formatter)
+         logger.addHandler(handler)
+ 
++    # iOS: cleanup functions
++    def close_io(self):
++        if sys.stdout is not None:
++            sys.stdout.flush()
++            sys.stdout.close()
++        sys.stdout = sys.__stdout__
++
++        if sys.stderr is not None:
++            sys.stderr.flush()
++            sys.stderr.close()
++        sys.stderr = sys.__stderr__
++
++    def close_heartbeat(self):
++        """terminates the heart beating"""
++        self.heartbeat.close()
++
++    def close_sockets(self):
++        context = zmq.Context.instance()
++        # context.term() # raises an error in Library/lib/python3.7/site-packages/zmq/error.py
++        self.shell_socket.close()
++        self.stdin_socket.close()
++        self.control_socket.close()
++        self.iopub_socket.close()
++    
++    def cleanup(self):
++        # iOS: cleanup function to close files, connections and sockets.
++        self.close_io()
++        self.close_heartbeat()
++        self.close_sockets()
++        self.cleanup_connection_file()
++        
+     @catch_config_error
+     def initialize(self, argv=None):
+         super(IPKernelApp, self).initialize(argv)
+@@ -505,6 +536,8 @@
+             self.io_loop.start()
+         except KeyboardInterrupt:
+             pass
++        # iOS: cleanup the sockets and connections
++        self.cleanup()
+ 
+ launch_new_instance = IPKernelApp.launch_instance
+ 
 diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/edit/js/main.min.js Library/lib/python3.7/site-packages/notebook/static/edit/js/main.min.js
 --- Library_orig/lib/python3.7/site-packages/notebook/static/edit/js/main.min.js	2019-01-06 20:47:45.000000000 +0100
 +++ Library/lib/python3.7/site-packages/notebook/static/edit/js/main.min.js	2019-01-29 16:04:08.000000000 +0100
@@ -268,3 +329,16 @@ diff -Naur Library_orig/lib/python3.7/site-packages/notebook/templates/page.html
      </span>
  
    {% endblock %}
+diff -Naur Library_orig/lib/python3.7/site-packages/ptyprocess/ptyprocess.py Library/lib/python3.7/site-packages/ptyprocess/ptyprocess.py
+--- Library_orig/lib/python3.7/site-packages/ptyprocess/ptyprocess.py	2018-12-26 12:38:31.000000000 +0100
++++ Library/lib/python3.7/site-packages/ptyprocess/ptyprocess.py	2019-01-29 17:13:25.000000000 +0100
+@@ -206,7 +206,8 @@
+         argv = argv[:]
+         command = argv[0]
+ 
+-        command_with_path = which(command)
++        # iOS: which() won't work.
++        command_with_path = command # which(command)
+         if command_with_path is None:
+             raise FileNotFoundError('The command was not found or was not ' +
+                                     'executable: %s.' % command)
