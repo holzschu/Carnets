@@ -329,6 +329,26 @@ diff -Naur Library_orig/lib/python3.7/site-packages/notebook/templates/page.html
      </span>
  
    {% endblock %}
+diff -Naur Library_orig/lib/python3.7/site-packages/pip/_internal/commands/install.py Library/lib/python3.7/site-packages/pip/_internal/commands/install.py
+--- Library_orig/lib/python3.7/site-packages/pip/_internal/commands/install.py	2019-01-25 13:24:56.000000000 +0100
++++ Library/lib/python3.7/site-packages/pip/_internal/commands/install.py	2019-01-30 16:43:52.000000000 +0100
+@@ -67,11 +67,15 @@
+         cmd_opts.add_option(cmdoptions.pre())
+ 
+         cmd_opts.add_option(cmdoptions.editable())
++
++        # iOS: force install in PYTHONPATH
++        default_target = os.getenv('PYTHONPATH')
++
+         cmd_opts.add_option(
+             '-t', '--target',
+             dest='target_dir',
+             metavar='dir',
+-            default=None,
++            default=default_target,  # iOS: was None
+             help='Install packages into <dir>. '
+                  'By default this will not replace existing files/folders in '
+                  '<dir>. Use --upgrade to replace existing packages in <dir> '
 diff -Naur Library_orig/lib/python3.7/site-packages/ptyprocess/ptyprocess.py Library/lib/python3.7/site-packages/ptyprocess/ptyprocess.py
 --- Library_orig/lib/python3.7/site-packages/ptyprocess/ptyprocess.py	2018-12-26 12:38:31.000000000 +0100
 +++ Library/lib/python3.7/site-packages/ptyprocess/ptyprocess.py	2019-01-29 17:13:25.000000000 +0100
