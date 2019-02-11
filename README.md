@@ -6,19 +6,19 @@ Carnets is a stand-alone Jupyter notebook server and client. Edit your notebooks
 - type `./get_frameworks.sh`
 - open Xcode, change the developer key, compile and install.
 
-# Known bugs:
+# Known issues / things to do:
 
-- "Terminals" don't work. I will probably remove the option from the menus.
-- Starting the 10th or so kernel fails with `zmq.error.ZMQError: Too many open files`
-
-# To fix before testflight:
-
-- icon
-- screen capture
-- screen shots
+- Save notebooks when app becomes inactive / background.
+- Save last open notebook and restore when the app reopens.
+- Better user interface for startup screen / ability to open notebooks everywhere, in place.
+- Silently terminate oldest kernel when we approach the maximum number of kernels.
+- "Terminals" don't work. Remove the option from the menus.
+- user-installed packages are in `$PYTHONPATH`, which is `$HOME/Library/python`. 
+- We are leaking 8-9 file descriptors for each kernel launch, and one thread. Trying to addres either of these results in *more* file descriptors being leaked.
 
 # Recently fixed bugs:
 
+- Fixed: Starting the 10th or so kernel fails with `zmq.error.ZMQError: Too many open files`
 - "new file", "new notebook", "copy notebook" now open a new window (instead of opening a blank window).
 - Issue #3: "Kernel / restart and run all" does not work (kernel shudown followed by kernel restart does). Fixed with 9e3faa7
 - Issue #2: `pip install` does not work (the package is unavailable, but the install process appears to have worked). Fixed with ee4cdc7
