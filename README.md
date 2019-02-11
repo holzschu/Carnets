@@ -33,3 +33,5 @@ p = subprocess.Popen("pip install packageName", stdout = subprocess.PIPE)
 out = p.stdout.read()
 print(out)
 ```
+
+Otherwise, open an [issue](https://github.com/holzschu/carnets/issues) and I'll add it to the default packages. 
