@@ -28,8 +28,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ios_system("cd $HOME/Documents/")
         // When it quits normally, the Jupyter server removes these files
         // If it crashes, it doesn't. So we do some cleanup before the start.
-        ios_system("rm $HOME/Library/Jupyter/runtime/*.html")
-        ios_system("rm $HOME/Library/Jupyter/runtime/*.json")
+        ios_system("rm -f $HOME/Library/Jupyter/runtime/*.html")
+        ios_system("rm -f $HOME/Library/Jupyter/runtime/*.json")
         startNotebookServer()
         return true
     }
