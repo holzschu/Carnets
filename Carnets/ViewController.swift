@@ -11,7 +11,6 @@ import WebKit
 import ios_system
 
 public var serverAddress: URL!
-var progressView: UIProgressView!
 
 extension String {
     
@@ -74,18 +73,17 @@ public func openURL(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutablePointer
 
 class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
 
-
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         // For debugging:
         // print("JavaScript is sending a message.body: \(message.body)") // (quit)
         // print("JavaScript is sending a message.name: \(message.name)") // (Carnets)
         let cmd:NSString = message.body as! NSString
         if (cmd == "quit") {
-            UIControl().sendAction(#selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)
+            // Warn the main app that the user has pressed the "quit" button
+            NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: notificationQuitRequested)))
         }
     }
-    
-
+        
     var webView: WKWebView!
     
     override func loadView() {

@@ -14,10 +14,6 @@
 		22288E36221209A40081D86C /* PythonC.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22288E202212098C0081D86C /* PythonC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22288E37221209A40081D86C /* PythonD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22288E212212098C0081D86C /* PythonD.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22288E38221209A40081D86C /* PythonE.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22288E1E2212098C0081D86C /* PythonE.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22288E39221209A40081D86C /* PythonF.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22288E1F2212098C0081D86C /* PythonF.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22288E3A221209A40081D86C /* PythonG.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22288E242212098C0081D86C /* PythonG.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22288E3B221209A40081D86C /* PythonH.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22288E252212098C0081D86C /* PythonH.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22288E3C221209A40081D86C /* PythonI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22288E1B2212098B0081D86C /* PythonI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2239A8DB2212106A005C73D0 /* openblas.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22288E222212098C0081D86C /* openblas.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22A1C69E21FE4143001B49F0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A1C69D21FE4142001B49F0 /* ViewController.swift */; };
 		22B750B021FC671700241F27 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B750AF21FC671700241F27 /* AppDelegate.swift */; };
@@ -68,10 +64,6 @@
 				22288E36221209A40081D86C /* PythonC.framework in Embed Frameworks */,
 				22288E37221209A40081D86C /* PythonD.framework in Embed Frameworks */,
 				22288E38221209A40081D86C /* PythonE.framework in Embed Frameworks */,
-				22288E39221209A40081D86C /* PythonF.framework in Embed Frameworks */,
-				22288E3A221209A40081D86C /* PythonG.framework in Embed Frameworks */,
-				22288E3B221209A40081D86C /* PythonH.framework in Embed Frameworks */,
-				22288E3C221209A40081D86C /* PythonI.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -79,17 +71,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		22288E1B2212098B0081D86C /* PythonI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PythonI.framework; path = Frameworks/PythonI.framework; sourceTree = "<group>"; };
 		22288E1C2212098C0081D86C /* PythonB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PythonB.framework; path = Frameworks/PythonB.framework; sourceTree = "<group>"; };
 		22288E1D2212098C0081D86C /* PythonA.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PythonA.framework; path = Frameworks/PythonA.framework; sourceTree = "<group>"; };
 		22288E1E2212098C0081D86C /* PythonE.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PythonE.framework; path = Frameworks/PythonE.framework; sourceTree = "<group>"; };
-		22288E1F2212098C0081D86C /* PythonF.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PythonF.framework; path = Frameworks/PythonF.framework; sourceTree = "<group>"; };
 		22288E202212098C0081D86C /* PythonC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PythonC.framework; path = Frameworks/PythonC.framework; sourceTree = "<group>"; };
 		22288E212212098C0081D86C /* PythonD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PythonD.framework; path = Frameworks/PythonD.framework; sourceTree = "<group>"; };
 		22288E222212098C0081D86C /* openblas.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = openblas.framework; path = Frameworks/openblas.framework; sourceTree = "<group>"; };
 		22288E232212098C0081D86C /* Python3_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Python3_ios.framework; path = Frameworks/Python3_ios.framework; sourceTree = "<group>"; };
-		22288E242212098C0081D86C /* PythonG.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PythonG.framework; path = Frameworks/PythonG.framework; sourceTree = "<group>"; };
-		22288E252212098C0081D86C /* PythonH.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PythonH.framework; path = Frameworks/PythonH.framework; sourceTree = "<group>"; };
 		229BB8D32210DC8F0070FD71 /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
 		229BB8D52210DCA30070FD71 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		22A1C69D21FE4142001B49F0 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -180,10 +168,6 @@
 				22288E202212098C0081D86C /* PythonC.framework */,
 				22288E212212098C0081D86C /* PythonD.framework */,
 				22288E1E2212098C0081D86C /* PythonE.framework */,
-				22288E1F2212098C0081D86C /* PythonF.framework */,
-				22288E242212098C0081D86C /* PythonG.framework */,
-				22288E252212098C0081D86C /* PythonH.framework */,
-				22288E1B2212098B0081D86C /* PythonI.framework */,
 				22B750DB21FCA4CF00241F27 /* awk.framework */,
 				22B750D621FCA4CF00241F27 /* curl_ios.framework */,
 				22B750DA21FCA4CF00241F27 /* files.framework */,
