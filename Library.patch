@@ -123,7 +123,7 @@ diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/notebook/js/
 +//# sourceMappingURL=main.min.js.map
 diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/tree/js/main.min.js Library/lib/python3.7/site-packages/notebook/static/tree/js/main.min.js
 --- Library_orig/lib/python3.7/site-packages/notebook/static/tree/js/main.min.js	2019-02-12 12:41:31.000000000 +0100
-+++ Library/lib/python3.7/site-packages/notebook/static/tree/js/main.min.js	2019-02-12 12:28:13.000000000 +0100
++++ Library/lib/python3.7/site-packages/notebook/static/tree/js/main.min.js	2019-02-12 18:14:38.000000000 +0100
 @@ -27877,14 +27877,20 @@
          if (!NotebookList._bound_singletons) {
              NotebookList._bound_singletons = true;
@@ -206,21 +206,37 @@ diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/tree/js/main
              // This statement is used simply so that message extraction
              // will pick up the strings.  The actual setting of the text
              // for the button is in dialog.js.
-@@ -29723,10 +29742,12 @@
+@@ -29723,16 +29742,19 @@
      "use strict";
  
      function display_shutdown_dialog() {
+-        var body = $('<div/>').append(
+-            $('<p/>').text(i18n.msg._("You have shut down Jupyter. You can now close this tab."))
+-        ).append(
+-            $('<p/>').text(i18n.msg._("To use Jupyter again, you will need to relaunch it."))
+-        );
+-
+-        dialog.modal({
+-            title: i18n.msg._("Server stopped"),
+-            body: body
+-        })
 +    	// iOS: send shutdown message to the main application:
 +    	window.webkit.messageHandlers.Carnets.postMessage("quit"); 
-         var body = $('<div/>').append(
-             $('<p/>').text(i18n.msg._("You have shut down Jupyter. You can now close this tab."))
-         ).append(
--            $('<p/>').text(i18n.msg._("To use Jupyter again, you will need to relaunch it."))
-+            $('<p/>').text(i18n.msg._("To use Jupyter again, you will have to relaunch it."))
-         );
++		// iOS: ... and don't show the dialog message:
++        // var body = $('<div/>').append(
++        //     $('<p/>').text(i18n.msg._("You have shut down Jupyter. You can now close this tab."))
++        // ).append(
++        //     $('<p/>').text(i18n.msg._("To use Jupyter again, you will have to relaunch it."))
++        // );
++
++        // dialog.modal({
++        //     title: i18n.msg._("Server stopped"),
++        //     body: body
++        // })
+     }
  
-         dialog.modal({
-@@ -30014,4 +30035,4 @@
+     function activate() {
+@@ -30014,4 +30036,4 @@
  define("tree/js/main", function(){});
  
  
@@ -251,23 +267,3 @@ diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/tree/js/shut
          var body = $('<div/>').append(
              $('<p/>').text(i18n.msg._("You have shut down Jupyter. You can now close this tab."))
          ).append(
-diff -Naur Library_orig/lib/python3.7/site-packages/pip/_internal/commands/install.py Library/lib/python3.7/site-packages/pip/_internal/commands/install.py
---- Library_orig/lib/python3.7/site-packages/pip/_internal/commands/install.py	2019-02-12 12:41:30.000000000 +0100
-+++ Library/lib/python3.7/site-packages/pip/_internal/commands/install.py	2019-01-30 16:43:52.000000000 +0100
-@@ -67,11 +67,15 @@
-         cmd_opts.add_option(cmdoptions.pre())
- 
-         cmd_opts.add_option(cmdoptions.editable())
-+
-+        # iOS: force install in PYTHONPATH
-+        default_target = os.getenv('PYTHONPATH')
-+
-         cmd_opts.add_option(
-             '-t', '--target',
-             dest='target_dir',
-             metavar='dir',
--            default=None,
-+            default=default_target,  # iOS: was None
-             help='Install packages into <dir>. '
-                  'By default this will not replace existing files/folders in '
-                  '<dir>. Use --upgrade to replace existing packages in <dir> '
