@@ -1,6 +1,10 @@
 # Carnets
 Carnets is a stand-alone Jupyter notebook server and client. Edit your notebooks on the go, even where there is no network.
 
+# To install without building: 
+
+Carnets has been approved for TestFlight by Apple. Send an [e-mail](mailto:carnets_jupyter@icloud.com) to receive an invitation. 
+
 # To build: 
 - clone the git repository
 - type `./get_frameworks.sh`
