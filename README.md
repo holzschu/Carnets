@@ -5,7 +5,7 @@ Carnets is a stand-alone Jupyter notebook server and client. Edit your notebooks
 
 Carnets has been approved for TestFlight by Apple. Send an [e-mail](mailto:carnets_jupyter@icloud.com) to receive an invitation. 
 
-# To build: 
+# To build it yourself: 
 - clone the git repository
 - type `./get_frameworks.sh`
 - open Xcode, change the developer key, compile and install.
@@ -15,10 +15,11 @@ Carnets has been approved for TestFlight by Apple. Send an [e-mail](mailto:carne
 - Save notebooks when app becomes inactive / background.
 - Save last open notebook and restore when the app reopens.
 - Better user interface for startup screen / ability to open notebooks everywhere, in place.
-- Silently terminate oldest kernel when we approach the maximum number of kernels.
-- "Terminals" don't work. Remove the option from the menus.
-- user-installed packages are in `$PYTHONPATH`, which is `$HOME/Library/python`. 
+- You can't have more than 5 kernels running simultaneously. 
+- Related: silently terminate oldest kernel when we approach the maximum number of kernels.
+- "Terminals" don't work. Todo: Remove the option from the menus.
 - We are leaking 8-9 file descriptors for each kernel launch, and one thread. Trying to addres either of these results in *more* file descriptors being leaked.
+- Ability to open notebooks in other applications (Safari, Juno...)
 
 # Recently fixed bugs:
 

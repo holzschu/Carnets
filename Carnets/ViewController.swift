@@ -10,7 +10,8 @@ import UIKit
 import WebKit
 import ios_system
 
-public var serverAddress: URL!
+// public var serverAddress: URL!
+var appWebView: WKWebView!
 
 extension String {
     
@@ -44,10 +45,10 @@ func convertCArguments(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutablePoin
     return args
 }
 
-@_cdecl("openURL")
-public func openURL(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>?) -> Int32 {
+@_cdecl("openURL_internal")
+public func openURL_internal(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>?) -> Int32 {
     let usage = """
-                usage: openURL url
+                usage: openurl url
 
                 loads the specified url in the WkWebView of the application
                 """
@@ -66,8 +67,12 @@ public func openURL(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutablePointer
         fputs(usage, thread_stderr)
         return 1
     }
-
-    serverAddress = url
+    NSLog("%@", "openURL_internal: ".appending(args[1]))
+    
+    if (appWebView != nil) {
+        appWebView.load(URLRequest(url: url!))
+    }
+    // serverAddress = url
     return 0
 }
 
@@ -101,18 +106,23 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         webView.navigationDelegate = self
         webView.uiDelegate = self
         view = webView
+        appWebView = webView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Wait until the Jupyter notebook has started
-        while (serverAddress == nil) { }
-        webView.load(URLRequest(url: serverAddress))
+        // while (serverAddress == nil) { }
+        // webView.load(URLRequest(url: serverAddress))
         webView.allowsBackForwardNavigationGestures = true
     }
     
 }
 
+// This function is called when the user clicks on a link inside the App
+// This is where we should replace webView.load (for internal action)
+// with openurl_main to open in external browsers. Also Juno, when it
+// has a specific URL scheme. 
 extension ViewController: WKUIDelegate {
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         if navigationAction.targetFrame == nil {

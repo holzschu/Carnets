@@ -31,8 +31,9 @@
 		22B7514221FCA53300241F27 /* ssh_cmd.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750E621FCA4D100241F27 /* ssh_cmd.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22B7514421FCA53300241F27 /* tar.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750E721FCA4D100241F27 /* tar.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22B7514621FCA53300241F27 /* text.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750DE21FCA4D000241F27 /* text.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22B7514A21FCB6D600241F27 /* Library in Resources */ = {isa = PBXBuildFile; fileRef = 22B7514921FCB6D500241F27 /* Library */; };
 		22B7515021FCCB9F00241F27 /* commandDictionary.plist in Resources */ = {isa = PBXBuildFile; fileRef = 22B7514F21FCCB9F00241F27 /* commandDictionary.plist */; };
+		22F03F712219D9EF00EBEA0B /* Library in Resources */ = {isa = PBXBuildFile; fileRef = 22F03F702219D9E500EBEA0B /* Library */; };
+		22F03F73222087AB00EBEA0B /* ListPythonFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F03F72222087AB00EBEA0B /* ListPythonFiles.swift */; };
 		22FDD69E22119AEC003FABFE /* freetype.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750EA21FCA4D100241F27 /* freetype.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22FDD69F22119AEC003FABFE /* harfbuzz.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750CF21FCA4CE00241F27 /* harfbuzz.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -100,8 +101,9 @@
 		22B750E621FCA4D100241F27 /* ssh_cmd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ssh_cmd.framework; path = Frameworks/ssh_cmd.framework; sourceTree = "<group>"; };
 		22B750E721FCA4D100241F27 /* tar.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = tar.framework; path = Frameworks/tar.framework; sourceTree = "<group>"; };
 		22B750EA21FCA4D100241F27 /* freetype.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = freetype.framework; path = Frameworks/freetype.framework; sourceTree = "<group>"; };
-		22B7514921FCB6D500241F27 /* Library */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Library; sourceTree = "<group>"; };
 		22B7514F21FCCB9F00241F27 /* commandDictionary.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = commandDictionary.plist; path = Resources/commandDictionary.plist; sourceTree = "<group>"; };
+		22F03F702219D9E500EBEA0B /* Library */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Library; sourceTree = "<group>"; };
+		22F03F72222087AB00EBEA0B /* ListPythonFiles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListPythonFiles.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,7 +129,7 @@
 		22B750A321FC671700241F27 = {
 			isa = PBXGroup;
 			children = (
-				22B7514921FCB6D500241F27 /* Library */,
+				22F03F702219D9E500EBEA0B /* Library */,
 				22B750AE21FC671700241F27 /* Carnets */,
 				22B750AD21FC671700241F27 /* Products */,
 				221EE18021FCCBDB00D0394F /* Resources */,
@@ -148,6 +150,7 @@
 			children = (
 				22B750AF21FC671700241F27 /* AppDelegate.swift */,
 				22A1C69D21FE4142001B49F0 /* ViewController.swift */,
+				22F03F72222087AB00EBEA0B /* ListPythonFiles.swift */,
 				22B750B321FC671700241F27 /* Main.storyboard */,
 				22B750B621FC671900241F27 /* Assets.xcassets */,
 				22B750B821FC671900241F27 /* LaunchScreen.storyboard */,
@@ -253,7 +256,7 @@
 				22B750B721FC671900241F27 /* Assets.xcassets in Resources */,
 				22B750B521FC671700241F27 /* Main.storyboard in Resources */,
 				22B7515021FCCB9F00241F27 /* commandDictionary.plist in Resources */,
-				22B7514A21FCB6D600241F27 /* Library in Resources */,
+				22F03F712219D9EF00EBEA0B /* Library in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,6 +269,7 @@
 			files = (
 				22A1C69E21FE4143001B49F0 /* ViewController.swift in Sources */,
 				22B750B021FC671700241F27 /* AppDelegate.swift in Sources */,
+				22F03F73222087AB00EBEA0B /* ListPythonFiles.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,6 +416,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = VG8Z23C8YL;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -430,6 +435,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = AsheKube.Carnets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = debugging;
+				STRIP_SWIFT_SYMBOLS = NO;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -440,6 +448,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = VG8Z23C8YL;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -458,6 +467,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = AsheKube.Carnets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = debugging;
+				STRIP_SWIFT_SYMBOLS = NO;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
