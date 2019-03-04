@@ -10,7 +10,6 @@ import UIKit
 import ios_system
 import UserNotifications
 
-
 let notificationQuitRequested = "AsheKube.Carnets.quit"
 
 @UIApplicationMain
@@ -21,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var notebookServerRunning: Bool = false
     var shutdownRequest: Bool = false
     var mustRecompilePythonFiles: Bool = false
+    var applicationInBackground: Bool = false
     
     func needToUpdatePythonFiles() -> Bool {
         // do it with UserDefaults, not storing in files
@@ -173,7 +173,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // close the application:
            UIControl().sendAction(#selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)
         } else {
-            // restart the server:
+            // restart the server (except if we're in background):
             startNotebookServer()
         }
     }
@@ -181,6 +181,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func startNotebookServer() {
         // TODO: detect whether the server is running, regardless of notebookServerRunning.
         if (notebookServerRunning) { return }
+        if (applicationInBackground) { return }
         // start the server:
         jupyterQueue.async {
             self.notebookServerRunning = true
@@ -203,7 +204,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
         // TODO: save every open notebook (inside each)
         // TODO: save list of open notebooks (inside app preference file)
-        NSLog("%@", "applicationWillResignActive")
+        NSLog("Carnets: applicationWillResignActive")
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -212,8 +213,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // TODO: terminate running kernels, *except* if they are opened in a different app (see user preferences)
         // TODO: save front (active) notebook name
         // Should I keep the server running or not?
-        NSLog("%@", "Carnets: applicationDidEnterBackground")
-        // TODO: set up an alert to warn the user in 4 mn 30 seconds. Less than that?
+        NSLog("Carnets: applicationDidEnterBackground")
+        applicationInBackground = true
+        // TODO: set up an alert to warn the user in 2 mn 30 seconds. Less than that?
         // Timers don't work in suspended state
         // TODO: since applicationWillTerminate is never called, this is where we terminate the server
     }
@@ -221,70 +223,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
         // TODO: reopen active notebooks
-        NSLog("%@", "applicationWillEnterForeground")
+        NSLog("Carnets: applicationWillEnterForeground")
+        applicationInBackground = false
         startNotebookServer()
         // TODO: get list of previously opened notebooks, reopen them
-        // This is where it crashes.
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        NSLog("%@", "applicationDidBecomeActive")
+        NSLog("Carnets: applicationDidBecomeActive")
+        applicationInBackground = false
         startNotebookServer()
-    }
-
-    func badgeAppAndPlaySound() {
-        let content = UNMutableNotificationContent()
-        content.title = "Carnets is about to terminate"
-        content.categoryIdentifier = "Terminate_Alert"
-        NSLog("%@", "badgeAppAndPlaySound")
-
-
-        // Define the custom actions.
-        // Define the notification type
-        let appIsAboutToTerminateAlert =
-            UNNotificationCategory(identifier: "Terminate_Alert",
-                                   actions: [], intentIdentifiers: [],
-                                   options: .customDismissAction)
-        // Register the notification type.
-        let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.setNotificationCategories([appIsAboutToTerminateAlert])
-    }
-    
-    func postAlertIfAuthorized() {
-        // Check the authorization status each time:
-        let notificationCenter = UNUserNotificationCenter.current()
-        NSLog("%@", "postAlertIfAuthorized")
-
-        notificationCenter.getNotificationSettings { (settings) in
-            // Do not schedule notifications if not authorized.
-            guard settings.authorizationStatus == .authorized else {return}
-            
-            if settings.alertSetting == .enabled {
-                self.badgeAppAndPlaySound()
-                // Schedule an alert-only notification.
-                // self.myScheduleAlertNotification()
-            }
-            else {
-                // Schedule a notification with a badge and sound.
-                self.badgeAppAndPlaySound()
-            }
-        }
     }
     
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-        // is actually almost never called. We cannot assume it will be called, except in special circumstances.
-        NSLog("%@", "applicationWillTerminate")
-        // TODO: send shutdown request to notebook server.
-        // Kill the server -- using currentCommandRootThread
-        ios_kill()
-        notebookServerRunning = false
-        // postAlertIfAuthorized()
-        if (!shutdownRequest) {
-            
-            
-        }
+        // is actually almost never called. We cannot assume it will be called.
+        NSLog("Carnets: applicationWillTerminate")
     }
 
 }
