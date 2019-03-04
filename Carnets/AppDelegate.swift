@@ -179,7 +179,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func startNotebookServer() {
-        // TODO: detect whether the server is running, regardless of notebookServerRunning.
         if (notebookServerRunning) { return }
         if (applicationInBackground) { return }
         // start the server:
@@ -196,9 +195,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    // TODO: write these functions. Background mode is against the rules (for this kind of app)
-    // https://developer.apple.com/library/archive/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/TheAppLifeCycle/TheAppLifeCycle.html
-    
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
@@ -212,12 +208,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         // TODO: terminate running kernels, *except* if they are opened in a different app (see user preferences)
         // TODO: save front (active) notebook name
-        // Should I keep the server running or not?
         NSLog("Carnets: applicationDidEnterBackground")
         applicationInBackground = true
-        // TODO: set up an alert to warn the user in 2 mn 30 seconds. Less than that?
-        // Timers don't work in suspended state
-        // TODO: since applicationWillTerminate is never called, this is where we terminate the server
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -238,9 +230,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-        // is actually almost never called. We cannot assume it will be called.
+        // NH: is actually almost never called. We cannot assume it will be called.
         NSLog("Carnets: applicationWillTerminate")
     }
-
 }
 

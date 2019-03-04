@@ -136,6 +136,9 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         NSLog("Terminating server. Time left = %f ", timeLeft)
         // shutdown Jupyter server and notebooks (takes about 7s with notebooks)
         webView.load(urlShutdownRequest)
+        // cancel the alert:
+        let notificationCenter = UNUserNotificationCenter.current()
+        notificationCenter.removeDeliveredNotifications(withIdentifiers: ["CarnetsShutdownAlert"])
         shutdownTimer = nil
         app.endBackgroundTask(shutdownTaskIdentifier)
         shutdownTaskIdentifier = UIBackgroundTaskIdentifier.invalid
@@ -160,7 +163,6 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     @objc func willResignActive()
     {
         // 3 min to close current process. Don't shutdown until 2 mn 45 s
-        // TODO: also send alert (if requested) at 2mn 15 s
         // TODO: restore current notebook, not server page
         let app = UIApplication.shared
         shutdownTaskIdentifier = app.beginBackgroundTask(expirationHandler: self.terminateServer)
