@@ -1,6 +1,58 @@
+diff -Naur Library_orig/lib/python3.7/site-packages/jupyter_client/kernelspec.py Library/lib/python3.7/site-packages/jupyter_client/kernelspec.py
+--- Library_orig/lib/python3.7/site-packages/jupyter_client/kernelspec.py	2019-02-12 12:41:30.000000000 +0100
++++ Library/lib/python3.7/site-packages/jupyter_client/kernelspec.py	2019-02-25 12:24:20.000000000 +0100
+@@ -32,7 +32,9 @@
+     env = Dict()
+     resource_dir = Unicode()
+     interrupt_mode = CaselessStrEnum(
+-        ['message', 'signal'], default_value='signal'
++# iOS: signal could result in strange side effects.
++#       ['message', 'signal'], default_value='signal'
++        ['message', 'signal'], default_value='message'
+     )
+     metadata = Dict()
+ 
+diff -Naur Library_orig/lib/python3.7/site-packages/jupyter_client/manager.py Library/lib/python3.7/site-packages/jupyter_client/manager.py
+--- Library_orig/lib/python3.7/site-packages/jupyter_client/manager.py	2019-02-12 12:41:30.000000000 +0100
++++ Library/lib/python3.7/site-packages/jupyter_client/manager.py	2019-02-26 22:06:23.000000000 +0100
+@@ -317,14 +317,16 @@
+         # Stop monitoring for restarting while we shutdown.
+         self.stop_restarter()
+ 
+-        if now:
+-            self._kill_kernel()
+-        else:
+-            self.request_shutdown(restart=restart)
++        # iOS: _kill_kernel results in unclean memory
++        # if now:
++        #     self._kill_kernel()
++        # else:
++        self.request_shutdown(restart=restart)
+             # Don't send any additional kernel kill messages immediately, to give
+             # the kernel a chance to properly execute shutdown actions. Wait for at
+             # most 1s, checking every 0.1s.
+-            self.finish_shutdown()
++        self.finish_shutdown()
++        # endif # if not iOS
+ 
+         self.cleanup(connection_file=not restart)
+ 
+diff -Naur Library_orig/lib/python3.7/site-packages/matplotlib-3.0.2-py3.7.egg/matplotlib/font_manager.py Library/lib/python3.7/site-packages/matplotlib-3.0.2-py3.7.egg/matplotlib/font_manager.py
+--- Library_orig/lib/python3.7/site-packages/matplotlib-3.0.2-py3.7.egg/matplotlib/font_manager.py	2019-02-12 12:41:31.000000000 +0100
++++ Library/lib/python3.7/site-packages/matplotlib-3.0.2-py3.7.egg/matplotlib/font_manager.py	2019-03-06 08:03:31.000000000 +0100
+@@ -268,7 +268,8 @@
+             fontfiles.update(win32InstalledFonts(fontext=fontext))
+         else:
+             fontpaths = X11FontDirectories
+-            fontfiles.update(get_fontconfig_fonts(fontext))
++            # iOS: this call doesn't do anything
++            # fontfiles.update(get_fontconfig_fonts(fontext))
+             # check for OS X & load its fonts if present
+             if sys.platform == 'darwin':
+                 fontfiles.update(OSXInstalledFonts(fontext=fontext))
 diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/edit/js/main.min.js Library/lib/python3.7/site-packages/notebook/static/edit/js/main.min.js
 --- Library_orig/lib/python3.7/site-packages/notebook/static/edit/js/main.min.js	2019-02-12 12:41:31.000000000 +0100
-+++ Library/lib/python3.7/site-packages/notebook/static/edit/js/main.min.js	2019-02-12 12:26:55.000000000 +0100
++++ Library/lib/python3.7/site-packages/notebook/static/edit/js/main.min.js	2019-03-08 15:40:18.000000000 +0100
 @@ -35216,17 +35216,22 @@
          
          //  File
@@ -28,7 +80,26 @@ diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/edit/js/main
                      dialog.modal({
                          title : 'Creating New File Failed',
                          body : "The error was: " + error.message,
-@@ -36587,4 +36592,4 @@
+@@ -36564,8 +36569,17 @@
+     editor.load();
+     page.show();
+ 
++	// iOS: "focusout" event is called when we leave the page or go into background
++	window.onfocusout = function () {
++		// This is not perfect, but it saves the edits if we go to background.
++		editor.save();
++		return;
++	}
++
+     window.onbeforeunload = function () {
+-        if (editor.save_enabled && !editor.codemirror.isClean(editor.generation)) {
++		// iOS note: onbeforeunload is not called with WkWebView or Safari. 
++		// We use focusout events instead.
++		if (editor.save_enabled && !editor.codemirror.isClean(editor.generation)) {
+             return "Unsaved changes will be lost. Close anyway?";
+         }
+     };
+@@ -36587,4 +36601,4 @@
  define("edit/js/main", function(){});
  
  
@@ -37,8 +108,87 @@ diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/edit/js/main
 +//# sourceMappingURL=main.min.js.map
 diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/notebook/js/main.min.js Library/lib/python3.7/site-packages/notebook/static/notebook/js/main.min.js
 --- Library_orig/lib/python3.7/site-packages/notebook/static/notebook/js/main.min.js	2019-02-12 12:41:32.000000000 +0100
-+++ Library/lib/python3.7/site-packages/notebook/static/notebook/js/main.min.js	2019-02-12 12:27:38.000000000 +0100
-@@ -45357,7 +45357,8 @@
++++ Library/lib/python3.7/site-packages/notebook/static/notebook/js/main.min.js	2019-03-08 15:40:20.000000000 +0100
+@@ -38320,6 +38320,8 @@
+             this.kernel._kernel_dead();
+         }
+ 
++		/* iOS: send notice to Carnets that this kernel is killed */
++        window.webkit.messageHandlers.Carnets.postMessage("killingSession:" + this.session_url)
+         utils.ajax(this.session_url, {
+             processData: false,
+             cache: false,
+@@ -38389,6 +38391,8 @@
+         if (data && data.id) {
+             this.id = data.id;
+             this.session_url = utils.url_path_join(this.session_service_url, this.id);
++            /* iOS: send notice to Carnets that this kernel is created */
++			window.webkit.messageHandlers.Carnets.postMessage("loadingSession:" + this.session_url)
+         }
+         if (data && data.notebook) {
+             this.notebook_model.path = data.path;
+@@ -42743,10 +42747,19 @@
+             expand_time(time);
+         });
+ 
++		// iOS: "focusout" event is called when we leave the page or go into background
++		window.onfocusout = function () {
++			if (that.dirty) {
++				that.save_notebook();
++			}
++			return;
++		}
+ 
+         // Firefox 22 broke $(window).on("beforeunload")
+         // I'm not sure why or how.
+         window.onbeforeunload = function () {
++            // iOS note: onbeforeunload is not called with WkWebView or Safari. 
++            // We use focusout events instead.
+             // TODO: Make killing the kernel configurable.
+             var kill_kernel = false;
+             if (kill_kernel) {
+@@ -45053,12 +45066,14 @@
+ 
+         var error;
+         if (!this._fully_loaded) {
+-            error = new Error("Load failed, save is disabled");
++            errfocusoutor = new Error("Load failed, save is disabled");
+             this.events.trigger('notebook_save_failed.Notebook', error);
++			window.webkit.messageHandlers.Carnets.postMessage("notebook_save_failed.Notebook: Load failed, save is disabled");
+             return Promise.reject(error);
+         } else if (!this.writable) {
+             error = new Error("Notebook is read-only");
+             this.events.trigger('notebook_save_failed.Notebook', error);
++			window.webkit.messageHandlers.Carnets.postMessage("notebook_save_failed.Notebook: Notebook is read-only");
+             return Promise.reject(error);
+         }
+ 
+@@ -45079,6 +45094,7 @@
+             return that.contents.save(that.notebook_path, model).then(
+                 $.proxy(that.save_notebook_success, that, start),
+                 function (error) {
++					window.webkit.messageHandlers.Carnets.postMessage("notebook_save_failed.Notebook: " + error.message);
+                     that.events.trigger('notebook_save_failed.Notebook', error);
+                 }
+             );
+@@ -45094,6 +45110,8 @@
+                     // so we allow 0.5 seconds difference before complaining.
+                     // This is configurable in nbconfig/notebook.json as `last_modified_check_margin`.
+                     if ((last_modified.getTime() - that.last_modified.getTime()) > last_modified_check_margin) {  
++						window.webkit.messageHandlers.Carnets.postMessage("Last saving was done on `"+that.last_modified+"`("+that._last_modified+"), "+
++                                    "while the current file seem to have been saved on `"+data.last_modified+"`");
+                         console.warn("Last saving was done on `"+that.last_modified+"`("+that._last_modified+"), "+
+                                     "while the current file seem to have been saved on `"+data.last_modified+"`");
+                         if (that._changed_on_disk_dialog !== null) {
+@@ -45134,6 +45152,7 @@
+                     }
+                 }, function () {
+                     // maybe it has been deleted or renamed? Go ahead and save.
++					window.webkit.messageHandlers.Carnets.postMessage("notebook_save: missing notebook on file. Maybe it has been deleted or renamed? Go ahead and save");
+                     return _save();
+                 }
+             );
+@@ -45357,7 +45376,8 @@
      Notebook.prototype.copy_notebook = function () {
          var that = this;
          var base_url = this.base_url;
@@ -48,7 +198,7 @@ diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/notebook/js/
          var parent = utils.url_path_split(this.notebook_path)[0];
          var p;
          if (this.dirty && this.writable) {
-@@ -45368,12 +45369,17 @@
+@@ -45368,12 +45388,17 @@
          return p.then(function () {
              return that.contents.copy(that.notebook_path, parent).then(
                  function (data) {
@@ -68,7 +218,7 @@ diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/notebook/js/
                      that.events.trigger('notebook_copy_failed', error);
                  }
              );
-@@ -46774,13 +46780,16 @@
+@@ -46774,13 +46799,16 @@
      };
  
      MenuBar.prototype._new_window = function(url) {
@@ -88,7 +238,7 @@ diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/notebook/js/
          }
      };
      
-@@ -49682,8 +49691,8 @@
+@@ -49682,8 +49710,8 @@
      };
  
      KernelSelector.prototype.new_notebook = function (kernel_name) {
@@ -99,7 +249,7 @@ diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/notebook/js/
          // Create a new notebook in the same path as the current
          // notebook's path.
          var that = this;
-@@ -49695,10 +49704,12 @@
+@@ -49695,10 +49723,12 @@
                      utils.encode_uri_components(data.path)
                  );
                  url += "?kernel_name=" + kernel_name;
@@ -114,7 +264,7 @@ diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/notebook/js/
                  dialog.modal({
                      title : i18n.msg._('Creating Notebook Failed'),
                      body : i18n.msg.sprintf(i18n.msg._("The error was: %s"), error.message),
-@@ -50591,4 +50602,4 @@
+@@ -50591,4 +50621,4 @@
  define("notebook/js/main", function(){});
  
  
@@ -123,7 +273,7 @@ diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/notebook/js/
 +//# sourceMappingURL=main.min.js.map
 diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/tree/js/main.min.js Library/lib/python3.7/site-packages/notebook/static/tree/js/main.min.js
 --- Library_orig/lib/python3.7/site-packages/notebook/static/tree/js/main.min.js	2019-02-12 12:41:31.000000000 +0100
-+++ Library/lib/python3.7/site-packages/notebook/static/tree/js/main.min.js	2019-02-12 18:14:38.000000000 +0100
++++ Library/lib/python3.7/site-packages/notebook/static/tree/js/main.min.js	2019-03-06 11:34:19.000000000 +0100
 @@ -27877,14 +27877,20 @@
          if (!NotebookList._bound_singletons) {
              NotebookList._bound_singletons = true;
@@ -150,7 +300,16 @@ diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/tree/js/main
                      dialog.modal({
                          title: i18n.msg._('Creating File Failed'),
                          body: $('<div/>')
-@@ -29508,18 +29514,26 @@
+@@ -28653,6 +28659,8 @@
+                 'api/sessions',
+                 encodeURIComponent(session.id)
+             );
++            /* iOS: send notice to Carnets that this kernel is killed */
++			window.webkit.messageHandlers.Carnets.postMessage("killingSession:" + url)
+             utils.ajax(url, settings);
+         }
+     };
+@@ -29508,18 +29516,26 @@
          if (event) {
              event.preventDefault();
          }
@@ -180,7 +339,7 @@ diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/tree/js/main
                  utils.log_ajax_error(jqXHR, status, error);
              },
          };
-@@ -29668,7 +29682,9 @@
+@@ -29668,7 +29684,9 @@
          /** create and open a new notebook */
          var that = this;
          kernel_name = kernel_name || this.default_kernel;
@@ -191,7 +350,7 @@ diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/tree/js/main
          var dir_path = $('body').attr('data-notebook-path');
          this.contents.new_untitled(dir_path, {type: "notebook"}).then(
              function (data) {
-@@ -29679,9 +29695,12 @@
+@@ -29679,9 +29697,12 @@
                  if (kernel_name) {
                      url += "?kernel_name=" + kernel_name;
                  }
@@ -206,7 +365,7 @@ diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/tree/js/main
              // This statement is used simply so that message extraction
              // will pick up the strings.  The actual setting of the text
              // for the button is in dialog.js.
-@@ -29723,16 +29742,19 @@
+@@ -29723,16 +29744,19 @@
      "use strict";
  
      function display_shutdown_dialog() {
@@ -236,7 +395,7 @@ diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/tree/js/main
      }
  
      function activate() {
-@@ -30014,4 +30036,4 @@
+@@ -30014,4 +30038,4 @@
  define("tree/js/main", function(){});
  
  
@@ -245,7 +404,7 @@ diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/tree/js/main
 +//# sourceMappingURL=main.min.js.map
 diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/tree/js/newnotebook.js Library/lib/python3.7/site-packages/notebook/static/tree/js/newnotebook.js
 --- Library_orig/lib/python3.7/site-packages/notebook/static/tree/js/newnotebook.js	2019-02-12 12:41:31.000000000 +0100
-+++ Library/lib/python3.7/site-packages/notebook/static/tree/js/newnotebook.js	2019-01-29 11:25:25.000000000 +0100
++++ Library/lib/python3.7/site-packages/notebook/static/tree/js/newnotebook.js	2019-02-25 08:29:23.000000000 +0100
 @@ -89,6 +89,7 @@
                      url += "?kernel_name=" + kernel_name;
                  }
