@@ -26,6 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // do it with UserDefaults, not storing in files
         UserDefaults.standard.register(defaults: ["versionInstalled" : "0.0"])
         let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
+        let currentBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as! String
         let libraryURL = try! FileManager().url(for: .libraryDirectory,
                                                 in: .userDomainMask,
                                                 appropriateFor: nil,
@@ -40,11 +41,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let majorCurrent = Int(currentVersionNumbers[0])!
         let minorCurrent = Int(currentVersionNumbers[1])!
         let installedVersion = UserDefaults.standard.string(forKey: "versionInstalled")
+        let buildNumberInstalled = Int(UserDefaults.standard.string(forKey: "buildNumber") ?? "0")!
+        let currentBuildInt = Int(currentBuild)!
         let installedVersionNumbers = installedVersion!.split(separator: ".")
         let majorInstalled = Int(installedVersionNumbers[0])!
         let minorInstalled = Int(installedVersionNumbers[1])!
         return (majorInstalled < majorCurrent) ||
-            ((majorInstalled == majorCurrent) && (minorInstalled < minorCurrent))
+            ((majorInstalled == majorCurrent) && (minorInstalled < minorCurrent)) ||
+            ((majorInstalled == majorCurrent) && (minorInstalled == minorCurrent) &&
+                (buildNumberInstalled < currentBuildInt))
     }
     
     func queueUpdatingPythonFiles() {
@@ -63,9 +68,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // setting up PYTHONPATH (temporary) so Jupyter can start while we copy items:
         let originalPythonpath = getenv("PYTHONPATH")
         let mainPythonUrl = bundleUrl.appendingPathComponent("Library/lib/python3.7")
-        let secondaryPythonUrl = bundleUrl.appendingPathComponent("Library/lib/python3.7/site-packages")
-        let thirdPythonUrl = bundleUrl.appendingPathComponent("Library/lib/python3.7/site-packages/cffi-1.11.5-py3.7-macosx-12.1-iPad6,7.egg")
-        var newPythonPath = mainPythonUrl.path.appending(":").appending(secondaryPythonUrl.path).appending(":").appending(thirdPythonUrl.path)
+        var newPythonPath = mainPythonUrl.path
+        let pythonDirectories = ["Library/lib/python3.7/site-packages",
+                                 "Library/lib/python3.7/site-packages/cffi-1.11.5-py3.7-macosx-12.1-iPad6,7.egg",
+                                 "Library/lib/python3.7/site-packages/numpy-1.16.0-py3.7-macosx-12.1-iPad6,7.egg/",
+                                 "Library/lib/python3.7/site-packages/matplotlib-3.0.2-py3.7.egg",
+                                 "Library/lib/python3.7/site-packages/cycler-0.10.0-py3.7.egg/",
+                                 "Library/lib/python3.7/site-packages/pyparsing-2.3.1-py3.7.egg"]
+        for otherPythonDirectory in pythonDirectories {
+            let secondaryPythonUrl = bundleUrl.appendingPathComponent(otherPythonDirectory)
+            newPythonPath = newPythonPath.appending(":").appending(secondaryPythonUrl.path)
+        }
         if (originalPythonpath != nil) {
             newPythonPath = newPythonPath.appending(":").appending(String(cString: originalPythonpath!))
         }
@@ -93,6 +106,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         moveFilesQueue.async{
             let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
             UserDefaults.standard.set(currentVersion, forKey: "versionInstalled")
+            let currentBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as! String
+            UserDefaults.standard.set(currentBuild, forKey: "buildNumber")
             NSLog("Finished updating python files.")
             if (originalPythonpath != nil) {
                 setenv("PYTHONPATH", originalPythonpath, 1)
@@ -199,7 +214,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
         // TODO: save every open notebook (inside each)
-        // TODO: save list of open notebooks (inside app preference file)
         NSLog("Carnets: applicationWillResignActive")
     }
 
@@ -207,18 +221,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         // TODO: terminate running kernels, *except* if they are opened in a different app (see user preferences)
-        // TODO: save front (active) notebook name
         NSLog("Carnets: applicationDidEnterBackground")
         applicationInBackground = true
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-        // TODO: reopen active notebooks
         NSLog("Carnets: applicationWillEnterForeground")
         applicationInBackground = false
         startNotebookServer()
-        // TODO: get list of previously opened notebooks, reopen them
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {

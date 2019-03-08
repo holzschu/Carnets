@@ -68,25 +68,80 @@ public func openURL_internal(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutab
         fputs(usage, thread_stderr)
         return 1
     }
-    NSLog("%@", "openURL_internal: ".appending(args[1]))
+    NSLog("%@", "Server address is set to ".appending(args[1]))
     
     serverAddress = url
-    if (appWebView != nil) {
-        appWebView.load(URLRequest(url: url!))
+    var lastPageVisited = UserDefaults.standard.string(forKey: "lastOpenUrl")
+    guard (appWebView != nil) else { return 0 }
+    if ((lastPageVisited == nil) || (lastPageVisited == "/tree")) {
+        appWebView.load(URLRequest(url: url!)) // server page
+        return 0
     }
+    if (lastPageVisited!.hasPrefix("/")) { lastPageVisited = String(lastPageVisited!.dropFirst()) }
+    let lastPageVisitedUrl = serverAddress.appendingPathComponent(lastPageVisited!)
+    NSLog("%@", "Re-opening previous page \(lastPageVisitedUrl)")
+    appWebView.load(URLRequest(url: lastPageVisitedUrl))
+    // TODO: check that file exists (if local). Urls are like:
+    // http://localhost:8888/notebooks/Typesetting.ipynb
+    // http://localhost:8888/edit/File.txt
+    // Then again, suppressed files should raise an alarm. 
     return 0
 }
 
-class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
+class ViewController: UIViewController, UITextFieldDelegate, WKNavigationDelegate, WKScriptMessageHandler {
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        let cmd:NSString = message.body as! NSString
+        let cmd:String = message.body as! String
         if (cmd == "quit") {
             // Warn the main app that the user has pressed the "quit" button
+            runningSessions.removeAll(keepingCapacity: true)
             NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: notificationQuitRequested)))
+        } else if (cmd.hasPrefix("loadingSession:")) {
+            runningSessions.updateValue(Date(), forKey: cmd)
+            if (runningSessions.count >= 4) { // Maybe "> 4"?
+                NSLog("More than 4 notebook running (including this one). Time to cleanup.")
+                var oldestSessionTime = Date()
+                var oldestSessionID: String!
+                for (sessionID, date) in runningSessions {
+                    if (date < oldestSessionTime) {
+                        oldestSessionTime = date
+                        oldestSessionID = sessionID
+                    }
+                }
+                let range = oldestSessionID.startIndex..<oldestSessionID.firstIndex(of: "S")!
+                let key = oldestSessionID.replacingCharacters(in: range, with: "loading")
+                oldestSessionID.removeFirst("loadingSession:".count)
+                if (oldestSessionID!.hasPrefix("/")) {
+                    oldestSessionID = String(oldestSessionID!.dropFirst())
+                }
+                let urlDelete = serverAddress!.appendingPathComponent(oldestSessionID)
+                var urlDeleteRequest = URLRequest(url: urlDelete)
+                urlDeleteRequest.httpMethod = "DELETE"
+                urlDeleteRequest.setValue("json", forHTTPHeaderField: "dataType")
+                NSLog("Sending DELETE: \(urlDelete). Notebook last accessed at: \(oldestSessionTime)")
+                let task = URLSession.shared.dataTask(with: urlDeleteRequest) { data, response, error in
+                    if let error = error {
+                        NSLog ("Error on DELETE: \(error)")
+                        return
+                    }
+                    guard let response = response as? HTTPURLResponse,
+                        (200...299).contains(response.statusCode) else {
+                            NSLog ("Server error on DELETE")
+                            return
+                    }
+                    self.runningSessions.removeValue(forKey: key)
+                }
+                task.resume()
+            }
+        } else if (cmd.hasPrefix("killingSession:")) {
+            let range = cmd.startIndex..<cmd.firstIndex(of: "S")!
+            let key = cmd.replacingCharacters(in: range, with: "loading")
+            if (runningSessions.removeValue(forKey: key) == nil) {
+                NSLog("Weird, removing notebook that was not started: \(cmd)")
+            }
         } else {
             // JS console:
-             print("JavaScript message: \(message.body)")
+            NSLog("JavaScript message: \(message.body)")
         }
     }
         
@@ -95,6 +150,8 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     var alertShutdownTimer: Timer!
     var urlShutdownRequest: URLRequest!
     var shutdownTaskIdentifier: UIBackgroundTaskIdentifier!
+    var lastPageVisited: String!
+    var runningSessions: [String: Date] = [:]
     
     override func loadView() {
         let contentController = WKUserContentController();
@@ -127,6 +184,15 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     override func viewDidLoad() {
         super.viewDidLoad()
         webView.allowsBackForwardNavigationGestures = true
+        // in case Jupyter has started before the view is active (unlikely):
+        guard (serverAddress != nil) else { return }
+        var lastPageVisited = UserDefaults.standard.string(forKey: "lastOpenUrl")
+        if ((lastPageVisited == nil) || (lastPageVisited == "/tree")) {
+            webView.load(URLRequest(url: serverAddress!)) // server page
+        }
+        if (lastPageVisited!.hasPrefix("/")) { lastPageVisited = String(lastPageVisited!.dropFirst()) }
+        let lastPageVisitedUrl = serverAddress.appendingPathComponent(lastPageVisited!)
+        webView.load(URLRequest(url: lastPageVisitedUrl))
     }
     
     
@@ -134,8 +200,10 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         let app = UIApplication.shared
         let timeLeft = app.backgroundTimeRemaining
         NSLog("Terminating server. Time left = %f ", timeLeft)
-        // shutdown Jupyter server and notebooks (takes about 7s with notebooks)
+        // shutdown Jupyter server and notebooks (takes about 7s with notebooks open)
         webView.load(urlShutdownRequest)
+        // also remove list of running sessions:
+        runningSessions.removeAll(keepingCapacity: true)
         // cancel the alert:
         let notificationCenter = UNUserNotificationCenter.current()
         notificationCenter.removeDeliveredNotifications(withIdentifiers: ["CarnetsShutdownAlert"])
@@ -143,7 +211,6 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         app.endBackgroundTask(shutdownTaskIdentifier)
         shutdownTaskIdentifier = UIBackgroundTaskIdentifier.invalid
     }
-
     
     @objc func didBecomeActive()
     {
@@ -163,13 +230,13 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     @objc func willResignActive()
     {
         // 3 min to close current process. Don't shutdown until 2 mn 45 s
-        // TODO: restore current notebook, not server page
         let app = UIApplication.shared
+        guard (serverAddress != nil) else { return }
         shutdownTaskIdentifier = app.beginBackgroundTask(expirationHandler: self.terminateServer)
         let urlPost = serverAddress!.appendingPathComponent("api/shutdown")
         urlShutdownRequest = URLRequest(url: urlPost)
         urlShutdownRequest.httpMethod = "POST"
-        // Configure the alert (if needed):
+        // Configure the alert (if needed) at 2:15 mn:
         let notificationCenter = UNUserNotificationCenter.current()
         notificationCenter.getNotificationSettings { (settings) in
             if (settings.authorizationStatus == .authorized) {
@@ -193,6 +260,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                 })
             }
         }
+        // Set up a timer to close everything at 2:45 mn
         if (shutdownTimer != nil) {
             shutdownTimer.invalidate()
             shutdownTimer = nil
@@ -205,7 +273,10 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                                                           repeats: false)
             }
     }
+
 }
+
+
 
 // This function is called when the user clicks on a link inside the App
 // This is where we should replace webView.load (for internal action)
@@ -219,4 +290,15 @@ extension ViewController: WKUIDelegate {
         }
         return nil
     }
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        // Method called after a web page has been loaded, included as a result of goBack()
+        // or goForward().
+        // More accurate to store the latest URL accessed than navigationAction()
+        guard (webView.url != nil) else { return }
+        if (webView.url!.path.starts(with: "/api/")) { return }  // don't store api requests
+        UserDefaults.standard.set(webView.url!.path, forKey: "lastOpenUrl")
+    }
+    
+    
 }
