@@ -1,7 +1,7 @@
 diff -Naur Library_orig/lib/python3.7/site-packages/IPython/core/interactiveshell.py Library/lib/python3.7/site-packages/IPython/core/interactiveshell.py
 --- Library_orig/lib/python3.7/site-packages/IPython/core/interactiveshell.py	2019-02-12 12:41:30.000000000 +0100
-+++ Library/lib/python3.7/site-packages/IPython/core/interactiveshell.py	2019-03-11 11:01:39.000000000 +0100
-@@ -2465,8 +2465,38 @@
++++ Library/lib/python3.7/site-packages/IPython/core/interactiveshell.py	2019-03-11 13:13:14.000000000 +0100
+@@ -2465,8 +2465,43 @@
          # but raising SystemExit(_exit_code) will give status 254!
          self.user_ns['_exit_code'] = ec
  
@@ -15,16 +15,21 @@ diff -Naur Library_orig/lib/python3.7/site-packages/IPython/core/interactiveshel
 +          Command to execute.
 +        """
 +        cmd = self.var_expand(cmd, depth=1)
-+        # sys.stdout.fileno, sys.stderr.fileno do not exist
++        # TODO: Command redirection with pipe of file does not work for now. 
++        # Worth investigating. 
++        if ("|" in cmd) or (">" in cmd):
++            print("Carnets does not support command redirection with '!'.", file=sys.stderr)
++            return 
++
 +        p = subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-+        out = p.stdout.read()
-+        err = p.stderr.read()
++        out, err = p.communicate()
++        # TODO: read both streams as they happen
 +        retcode = p.poll()
 +        # out tends to include starging/trailing newlines, so we remove them:
 +        if (err): 
-+            print(err.strip('\n').decode('UTF-8'), file = sys.stderr)
++            print(err.decode('UTF-8').strip('\n'), file = sys.stderr)
 +        if (out): 
-+            print(out.strip('\n').decode('UTF-8'))
++            print(out.decode('UTF-8').strip('\n'))
 +
 +        if retcode is not None: 
 +            if retcode > 128:
