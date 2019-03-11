@@ -1,3 +1,65 @@
+diff -Naur Library_orig/lib/python3.7/site-packages/IPython/core/interactiveshell.py Library/lib/python3.7/site-packages/IPython/core/interactiveshell.py
+--- Library_orig/lib/python3.7/site-packages/IPython/core/interactiveshell.py	2019-02-12 12:41:30.000000000 +0100
++++ Library/lib/python3.7/site-packages/IPython/core/interactiveshell.py	2019-03-11 11:01:39.000000000 +0100
+@@ -2465,8 +2465,38 @@
+         # but raising SystemExit(_exit_code) will give status 254!
+         self.user_ns['_exit_code'] = ec
+ 
++    def system_ios(self, cmd):
++        """Call the given cmd in a subprocess using system on iOS and output 
++        the result on stdout / stderr as needed. 
++
++        Parameters
++        ----------
++        cmd : str
++          Command to execute.
++        """
++        cmd = self.var_expand(cmd, depth=1)
++        # sys.stdout.fileno, sys.stderr.fileno do not exist
++        p = subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
++        out = p.stdout.read()
++        err = p.stderr.read()
++        retcode = p.poll()
++        # out tends to include starging/trailing newlines, so we remove them:
++        if (err): 
++            print(err.strip('\n').decode('UTF-8'), file = sys.stderr)
++        if (out): 
++            print(out.strip('\n').decode('UTF-8'))
++
++        if retcode is not None: 
++            if retcode > 128:
++                retcode = -(retcode - 128)
++            self.user_ns['_exit_code'] = retcode 
++        else:
++            self.user_ns['_exit_code'] = 0
++
+     # use piped system by default, because it is better behaved
+-    system = system_piped
++    # system = system_piped
++    # iOS: use system_ios instead
++    system = system_ios
+ 
+     def getoutput(self, cmd, split=True, depth=0):
+         """Get output (possibly including stderr) from a subprocess.
+diff -Naur Library_orig/lib/python3.7/site-packages/IPython/utils/_process_posix.py Library/lib/python3.7/site-packages/IPython/utils/_process_posix.py
+--- Library_orig/lib/python3.7/site-packages/IPython/utils/_process_posix.py	2019-02-12 12:41:30.000000000 +0100
++++ Library/lib/python3.7/site-packages/IPython/utils/_process_posix.py	2019-03-11 10:24:27.000000000 +0100
+@@ -151,9 +151,13 @@
+             # the text itself.
+             #child = pexpect.spawn(pcmd, searchwindowsize=1)
+             if hasattr(pexpect, 'spawnb'):
+-                child = pexpect.spawnb(self.sh, args=['-c', cmd]) # Pexpect-U
++                # child = pexpect.spawnb(self.sh, args=['-c', cmd]) # Pexpect-U
++                # iOS: don't add "sh -c" in front of command
++                child = pexpect.spawnb(cmd) # Pexpect-U
+             else:
+-                child = pexpect.spawn(self.sh, args=['-c', cmd])  # Vanilla Pexpect
++                # child = pexpect.spawn(self.sh, args=['-c', cmd])  # Vanilla Pexpect
++                # iOS: don't add "sh -c" in front of command
++                child = pexpect.spawn(cmd)  # Vanilla Pexpect
+             flush = sys.stdout.flush
+             while True:
+                 # res is the index of the pattern that caused the match, so we
 diff -Naur Library_orig/lib/python3.7/site-packages/jupyter_client/kernelspec.py Library/lib/python3.7/site-packages/jupyter_client/kernelspec.py
 --- Library_orig/lib/python3.7/site-packages/jupyter_client/kernelspec.py	2019-02-12 12:41:30.000000000 +0100
 +++ Library/lib/python3.7/site-packages/jupyter_client/kernelspec.py	2019-02-25 12:24:20.000000000 +0100
@@ -426,3 +488,27 @@ diff -Naur Library_orig/lib/python3.7/site-packages/notebook/static/tree/js/shut
          var body = $('<div/>').append(
              $('<p/>').text(i18n.msg._("You have shut down Jupyter. You can now close this tab."))
          ).append(
+diff -Naur Library_orig/lib/python3.7/site-packages/pexpect/utils.py Library/lib/python3.7/site-packages/pexpect/utils.py
+--- Library_orig/lib/python3.7/site-packages/pexpect/utils.py	2019-02-12 12:41:31.000000000 +0100
++++ Library/lib/python3.7/site-packages/pexpect/utils.py	2019-03-09 21:07:02.000000000 +0100
+@@ -4,6 +4,8 @@
+ import select
+ import time
+ import errno
++# iOS: to separate between OSX and iOS (both are 'darwin')
++import platform
+ 
+ try:
+     InterruptedError
+@@ -49,7 +51,10 @@
+     '''This takes a given filename; tries to find it in the environment path;
+     then checks if it is executable. This returns the full path to the filename
+     if found and executable. Otherwise this returns None.'''
+-
++    # iOS: we don't search for execs, ios_system will do. 
++    if (sys.platform == 'darwin') and (platform.machine().startswith('iP')):
++        return filename
++    # 
+     # Special case where filename contains an explicit path.
+     if os.path.dirname(filename) != '' and is_executable_file(filename):
+         return filename
