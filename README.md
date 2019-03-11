@@ -33,10 +33,12 @@ Carnets has been approved for TestFlight by Apple. Send an [e-mail](mailto:carne
 If it's a pure python package, you can install it yourself:
 
 ```python
-import subprocess
-p = subprocess.Popen("pip install packageName", stdout = subprocess.PIPE)
-out = p.stdout.read()
-print(out)
+!pip install packageName
 ```
+and remove it if it doesn't work: 
+```python
+!pip uninstall -y packageName
+```
+(you need the "-y" flag because there is no interaction) 
 
 Otherwise, open an [issue](https://github.com/holzschu/carnets/issues) and I'll add it to the default packages. 
