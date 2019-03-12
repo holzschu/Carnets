@@ -21,12 +21,24 @@ func numberOfRunningSessions() -> Int {
 }
 
 func addRunningSession(session: String) {
-    runningSessions.updateValue(Date(), forKey: session)
+    var key = session
+    key.removeFirst("loadingSession:".count)
+    if (key.hasPrefix("/")) {
+        key = String(key.dropFirst())
+    }
+    runningSessions.updateValue(Date(), forKey: key)
 }
 
 func removeRunningSession(session: String) {
-    if (runningSessions.removeValue(forKey: session) == nil) {
-        NSLog("Warning - removing notebook that was not started: \(session)")
+    var key = session
+    if (key.hasPrefix("killingSession:")) {
+        key.removeFirst("killingSession:".count)
+    }
+    if (key.hasPrefix("/")) {
+        key = String(key.dropFirst())
+    }
+    if (runningSessions.removeValue(forKey: key) == nil) {
+        NSLog("Warning - removing notebook that was not started: \(key)")
     }
 }
 
@@ -39,12 +51,6 @@ func oldestRunningSession() -> String {
             oldestSessionID = sessionID
         }
     }
-    NSLog("Oldest session found: %s", oldestSessionID)
-    let range = oldestSessionID.startIndex..<oldestSessionID.firstIndex(of: "S")!
-    let key = oldestSessionID.replacingCharacters(in: range, with: "loading")
-    oldestSessionID.removeFirst("loadingSession:".count)
-    if (oldestSessionID!.hasPrefix("/")) {
-        oldestSessionID = String(oldestSessionID!.dropFirst())
-    }
+    NSLog("Oldest session found: \(oldestSessionID)")
     return oldestSessionID
 }
