@@ -18,7 +18,15 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
         
         allowsDocumentCreation = true
         allowsPickingMultipleItems = true
-        
+        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        let documentViewController = storyBoard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
+        let lastPageVisited = UserDefaults.standard.url(forKey: "lastOpenUrl")
+
+        if (lastPageVisited != nil) && (lastPageVisited!.path != "/tree") {
+            notebookURL = lastPageVisited
+            present(documentViewController, animated: true, completion: nil)
+        }
+
         // Update the style of the UIDocumentBrowserViewController
         // browserUserInterfaceStyle = .dark
         // view.tintColor = .white
@@ -51,14 +59,12 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
         let newFileContent = "{\n\"cells\": [\n{\n\"cell_type\": \"code\",\n\"execution_count\": null,\n\"metadata\": {},\n\"outputs\": [],\n\"source\": []\n}\n],\n\"metadata\": {\n\"kernelspec\": {\n\"display_name\": \"Python 3\",\n\"language\": \"python\",\n\"name\": \"python3\"\n},\n\"language_info\": {\n\"codemirror_mode\": {\n\"name\": \"ipython\",\n\"version\": 3\n},\n\"file_extension\": \".py\",\n\"mimetype\": \"text/x-python\",\n\"name\": \"python\",\n\"nbconvert_exporter\": \"python\",\n\"pygments_lexer\": \"ipython3\",\n\"version\": \"3.7.1\"\n}\n},\n\"nbformat\": 4,\n\"nbformat_minor\": 2\n}"
         let newFileData: Data = newFileContent.data(using: String.Encoding.utf8)!
         // Create an empty document here:
-        FileManager().createFile(atPath: fileName, contents: newFileData, attributes: nil)
-        let newDocumentURL = URL(fileURLWithPath: fileName)
-        // Make sure the importHandler is always called, even if the user cancels the creation request.
-        if newDocumentURL != nil {
-            importHandler(newDocumentURL, .move)
-        } else {
+        if (!FileManager().createFile(atPath: fileName, contents: newFileData, attributes: nil)) {
+            // file creation failed:
             importHandler(nil, .none)
         }
+        let newDocumentURL = URL(fileURLWithPath: fileName)
+        importHandler(newDocumentURL, .move)
     }
     
     func documentBrowser(_ controller: UIDocumentBrowserViewController, didPickDocumentsAt documentURLs: [URL]) {
@@ -81,12 +87,15 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
     // MARK: Document Presentation
     
     func presentDocument(at documentURL: URL) {
+        if (!documentURL.path.hasSuffix(".ipynb")) { return }
+        
         let isSecuredURL = documentURL.startAccessingSecurityScopedResource() == true
+        let document = UIDocument(fileURL: documentURL)
         
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let documentViewController = storyBoard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
-        documentViewController.notebookURL = documentURL
-        
+        notebookURL = documentURL
+        UserDefaults.standard.set(documentURL, forKey: "lastOpenUrl")
         present(documentViewController, animated: true, completion: nil)
         if (isSecuredURL) {
            documentURL.stopAccessingSecurityScopedResource()

@@ -12,6 +12,7 @@ import UserNotifications
 import ios_system
 
 public var serverAddress: URL!
+public var notebookURL: URL?
 var appWebView: WKWebView!
 
 extension String {
@@ -46,6 +47,38 @@ func convertCArguments(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutablePoin
     return args
 }
 
+func urlFromFileURL(fileURL: URL) -> URL {
+    // load notebook sent by documentBrowser:
+    guard (fileURL.isFileURL) else {
+        return serverAddress
+    }
+    var filePath = fileURL.path
+    if (!FileManager().fileExists(atPath: filePath)) {
+        // Don't try to open files that don't exist
+        return serverAddress
+    }
+    if (!filePath.hasSuffix(".ipynb")) {
+        // Don't open files that are not notebooks
+        return serverAddress
+    }
+    let documentsURL = try! FileManager().url(for: .documentDirectory,
+                                              in: .userDomainMask,
+                                              appropriateFor: nil,
+                                              create: true)
+    if (filePath.hasPrefix("/private") && (!documentsURL.path.hasPrefix("/private"))) {
+        filePath = String(filePath.dropFirst("/private".count))
+    }
+    if (filePath.hasPrefix(documentsURL.path)) {
+        // local files.
+        filePath = String(filePath.dropFirst(documentsURL.path.count))
+        if (filePath.hasPrefix("/")) { filePath = String(filePath.dropFirst()) }
+        var fileAddressUrl = serverAddress.appendingPathComponent("notebooks")
+        fileAddressUrl = fileAddressUrl.appendingPathComponent(filePath)
+        return fileAddressUrl
+    }
+    return serverAddress
+}
+
 @_cdecl("openURL_internal")
 public func openURL_internal(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>?) -> Int32 {
     let usage = """
@@ -72,28 +105,9 @@ public func openURL_internal(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutab
     
     serverAddress = url
     
-    // Probably remove everything after this line
-    var lastPageVisited = UserDefaults.standard.string(forKey: "lastOpenUrl")
-    guard (appWebView != nil) else { return 0 }
-    
-    let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-    let documentViewController = storyBoard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
-    if (documentViewController.isViewLoaded) {
-        documentViewController.viewDidLoad()
-    }
-    
-    if ((lastPageVisited == nil) || (lastPageVisited == "/tree")) {
-        // appWebView.load(URLRequest(url: url!)) // server page
-        return 0
-    }
-    if (lastPageVisited!.hasPrefix("/")) { lastPageVisited = String(lastPageVisited!.dropFirst()) }
-    let lastPageVisitedUrl = serverAddress.appendingPathComponent(lastPageVisited!)
-    // NSLog("%@", "Re-opening previous page \(lastPageVisitedUrl)")
-    // appWebView.load(URLRequest(url: lastPageVisitedUrl))
-    // TODO: check that file exists (if local). Urls are like:
-    // http://localhost:8888/notebooks/Typesetting.ipynb
-    // http://localhost:8888/edit/File.txt
-    // Then again, suppressed files should raise an alarm. 
+    guard (notebookURL != nil) else { return 0 }
+
+    appWebView.load(URLRequest(url: urlFromFileURL(fileURL: notebookURL!)))
     return 0
 }
 
@@ -147,8 +161,6 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     var shutdownTaskIdentifier: UIBackgroundTaskIdentifier!
     var lastPageVisited: String!
     // document information
-    @IBOutlet weak var documentNameLabel: UILabel!
-    var notebookURL: URL?
 
     override func loadView() {
         let contentController = WKUserContentController();
@@ -159,9 +171,9 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         config.preferences.javaScriptCanOpenWindowsAutomatically = true
         config.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
         config.preferences.setValue(true, forKey: "shouldAllowUserInstalledFonts")
-
+        
         webView = WKWebView(frame: .zero, configuration: config)
-
+        
         webView.navigationDelegate = self
         webView.uiDelegate = self
         view = webView
@@ -185,43 +197,8 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         webView.allowsBackForwardNavigationGestures = true
         // in case Jupyter has started before the view is active (unlikely):
         guard (serverAddress != nil) else { return }
-        // load notebook sent by documentBrowser:
-        if (notebookURL != nil) {
-            var notebookPath = notebookURL!.path
-            let documentsURL = try! FileManager().url(for: .documentDirectory,
-                                                      in: .userDomainMask,
-                                                      appropriateFor: nil,
-                                                      create: true)
-            if (notebookPath.hasPrefix("/private") && (!documentsURL.path.hasPrefix("/private"))) {
-                notebookPath = String(notebookPath.dropFirst("/private".count))
-            }
-            if (notebookPath.hasPrefix(documentsURL.path)) {
-                // local files.
-                notebookPath = String(notebookPath.dropFirst(documentsURL.path.count))
-                if (notebookPath.hasPrefix("/")) { notebookPath = String(notebookPath.dropFirst()) }
-                var notebookAddressUrl = serverAddress.appendingPathComponent("notebooks")
-                notebookAddressUrl = notebookAddressUrl.appendingPathComponent(notebookPath)
-                webView.load(URLRequest(url: notebookAddressUrl))
-            } else {
-                // non-local files (outside of the app)
-                // This won't work. I have to copy them to the Documents place
-                // Or I serve notebooks from "/".
-                // if (notebookPath.hasPrefix("/")) { notebookPath = String(notebookPath.dropFirst()) }
-                var notebookAddressUrl = serverAddress.appendingPathComponent("notebooks")
-                notebookAddressUrl = notebookAddressUrl.appendingPathComponent(notebookPath)
-                NSLog("%@", "Calling loadPage (raw) \(notebookAddressUrl)")
-                webView.load(URLRequest(url: notebookAddressUrl))
-            }
-        }
-        return
-        // load last notebook
-        var lastPageVisited = UserDefaults.standard.string(forKey: "lastOpenUrl")
-        if ((lastPageVisited == nil) || (lastPageVisited == "/tree")) {
-            webView.load(URLRequest(url: serverAddress!)) // server page
-        }
-        if (lastPageVisited!.hasPrefix("/")) { lastPageVisited = String(lastPageVisited!.dropFirst()) }
-        let lastPageVisitedUrl = serverAddress.appendingPathComponent(lastPageVisited!)
-        webView.load(URLRequest(url: lastPageVisitedUrl))
+        guard (notebookURL != nil) else { return }
+        webView.load(URLRequest(url: urlFromFileURL(fileURL: notebookURL!)))
     }
     
     
@@ -327,10 +304,8 @@ extension ViewController: WKUIDelegate {
         guard (webView.url != nil) else { return }
         if (webView.url!.path.starts(with: "/api/")) { return }  // don't store api requests
         if (webView.url!.path == "/tree") {
+            UserDefaults.standard.set(nil, forKey: "lastOpenUrl")
             dismiss(animated: true)
         } // back to documentBrowser
-        UserDefaults.standard.set(webView.url!.path, forKey: "lastOpenUrl")
     }
-    
-    
 }
