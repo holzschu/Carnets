@@ -168,12 +168,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                 in: .userDomainMask,
                                                 appropriateFor: nil,
                                                 create: true)
-        FileManager().changeCurrentDirectoryPath(documentsURL.path)
+        startingPath = documentsURL.path
+        startingPath = String(startingPath!.dropLast("/Documents".count))
         // When it quits normally, the Jupyter server removes these files
         // If it crashes, it doesn't. So we do some cleanup before the start.
         ios_system("rm -f $HOME/Library/Jupyter/runtime/*.html")
         ios_system("rm -f $HOME/Library/Jupyter/runtime/*.json")
-        // startNotebookServer()
+        ios_system("rm -rf $HOME/tmp/(A*")
+        // iCloud abilities:
+        // We check whether the user has iCloud ability here, and that the container exists
+        // We don't actually store things in iCloud explicitly. Users can access iCloud files.
+        let currentiCloudToken = FileManager().ubiquityIdentityToken
+        if (currentiCloudToken != nil) {
+            DispatchQueue.global().async(execute: {
+                let iCloudContainer = FileManager().url(forUbiquityContainerIdentifier: nil)
+            })
+        }
         return true
     }
 
@@ -203,7 +213,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // start the Jupyter notebook server:
             // (the server will call openURL with the name of the local file)
             NSLog("Starting jupyter notebook server")
-            ios_system("jupyter-notebook")
+            var shellCommand = "jupyter-notebook --notebook-dir "
+            shellCommand.append(startingPath!)
+            ios_system(shellCommand)
             DispatchQueue.main.async {
                 self.notebookServerTerminated()
             }
@@ -258,14 +270,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 NSLog("Failed to reveal the document at URL \(inputURL) with error: '\(error)'")
                 return
             }
-            
+            self.startNotebookServer()
+            NSLog("Received document to open: \(revealedDocumentURL)")
             // Present the Document View Controller for the revealed URL
             documentBrowserViewController.presentDocument(at: revealedDocumentURL!)
         }
 
         return true
     }
-
-
 }
 

@@ -11,9 +11,20 @@ import WebKit
 import UserNotifications
 import ios_system
 
-public var serverAddress: URL!
+var serverAddress: URL!
+// The URL for the file being accessed (can be distant):
 public var notebookURL: URL?
+// A bookmark to the file being accessed (in case it changes name):
+var notebookBookmark: Data?
+// The URL for the notebook: http://localhost:8888/notebooks/Documents/file if local file
+// http://localhost:8888/notebooks/tmp/(A Document Being Saved by YourApp 5)/file if distant
+var kernelURL: URL?
+public var startingPath: String?
 var appWebView: WKWebView!
+
+var bookmarks: [URL: Data] = [:]
+var localFiles: [URL: URL] = [:]
+
 
 extension String {
     
@@ -47,37 +58,156 @@ func convertCArguments(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutablePoin
     return args
 }
 
+// load notebook sent by documentBrowser:
 func urlFromFileURL(fileURL: URL) -> URL {
-    // load notebook sent by documentBrowser:
+    var returnURL = serverAddress
+    if (kernelURL != nil) {
+        returnURL = kernelURL
+    }
     guard (fileURL.isFileURL) else {
-        return serverAddress
+        return returnURL!
     }
     var filePath = fileURL.path
-    if (!FileManager().fileExists(atPath: filePath)) {
-        // Don't try to open files that don't exist
-        return serverAddress
-    }
     if (!filePath.hasSuffix(".ipynb")) {
         // Don't open files that are not notebooks
-        return serverAddress
+        return returnURL!
     }
-    let documentsURL = try! FileManager().url(for: .documentDirectory,
-                                              in: .userDomainMask,
-                                              appropriateFor: nil,
-                                              create: true)
-    if (filePath.hasPrefix("/private") && (!documentsURL.path.hasPrefix("/private"))) {
+    if (filePath.hasPrefix("/private") && (!startingPath!.hasPrefix("/private"))) {
         filePath = String(filePath.dropFirst("/private".count))
     }
-    if (filePath.hasPrefix(documentsURL.path)) {
-        // local files.
-        filePath = String(filePath.dropFirst(documentsURL.path.count))
-        if (filePath.hasPrefix("/")) { filePath = String(filePath.dropFirst()) }
-        var fileAddressUrl = serverAddress.appendingPathComponent("notebooks")
-        fileAddressUrl = fileAddressUrl.appendingPathComponent(filePath)
-        return fileAddressUrl
+    if (filePath.hasPrefix(startingPath!)) {
+        if (!FileManager().fileExists(atPath: filePath)) {
+        // Don't try to open files that don't exist
+            return returnURL!
+        }
+    } else {
+        // Non-local file. Copy into ~/tmp/ and open
+        // first, is that the last file we opened?
+        var fileURLToOpen:URL?
+        var destination:URL?
+        if (notebookBookmark == nil) {
+            notebookBookmark = UserDefaults.standard.data(forKey: "lastOpenUrlBookmark")
+            if (notebookBookmark != nil) {
+                var stale = false
+                do {
+                    let previousURL = try URL(resolvingBookmarkData: notebookBookmark!, bookmarkDataIsStale: &stale)
+                    if (!stale && (previousURL.path == fileURL.path)) {
+                            // They are the same, but the one from the bookmark still has the authorization
+                            fileURLToOpen = previousURL
+                            bookmarks.updateValue(notebookBookmark!, forKey:fileURLToOpen!)
+                    }
+                } catch {
+                    NSLog("Could not resolve the bookmark to previous URL")
+                    print(error)
+                }
+            }
+        }
+        if (fileURLToOpen == nil) {
+            // Not the bookmark stored in UserDefaults, maybe in the dictionary?
+            if (bookmarks[fileURL] != nil) {
+                NSLog("We did this URL before: \(fileURL)")
+                // We've met this one before
+                var stale = false
+                do {
+                    let previousURL = try URL(resolvingBookmarkData: bookmarks[fileURL]!, bookmarkDataIsStale: &stale)
+                    if (!stale && (previousURL.path == fileURL.path)) {
+                        NSLog("Bookmark found: \(fileURL)")
+                        // We did this URL before, and still have the bookmark for it
+                        fileURLToOpen = previousURL
+                        notebookBookmark = bookmarks[fileURL]
+                    }
+                } catch {
+                    NSLog("Could not resolve the bookmark to previous URL")
+                    print(error)
+                }
+            }
+        }
+        // no existing bookmarks, so we take the URL given:
+        if (fileURLToOpen == nil) {
+            fileURLToOpen = fileURL
+            notebookBookmark = nil  // if we're there, we don't have a bookmark
+        }
+        destination = localFiles[fileURL]
+        if (destination != nil) { NSLog("Temp directory found: \(destination!)") }
+        if (destination == nil) {
+            // do we have a local file storage:
+            let temporaryDirectory = try! FileManager().url(for: .itemReplacementDirectory,
+                                                            in: .userDomainMask,
+                                                            appropriateFor: URL(fileURLWithPath: startingPath!),
+                                                            create: true)
+            destination = temporaryDirectory.appendingPathComponent(fileURLToOpen!.lastPathComponent)
+            localFiles.updateValue(destination!, forKey:fileURLToOpen!)
+        }
+        let isSecuredURL = fileURLToOpen!.startAccessingSecurityScopedResource() == true
+        NSLog("isSecuredURL: \(isSecuredURL)")
+        do {
+            if (notebookBookmark == nil) {
+                notebookBookmark = try fileURLToOpen!.bookmarkData(options: [],
+                                                                   includingResourceValuesForKeys: nil,
+                                                                   relativeTo: nil)
+                bookmarks.updateValue(notebookBookmark!, forKey:fileURLToOpen!)
+            }
+            UserDefaults.standard.set(notebookBookmark, forKey: "lastOpenUrlBookmark")
+            if (FileManager().fileExists(atPath: destination!.path)) {
+                try FileManager().removeItem(atPath: destination!.path)
+            }
+            try FileManager().copyItem(at: fileURLToOpen!, to: destination!)
+        }
+        catch {
+            print(error)
+            NSLog("Trying to access: \(fileURLToOpen)")
+            if (isSecuredURL) {
+                fileURLToOpen!.stopAccessingSecurityScopedResource()
+            }
+            return returnURL!
+        }
+        if (isSecuredURL) {
+            fileURLToOpen!.stopAccessingSecurityScopedResource()
+        }
+        filePath = destination!.path
+        if (filePath.hasPrefix("/private") && (!startingPath!.hasPrefix("/private"))) {
+            filePath = String(filePath.dropFirst("/private".count))
+        }
     }
-    return serverAddress
+    // local files.
+    filePath = String(filePath.dropFirst(startingPath!.count))
+    if (filePath.hasPrefix("/")) { filePath = String(filePath.dropFirst()) }
+    var fileAddressUrl = serverAddress.appendingPathComponent("notebooks")
+    fileAddressUrl = fileAddressUrl.appendingPathComponent(filePath)
+    return fileAddressUrl
 }
+
+func saveDistantFile() {
+    var localFilePath = kernelURL!.path
+    localFilePath = String(localFilePath.dropFirst("/notebooks".count))
+    if (localFilePath.hasPrefix("/tmp")) {
+        guard (notebookBookmark != nil) else { return }
+        localFilePath = startingPath!.appending(localFilePath)
+        do {
+            var stale = false
+            notebookURL = try URL(resolvingBookmarkData: notebookBookmark!, bookmarkDataIsStale: &stale)
+            if (notebookURL != nil) {
+                let temporaryDirectory = try! FileManager().url(for: .itemReplacementDirectory,
+                                                                in: .userDomainMask,
+                                                                appropriateFor: URL(fileURLWithPath: startingPath!),
+                                                                create: true)
+                var destination = temporaryDirectory
+                destination = destination.appendingPathComponent(kernelURL!.lastPathComponent)
+                try FileManager().copyItem(at: URL(fileURLWithPath: localFilePath), to: destination)
+                notebookURL!.startAccessingSecurityScopedResource()
+                try FileManager().replaceItemAt(notebookURL!, withItemAt: destination, backupItemName: nil, options: [])
+                notebookURL!.stopAccessingSecurityScopedResource()
+                try FileManager().removeItem(at: temporaryDirectory)
+                NSLog("Saved distant file \(notebookURL!)")
+            }
+        }
+        catch {
+            print(error)
+            NSLog("Could not save distant file \(notebookURL!)")
+        }
+    }
+}
+
 
 @_cdecl("openURL_internal")
 public func openURL_internal(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>?) -> Int32 {
@@ -104,10 +234,10 @@ public func openURL_internal(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutab
     NSLog("%@", "Server address is set to ".appending(args[1]))
     
     serverAddress = url
-    
     guard (notebookURL != nil) else { return 0 }
 
-    appWebView.load(URLRequest(url: urlFromFileURL(fileURL: notebookURL!)))
+    kernelURL = urlFromFileURL(fileURL: notebookURL!)
+    appWebView.load(URLRequest(url: kernelURL!))
     return 0
 }
 
@@ -119,8 +249,10 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             // Warn the main app that the user has pressed the "quit" button
             clearAllRunningSessions()
             NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: notificationQuitRequested)))
+        } else if (cmd == "save") {
+            // if the file open is from another App, we copy the newly saved file too
+            saveDistantFile()
         } else if (cmd.hasPrefix("loadingSession:")) {
-            NSLog(cmd)
             addRunningSession(session: cmd)
             if (numberOfRunningSessions() >= 4) { // Maybe "> 4"?
                 NSLog("More than 4 notebook running (including this one). Time to cleanup.")
@@ -144,7 +276,6 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                 task.resume()
             }
         } else if (cmd.hasPrefix("killingSession:")) {
-            NSLog(cmd)
             let range = cmd.startIndex..<cmd.firstIndex(of: "S")!
             let key = cmd.replacingCharacters(in: range, with: "loading")
             removeRunningSession(session: key)
@@ -198,9 +329,9 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         // in case Jupyter has started before the view is active (unlikely):
         guard (serverAddress != nil) else { return }
         guard (notebookURL != nil) else { return }
-        webView.load(URLRequest(url: urlFromFileURL(fileURL: notebookURL!)))
+        kernelURL = urlFromFileURL(fileURL: notebookURL!)
+        webView.load(URLRequest(url: kernelURL!))
     }
-    
     
     @objc func terminateServer() {
         let app = UIApplication.shared
@@ -297,14 +428,19 @@ extension ViewController: WKUIDelegate {
         return nil
     }
     
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         // Method called after a web page has been loaded, included as a result of goBack()
         // or goForward().
         // More accurate to store the latest URL accessed than navigationAction()
         guard (webView.url != nil) else { return }
         if (webView.url!.path.starts(with: "/api/")) { return }  // don't store api requests
         if (webView.url!.path == "/tree") {
+            // We're leaving. Copy edited file back to place and remove directory:
+            saveDistantFile()
             UserDefaults.standard.set(nil, forKey: "lastOpenUrl")
+            UserDefaults.standard.set(nil, forKey: "lastOpenUrlBookmark")
+            notebookURL = nil
+            kernelURL = nil
             dismiss(animated: true)
         } // back to documentBrowser
     }

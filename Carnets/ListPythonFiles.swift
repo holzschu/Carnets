@@ -5347,6 +5347,7 @@ let PythonFiles = [
 "Library/lib/python3.7/site-packages/notebook/static/base/images/favicon.ico",
 "Library/lib/python3.7/site-packages/notebook/static/base/images/favicon-terminal.ico",
 "Library/lib/python3.7/site-packages/notebook/static/base/images/logo.png",
+"Library/lib/python3.7/site-packages/notebook/static/base/images/back.png",
 "Library/lib/python3.7/site-packages/notebook/static/base/images/favicon-notebook.ico",
 "Library/lib/python3.7/site-packages/notebook/static/base/images/favicon-file.ico",
 "Library/lib/python3.7/site-packages/notebook/static/base/js/security.js",

@@ -89,17 +89,11 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
     func presentDocument(at documentURL: URL) {
         if (!documentURL.path.hasSuffix(".ipynb")) { return }
         
-        let isSecuredURL = documentURL.startAccessingSecurityScopedResource() == true
-        let document = UIDocument(fileURL: documentURL)
-        
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let documentViewController = storyBoard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
         notebookURL = documentURL
         UserDefaults.standard.set(documentURL, forKey: "lastOpenUrl")
         present(documentViewController, animated: true, completion: nil)
-        if (isSecuredURL) {
-           documentURL.stopAccessingSecurityScopedResource()
-        }
     }
 }
 
