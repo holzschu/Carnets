@@ -18,7 +18,7 @@ public var notebookURL: URL?
 var notebookBookmark: Data?
 // The URL for the notebook: http://localhost:8888/notebooks/Documents/file if local file
 // http://localhost:8888/notebooks/tmp/(A Document Being Saved by YourApp 5)/file if distant
-var kernelURL: URL?
+public var kernelURL: URL?
 public var startingPath: String?
 var appWebView: WKWebView!
 
@@ -105,13 +105,11 @@ func urlFromFileURL(fileURL: URL) -> URL {
         if (fileURLToOpen == nil) {
             // Not the bookmark stored in UserDefaults, maybe in the dictionary?
             if (bookmarks[fileURL] != nil) {
-                NSLog("We did this URL before: \(fileURL)")
                 // We've met this one before
                 var stale = false
                 do {
                     let previousURL = try URL(resolvingBookmarkData: bookmarks[fileURL]!, bookmarkDataIsStale: &stale)
                     if (!stale && (previousURL.path == fileURL.path)) {
-                        NSLog("Bookmark found: \(fileURL)")
                         // We did this URL before, and still have the bookmark for it
                         fileURLToOpen = previousURL
                         notebookBookmark = bookmarks[fileURL]
@@ -128,7 +126,6 @@ func urlFromFileURL(fileURL: URL) -> URL {
             notebookBookmark = nil  // if we're there, we don't have a bookmark
         }
         destination = localFiles[fileURL]
-        if (destination != nil) { NSLog("Temp directory found: \(destination!)") }
         if (destination == nil) {
             // do we have a local file storage:
             let temporaryDirectory = try! FileManager().url(for: .itemReplacementDirectory,
@@ -136,11 +133,21 @@ func urlFromFileURL(fileURL: URL) -> URL {
                                                             appropriateFor: URL(fileURLWithPath: startingPath!),
                                                             create: true)
             destination = temporaryDirectory.appendingPathComponent(fileURLToOpen!.lastPathComponent)
+            print(destination)
             localFiles.updateValue(destination!, forKey:fileURLToOpen!)
         }
         let isSecuredURL = fileURLToOpen!.startAccessingSecurityScopedResource() == true
-        NSLog("isSecuredURL: \(isSecuredURL)")
         do {
+            // Specific treatment for files on iCloud that are not downloaded:
+            if (!FileManager().fileExists(atPath: fileURLToOpen!.path)) {
+                NSLog("Downloading file from iCloud: \(fileURLToOpen)")
+                try FileManager().startDownloadingUbiquitousItem(at: fileURLToOpen!)
+                let startingTime = Date()
+                // try downloading the file for 5s, then give up:
+                while (!FileManager().fileExists(atPath: fileURLToOpen!.path) && (Date().timeIntervalSince(startingTime) < 5)) { }
+                // TODO: add an alert, ask if user wants to continue
+                NSLog("Done downloading, new status: \(FileManager().fileExists(atPath: fileURLToOpen!.path))")
+            }
             if (notebookBookmark == nil) {
                 notebookBookmark = try fileURLToOpen!.bookmarkData(options: [],
                                                                    includingResourceValuesForKeys: nil,
@@ -155,7 +162,6 @@ func urlFromFileURL(fileURL: URL) -> URL {
         }
         catch {
             print(error)
-            NSLog("Trying to access: \(fileURLToOpen)")
             if (isSecuredURL) {
                 fileURLToOpen!.stopAccessingSecurityScopedResource()
             }
@@ -176,6 +182,16 @@ func urlFromFileURL(fileURL: URL) -> URL {
     fileAddressUrl = fileAddressUrl.appendingPathComponent(filePath)
     return fileAddressUrl
 }
+
+
+/*
+ override func fileAttributesToWrite(to url: URL, for saveOperation: UIDocumentSaveOperation) throws -> [AnyHashable : Any] {
+ let thumbnail = thumbnailForDocument(at: url) return [
+ URLResourceKey.hasHiddenExtensionKey: true, URLResourceKey.thumbnailDictionaryKey: [
+ URLThumbnailDictionaryItem.NSThumbnail1024x1024SizeKey: thumbnail ]
+ ] }
+ */
+
 
 func saveDistantFile() {
     var localFilePath = kernelURL!.path

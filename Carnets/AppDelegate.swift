@@ -273,9 +273,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.startNotebookServer()
             NSLog("Received document to open: \(revealedDocumentURL)")
             // Present the Document View Controller for the revealed URL
-            documentBrowserViewController.presentDocument(at: revealedDocumentURL!)
+            if (notebookURL == nil) {
+                NSLog("calling documentBrowserViewController")
+                documentBrowserViewController.presentDocument(at: revealedDocumentURL!)
+            } else {
+                NSLog("calling appWebView")
+                notebookURL = revealedDocumentURL
+                UserDefaults.standard.set(notebookURL, forKey: "lastOpenUrl")
+                kernelURL = urlFromFileURL(fileURL: notebookURL!)
+                appWebView.load(URLRequest(url: kernelURL!))
+            }
         }
-
         return true
     }
 }
