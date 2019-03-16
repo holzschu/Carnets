@@ -49,7 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return (majorInstalled < majorCurrent) ||
             ((majorInstalled == majorCurrent) && (minorInstalled < minorCurrent)) ||
             ((majorInstalled == majorCurrent) && (minorInstalled == minorCurrent) &&
-                (buildNumberInstalled < currentBuildInt))
+                (buildNumberInstalled <= currentBuildInt))
     }
     
     func queueUpdatingPythonFiles() {

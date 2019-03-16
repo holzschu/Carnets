@@ -449,6 +449,7 @@ extension ViewController: WKUIDelegate {
         // or goForward().
         // More accurate to store the latest URL accessed than navigationAction()
         guard (webView.url != nil) else { return }
+        NSLog("Trying to load: \(webView.url)")
         if (webView.url!.path.starts(with: "/api/")) { return }  // don't store api requests
         if (webView.url!.path == "/tree") {
             // We're leaving. Copy edited file back to place and remove directory:

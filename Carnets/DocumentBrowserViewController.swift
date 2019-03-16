@@ -42,29 +42,27 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
     func documentBrowser(_ controller: UIDocumentBrowserViewController, didRequestDocumentCreationWithHandler importHandler: @escaping (URL?, UIDocumentBrowserViewController.ImportMode) -> Void) {
 
         // Set the URL for the new document here. Optionally, you can present a template chooser before calling the importHandler.
-        let documentsURL = try! FileManager().url(for: .documentDirectory,
-                                              in: .userDomainMask,
-                                              appropriateFor: nil,
-                                              create: true)
-        var fileName = documentsURL.path
-        fileName.append("/Untitled.ipynb")
-        var numUntitledFiles = 1
-        while (FileManager().fileExists(atPath: fileName)) {
-            fileName = documentsURL.path
-            fileName.append("/Untitled_")
-            fileName.append(String(numUntitledFiles))
-            fileName.append(".ipynb")
-            numUntitledFiles += 1
-        }
+        let temporaryDirectoryURL = try! FileManager().url(for: .itemReplacementDirectory,
+                                                           in: .userDomainMask,
+                                                           appropriateFor: URL(fileURLWithPath: startingPath!),
+                                                           create: true)
+        var temporaryFileURL = temporaryDirectoryURL
+        temporaryFileURL.appendPathComponent("Untitled.ipynb")
         let newFileContent = "{\n\"cells\": [\n{\n\"cell_type\": \"code\",\n\"execution_count\": null,\n\"metadata\": {},\n\"outputs\": [],\n\"source\": []\n}\n],\n\"metadata\": {\n\"kernelspec\": {\n\"display_name\": \"Python 3\",\n\"language\": \"python\",\n\"name\": \"python3\"\n},\n\"language_info\": {\n\"codemirror_mode\": {\n\"name\": \"ipython\",\n\"version\": 3\n},\n\"file_extension\": \".py\",\n\"mimetype\": \"text/x-python\",\n\"name\": \"python\",\n\"nbconvert_exporter\": \"python\",\n\"pygments_lexer\": \"ipython3\",\n\"version\": \"3.7.1\"\n}\n},\n\"nbformat\": 4,\n\"nbformat_minor\": 2\n}"
         let newFileData: Data = newFileContent.data(using: String.Encoding.utf8)!
         // Create an empty document here:
-        if (!FileManager().createFile(atPath: fileName, contents: newFileData, attributes: nil)) {
+        if (!FileManager().createFile(atPath: temporaryFileURL.path, contents: newFileData, attributes: nil)) {
             // file creation failed:
             importHandler(nil, .none)
         }
-        let newDocumentURL = URL(fileURLWithPath: fileName)
-        importHandler(newDocumentURL, .move)
+        importHandler(temporaryFileURL, .move)
+        do {
+            try FileManager().removeItem(at: temporaryDirectoryURL)
+        }
+        catch {
+            print(error)
+            NSLog("Could not erase temporary directory")
+        }
     }
     
     func documentBrowser(_ controller: UIDocumentBrowserViewController, didPickDocumentsAt documentURLs: [URL]) {
