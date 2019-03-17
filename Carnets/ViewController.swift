@@ -70,6 +70,7 @@ func urlFromFileURL(fileURL: URL) -> URL {
     var filePath = fileURL.path
     if (!filePath.hasSuffix(".ipynb")) {
         // Don't open files that are not notebooks
+        NSLog("Can't open this file (wrong suffix): \(filePath)")
         return returnURL!
     }
     if (filePath.hasPrefix("/private") && (!startingPath!.hasPrefix("/private"))) {
@@ -178,6 +179,7 @@ func urlFromFileURL(fileURL: URL) -> URL {
     // local files.
     filePath = String(filePath.dropFirst(startingPath!.count))
     if (filePath.hasPrefix("/")) { filePath = String(filePath.dropFirst()) }
+    while (serverAddress == nil) {  }
     var fileAddressUrl = serverAddress.appendingPathComponent("notebooks")
     fileAddressUrl = fileAddressUrl.appendingPathComponent(filePath)
     return fileAddressUrl
@@ -268,6 +270,14 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         } else if (cmd == "save") {
             // if the file open is from another App, we copy the newly saved file too
             saveDistantFile()
+        } else if (cmd == "back") {
+            if self.webView.canGoBack {
+                self.webView.go(to: self.webView.backForwardList.backItem!)
+            } else {
+                var treeAddress = serverAddress
+                treeAddress = treeAddress?.appendingPathComponent("tree")
+                self.webView.load(URLRequest(url: treeAddress!))
+            }
         } else if (cmd.hasPrefix("loadingSession:")) {
             addRunningSession(session: cmd)
             if (numberOfRunningSessions() >= 4) { // Maybe "> 4"?
@@ -418,6 +428,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             shutdownTimer.invalidate()
             shutdownTimer = nil
         }
+        // Multiple timers being started???
         DispatchQueue.main.async {
                 self.shutdownTimer = Timer.scheduledTimer(timeInterval: 165,
                                                           target: self,
@@ -426,7 +437,17 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                                                           repeats: false)
             }
     }
-
+    
+    /* func goBack() -> WKNavigation? {
+        if self.webView.canGoBack {
+            return self.webView.go(to: self.webView.backForwardList.backItem!)
+        } else {
+            print("Can't go back")
+            var treeAddress = serverAddress
+            treeAddress = treeAddress?.appendingPathComponent("tree")
+            return self.webView.load(URLRequest(url: treeAddress!))
+        }
+    } */
 }
 
 

@@ -32,7 +32,6 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
         // view.tintColor = .white
         
         // Specify the allowed content types of your application via the Info.plist.
-        
         // Do any additional setup after loading the view, typically from a nib.
     }
     
@@ -56,21 +55,19 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
             importHandler(nil, .none)
         }
         importHandler(temporaryFileURL, .move)
-        do {
-            try FileManager().removeItem(at: temporaryDirectoryURL)
-        }
-        catch {
-            print(error)
-            NSLog("Could not erase temporary directory")
-        }
+        // Note: we cannot delete the temporary directory, otherwise the file opening fails.
     }
     
     func documentBrowser(_ controller: UIDocumentBrowserViewController, didPickDocumentsAt documentURLs: [URL]) {
-        guard let sourceURL = documentURLs.first else { return }
-        
         // Present the Document View Controller for the first document that was picked.
         // If you support picking multiple items, make sure you handle them all.
-        presentDocument(at: sourceURL)
+        for sourceURL in documentURLs {
+            print("didPickDocumentsAt, presenting document: \(sourceURL)")
+            presentDocument(at: sourceURL)
+            // TODO: wait until document is fully loaded. 
+        }
+        // guard let sourceURL = documentURLs.first else { return }
+        // presentDocument(at: sourceURL)
     }
     
     func documentBrowser(_ controller: UIDocumentBrowserViewController, didImportDocumentAt sourceURL: URL, toDestinationURL destinationURL: URL) {
@@ -85,7 +82,8 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
     // MARK: Document Presentation
     
     func presentDocument(at documentURL: URL) {
-        if (!documentURL.path.hasSuffix(".ipynb")) { return }
+        // This may be causing issues with non-UTF8 systems.
+        // if (!documentURL.path.hasSuffix(".ipynb")) { return }
         
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let documentViewController = storyBoard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
