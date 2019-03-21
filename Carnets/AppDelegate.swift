@@ -21,6 +21,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var shutdownRequest: Bool = false
     var mustRecompilePythonFiles: Bool = false
     var applicationInBackground: Bool = false
+    // shutdown tasks:
+    var shutdownTimer: Timer!
+    var alertShutdownTimer: Timer!
+    var urlShutdownRequest: URLRequest!
+    var shutdownTaskIdentifier: UIBackgroundTaskIdentifier!
+
     
     func needToUpdatePythonFiles() -> Bool {
         // do it with UserDefaults, not storing in files
@@ -49,7 +55,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return (majorInstalled < majorCurrent) ||
             ((majorInstalled == majorCurrent) && (minorInstalled < minorCurrent)) ||
             ((majorInstalled == majorCurrent) && (minorInstalled == minorCurrent) &&
-                (buildNumberInstalled <= currentBuildInt))
+                (buildNumberInstalled < currentBuildInt))
     }
     
     func queueUpdatingPythonFiles() {
@@ -71,10 +77,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var newPythonPath = mainPythonUrl.path
         let pythonDirectories = ["Library/lib/python3.7/site-packages",
                                  "Library/lib/python3.7/site-packages/cffi-1.11.5-py3.7-macosx-12.1-iPad6,7.egg",
-                                 "Library/lib/python3.7/site-packages/numpy-1.16.0-py3.7-macosx-12.1-iPad6,7.egg/",
+                                 "Library/lib/python3.7/site-packages/cycler-0.10.0-py3.7.egg",
+                                 "Library/lib/python3.7/site-packages/jupyter_contrib_core-0.3.3-py3.7.egg",
+                                 "Library/lib/python3.7/site-packages/jupyter_contrib_nbextensions-0.5.1-py3.7.egg",
+                                 "Library/lib/python3.7/site-packages/jupyter_highlight_selected_word-0.2.0-py3.7.egg",
+                                 "Library/lib/python3.7/site-packages/jupyter_latex_envs-1.4.6-py3.7.egg",
+                                 "Library/lib/python3.7/site-packages/jupyter_nbextensions_configurator-0.4.1-py3.7.egg",
                                  "Library/lib/python3.7/site-packages/matplotlib-3.0.2-py3.7.egg",
-                                 "Library/lib/python3.7/site-packages/cycler-0.10.0-py3.7.egg/",
-                                 "Library/lib/python3.7/site-packages/pyparsing-2.3.1-py3.7.egg"]
+                                 "Library/lib/python3.7/site-packages/numpy-1.16.0-py3.7-macosx-12.1-iPad6,7.egg",
+                                 "Library/lib/python3.7/site-packages/pyparsing-2.3.1-py3.7.egg",
+                                 "Library/lib/python3.7/site-packages/tornado-6.0.1-py3.7-macosx-12.1-iPad6,7.egg",
+                                 ]
         for otherPythonDirectory in pythonDirectories {
             let secondaryPythonUrl = bundleUrl.appendingPathComponent(otherPythonDirectory)
             newPythonPath = newPythonPath.appending(":").appending(secondaryPythonUrl.path)
@@ -104,10 +117,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         // Done, now update the installed version:
         moveFilesQueue.async{
-            let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
-            UserDefaults.standard.set(currentVersion, forKey: "versionInstalled")
-            let currentBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as! String
-            UserDefaults.standard.set(currentBuild, forKey: "buildNumber")
             NSLog("Finished updating python files.")
             if (originalPythonpath != nil) {
                 setenv("PYTHONPATH", originalPythonpath, 1)
@@ -115,6 +124,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let returnValue = unsetenv("PYTHONPATH")
                 if (returnValue == -1) { NSLog("Could not unsetenv PYTHONPATH") }
             }
+            NSLog("Installing extensions.")
+            ios_system("jupyter-contrib nbextension install --user")
+            ios_system("jupyter-nbextension install --user --py widgetsnbextension")
+            ios_system("jupyter-nbextension enable --user --py widgetsnbextension")
+            NSLog("Done upgrading Python files.")
+            let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
+            UserDefaults.standard.set(currentVersion, forKey: "versionInstalled")
+            let currentBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as! String
+            UserDefaults.standard.set(currentBuild, forKey: "buildNumber")
         }
         // Compiling seems to take a toll on interactivity
         /*
@@ -163,13 +181,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(self.shutdownRequested), name: NSNotification.Name(rawValue: notificationQuitRequested), object: nil)
         // add our own function "openurl"
         replaceCommand("openurl", "openURL_internal", true)
-        // set working directory (comment to serve from /)
-        let documentsURL = try! FileManager().url(for: .documentDirectory,
-                                                in: .userDomainMask,
-                                                appropriateFor: nil,
-                                                create: true)
-        startingPath = documentsURL.path
-        startingPath = String(startingPath!.dropLast("/Documents".count))
         // When it quits normally, the Jupyter server removes these files
         // If it crashes, it doesn't. So we do some cleanup before the start.
         ios_system("rm -f $HOME/Library/Jupyter/runtime/*.html")
@@ -208,6 +219,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if (notebookServerRunning) { return }
         if (applicationInBackground) { return }
         // start the server:
+        // set working directory (comment to serve from /)
+        let documentsURL = try! FileManager().url(for: .documentDirectory,
+                                                  in: .userDomainMask,
+                                                  appropriateFor: nil,
+                                                  create: true)
+        startingPath = documentsURL.path
+        NSLog("Documents directory = \(documentsURL)")
+        startingPath = String(startingPath!.dropLast("/Documents".count))
+        NSLog("Starting path = \(startingPath)")
         jupyterQueue.async {
             self.notebookServerRunning = true
             // start the Jupyter notebook server:
@@ -222,11 +242,83 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
+    
+    @objc func terminateServer() {
+        let app = UIApplication.shared
+        let timeLeft = app.backgroundTimeRemaining
+        NSLog("Terminating server. Time left = %f ", timeLeft)
+        // shutdown Jupyter server and notebooks (takes about 7s with notebooks open)
+        let task = URLSession.shared.dataTask(with: urlShutdownRequest) { data, response, error in
+            if let error = error {
+                NSLog ("Error on shutdown server: \(error)")
+                return
+            }
+            guard let response = response as? HTTPURLResponse,
+                (200...299).contains(response.statusCode) else {
+                    NSLog ("Server error on shutdown")
+                    return
+            }
+            clearAllRunningSessions()
+        }
+        task.resume()
+        // cancel the alert:
+        let notificationCenter = UNUserNotificationCenter.current()
+        notificationCenter.removeDeliveredNotifications(withIdentifiers: ["CarnetsShutdownAlert"])
+        shutdownTimer = nil
+        app.endBackgroundTask(shutdownTaskIdentifier)
+        shutdownTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+    }
+
+    
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
         // TODO: save every open notebook (inside each)
         NSLog("Carnets: applicationWillResignActive")
+        // 3 min to close current process. Don't shutdown until 2 mn 45 s
+        guard (serverAddress != nil) else { return }
+        let app = UIApplication.shared
+        shutdownTaskIdentifier = app.beginBackgroundTask(expirationHandler: self.terminateServer)
+        let urlPost = serverAddress!.appendingPathComponent("api/shutdown")
+        urlShutdownRequest = URLRequest(url: urlPost)
+        urlShutdownRequest.httpMethod = "POST"
+        // Configure the alert (if needed) at 2:15 mn:
+        let notificationCenter = UNUserNotificationCenter.current()
+        notificationCenter.getNotificationSettings { (settings) in
+            if (settings.authorizationStatus == .authorized) {
+                let shutdownAlertContent = UNMutableNotificationContent()
+                if settings.alertSetting == .enabled {
+                    shutdownAlertContent.title = NSString.localizedUserNotificationString(forKey: "Carnets shutdown alert", arguments: nil)
+                    shutdownAlertContent.body = NSString.localizedUserNotificationString(forKey: "Carnets is about to terminate. Click here if you want to continue.", arguments: nil)
+                }
+                if settings.soundSetting == .enabled {
+                    shutdownAlertContent.sound = UNNotificationSound.default
+                }
+                let localShutdownNotification = UNNotificationRequest(identifier: "CarnetsShutdownAlert",
+                                                                      content: shutdownAlertContent,
+                                                                      trigger: UNTimeIntervalNotificationTrigger(timeInterval: (135), repeats: false))
+                notificationCenter.add(localShutdownNotification, withCompletionHandler: { (error) in
+                    if let error = error {
+                        var message = "Error in setting up the alert: "
+                        message.append(error.localizedDescription)
+                        NSLog(message)
+                    }
+                })
+            }
+        }
+        // Set up a timer to close everything at 2:45 mn
+        if (shutdownTimer != nil) {
+            shutdownTimer.invalidate()
+            shutdownTimer = nil
+        }
+        // Multiple timers being started???
+        DispatchQueue.main.async {
+            self.shutdownTimer = Timer.scheduledTimer(timeInterval: 165,
+                                                      target: self,
+                                                      selector: #selector(self.terminateServer),
+                                                      userInfo: nil,
+                                                      repeats: false)
+        }
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -248,6 +340,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         NSLog("Carnets: applicationDidBecomeActive")
         applicationInBackground = false
+        // cancel the alert:
+        let notificationCenter = UNUserNotificationCenter.current()
+        notificationCenter.removePendingNotificationRequests(withIdentifiers: ["CarnetsShutdownAlert"])
+        // cancel the termination:
+        if ((shutdownTaskIdentifier != nil) && (shutdownTaskIdentifier != UIBackgroundTaskIdentifier.invalid)) {
+            let app = UIApplication.shared
+            app.endBackgroundTask(shutdownTaskIdentifier)
+            shutdownTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+        }
+        if (shutdownTimer != nil) {
+            shutdownTimer.invalidate()
+            shutdownTimer = nil
+        }
         startNotebookServer()
     }
 
@@ -279,7 +384,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             } else {
                 NSLog("calling appWebView")
                 notebookURL = revealedDocumentURL
-                UserDefaults.standard.set(notebookURL, forKey: "lastOpenUrl")
                 kernelURL = urlFromFileURL(fileURL: notebookURL!)
                 appWebView.load(URLRequest(url: kernelURL!))
             }

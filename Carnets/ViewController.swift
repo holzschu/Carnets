@@ -17,7 +17,7 @@ public var notebookURL: URL?
 // A bookmark to the file being accessed (in case it changes name):
 var notebookBookmark: Data?
 // The URL for the notebook: http://localhost:8888/notebooks/Documents/file if local file
-// http://localhost:8888/notebooks/tmp/(A Document Being Saved by YourApp 5)/file if distant
+// http://localhost:8888/notebooks/tmp/(A Document Being Saved by Carnets 5)/file if distant
 public var kernelURL: URL?
 public var startingPath: String?
 var appWebView: WKWebView!
@@ -68,11 +68,6 @@ func urlFromFileURL(fileURL: URL) -> URL {
         return returnURL!
     }
     var filePath = fileURL.path
-    if (!filePath.hasSuffix(".ipynb")) {
-        // Don't open files that are not notebooks
-        NSLog("Can't open this file (wrong suffix): \(filePath)")
-        return returnURL!
-    }
     if (filePath.hasPrefix("/private") && (!startingPath!.hasPrefix("/private"))) {
         filePath = String(filePath.dropFirst("/private".count))
     }
@@ -134,7 +129,6 @@ func urlFromFileURL(fileURL: URL) -> URL {
                                                             appropriateFor: URL(fileURLWithPath: startingPath!),
                                                             create: true)
             destination = temporaryDirectory.appendingPathComponent(fileURLToOpen!.lastPathComponent)
-            print(destination)
             localFiles.updateValue(destination!, forKey:fileURLToOpen!)
         }
         let isSecuredURL = fileURLToOpen!.startAccessingSecurityScopedResource() == true
@@ -259,6 +253,23 @@ public func openURL_internal(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutab
     return 0
 }
 
+// compare 2 URLs and return true if they correspond to the same
+// page, excluding parameters and queries. This avoids infinite
+// loops with redirections.
+// Maybe we need to include parameters, but queries are excluded.
+// We had an infinite loop with http://localhost:8888/nbextensions/
+// loading http://localhost:8888/nbextensions/?nbextension=zenmode/main
+func sameLocation(url1: URL?, url2: URL?) -> Bool {
+    if (url1 == nil) && (url2 == nil) { return true }
+    if (url1 == nil) { return false }
+    if (url2 == nil) { return false }
+    if (url1!.host != url2!.host) { return false }
+    if (url1!.port != url2!.port) { return false }
+    if (url1!.path != url2!.path) { return false }
+    return true
+}
+
+
 class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -272,18 +283,35 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             saveDistantFile()
         } else if (cmd == "back") {
             if self.webView.canGoBack {
-                self.webView.go(to: self.webView.backForwardList.backItem!)
-            } else {
-                var treeAddress = serverAddress
-                treeAddress = treeAddress?.appendingPathComponent("tree")
-                self.webView.load(URLRequest(url: treeAddress!))
+                var position = -1
+                var backPageItem = self.webView.backForwardList.item(at: position)
+                while ((backPageItem != nil) && (sameLocation(url1: backPageItem?.url, url2: self.webView.url))) {
+                    position -= 1
+                    backPageItem = self.webView.backForwardList.item(at: position)
+                }
+                if (backPageItem != nil) {
+                    self.webView.go(to: backPageItem!)
+                    return
+                }
             }
+            // Nothing left in history, so we open the file server:
+            var treeAddress = serverAddress
+            treeAddress = treeAddress?.appendingPathComponent("tree")
+            self.webView.load(URLRequest(url: treeAddress!))
         } else if (cmd.hasPrefix("loadingSession:")) {
-            addRunningSession(session: cmd)
+            NSLog(cmd)
+            addRunningSession(session: cmd, url: self.webView!.url!)
             if (numberOfRunningSessions() >= 4) { // Maybe "> 4"?
                 NSLog("More than 4 notebook running (including this one). Time to cleanup.")
-                let oldestSession = oldestRunningSession()
-                let urlDelete = serverAddress!.appendingPathComponent(oldestSession)
+                var oldestSessionURL = oldestRunningSessionURL()
+                var oldestSessionID = sessionID(url: oldestSessionURL)
+                while (oldestSessionID == nil) {
+                    NSLog("Oldest session URL was not stored. Taking the next one")
+                    removeRunningSession(url: oldestSessionURL)
+                    oldestSessionURL = oldestRunningSessionURL()
+                    oldestSessionID = sessionID(url: oldestSessionURL)
+                }
+                let urlDelete = serverAddress!.appendingPathComponent(oldestSessionID!)
                 var urlDeleteRequest = URLRequest(url: urlDelete)
                 urlDeleteRequest.httpMethod = "DELETE"
                 urlDeleteRequest.setValue("json", forHTTPHeaderField: "dataType")
@@ -297,14 +325,18 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                             NSLog ("Server error on DELETE")
                             return
                     }
-                    removeRunningSession(session: oldestSession)
+                    removeRunningSession(url: oldestSessionURL)
                 }
                 task.resume()
             }
         } else if (cmd.hasPrefix("killingSession:")) {
-            let range = cmd.startIndex..<cmd.firstIndex(of: "S")!
-            let key = cmd.replacingCharacters(in: range, with: "loading")
-            removeRunningSession(session: key)
+            NSLog(cmd)
+            var key = cmd
+            key.removeFirst("killingSession:".count)
+            if (key.hasPrefix("/")) {
+                key = String(key.dropFirst())
+            }
+            removeRunningSessionWithID(session: key)
         } else {
             // JS console:
             NSLog("JavaScript message: \(message.body)")
@@ -312,12 +344,8 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     }
         
     var webView: WKWebView!
-    var shutdownTimer: Timer!
-    var alertShutdownTimer: Timer!
-    var urlShutdownRequest: URLRequest!
-    var shutdownTaskIdentifier: UIBackgroundTaskIdentifier!
     var lastPageVisited: String!
-    // document information
+    var tbAccessoryView : UIToolbar?
 
     override func loadView() {
         let contentController = WKUserContentController();
@@ -335,19 +363,18 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         webView.uiDelegate = self
         view = webView
         appWebView = webView
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.willResignActive),
-            name: UIApplication.willResignActiveNotification,
-            object: nil)
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.didBecomeActive),
-            name: UIApplication.didBecomeActiveNotification,
-            object: nil)
     }
     
+    // This works in text-input mode:
+    @objc func escapeKey() {
+        print("Received escape key")
+    }
     
+    override var keyCommands: [UIKeyCommand]? {
+        return [
+            UIKeyCommand(input: UIKeyCommand.inputEscape, modifierFlags: .shift, action: #selector(escapeKey), discoverabilityTitle: "Escape Key")
+        ]
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -359,95 +386,21 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         webView.load(URLRequest(url: kernelURL!))
     }
     
-    @objc func terminateServer() {
-        let app = UIApplication.shared
-        let timeLeft = app.backgroundTimeRemaining
-        NSLog("Terminating server. Time left = %f ", timeLeft)
-        // shutdown Jupyter server and notebooks (takes about 7s with notebooks open)
-        webView.load(urlShutdownRequest)
-        // also remove list of running sessions:
-        clearAllRunningSessions()
-        // cancel the alert:
-        let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.removeDeliveredNotifications(withIdentifiers: ["CarnetsShutdownAlert"])
-        shutdownTimer = nil
-        app.endBackgroundTask(shutdownTaskIdentifier)
-        shutdownTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+    @objc
+    func doBtnPrev() {
+        
     }
     
-    @objc func didBecomeActive()
-    {
-        // cancel the alert:
-        let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.removePendingNotificationRequests(withIdentifiers: ["CarnetsShutdownAlert"])
-        // cancel the termination:
-        guard (shutdownTaskIdentifier != nil) else { return; }
-        guard (shutdownTaskIdentifier != UIBackgroundTaskIdentifier.invalid) else { return; }
-        let app = UIApplication.shared
-        app.endBackgroundTask(shutdownTaskIdentifier)
-        shutdownTaskIdentifier = UIBackgroundTaskIdentifier.invalid
-        shutdownTimer.invalidate()
-        shutdownTimer = nil
+    @objc
+    func doBtnNext() {
+        
     }
     
-    @objc func willResignActive()
-    {
-        // 3 min to close current process. Don't shutdown until 2 mn 45 s
-        let app = UIApplication.shared
-        guard (serverAddress != nil) else { return }
-        shutdownTaskIdentifier = app.beginBackgroundTask(expirationHandler: self.terminateServer)
-        let urlPost = serverAddress!.appendingPathComponent("api/shutdown")
-        urlShutdownRequest = URLRequest(url: urlPost)
-        urlShutdownRequest.httpMethod = "POST"
-        // Configure the alert (if needed) at 2:15 mn:
-        let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.getNotificationSettings { (settings) in
-            if (settings.authorizationStatus == .authorized) {
-                let shutdownAlertContent = UNMutableNotificationContent()
-                if settings.alertSetting == .enabled {
-                    shutdownAlertContent.title = NSString.localizedUserNotificationString(forKey: "Carnets shutdown alert", arguments: nil)
-                    shutdownAlertContent.body = NSString.localizedUserNotificationString(forKey: "Carnets is about to terminate. Click here if you want to continue.", arguments: nil)
-                }
-                if settings.soundSetting == .enabled {
-                    shutdownAlertContent.sound = UNNotificationSound.default
-                }
-                let localShutdownNotification = UNNotificationRequest(identifier: "CarnetsShutdownAlert",
-                                                                      content: shutdownAlertContent,
-                                                                      trigger: UNTimeIntervalNotificationTrigger(timeInterval: (135), repeats: false))
-                notificationCenter.add(localShutdownNotification, withCompletionHandler: { (error) in
-                    if let error = error {
-                        var message = "Error in setting up the alert: "
-                        message.append(error.localizedDescription)
-                        NSLog(message)
-                    }
-                })
-            }
-        }
-        // Set up a timer to close everything at 2:45 mn
-        if (shutdownTimer != nil) {
-            shutdownTimer.invalidate()
-            shutdownTimer = nil
-        }
-        // Multiple timers being started???
-        DispatchQueue.main.async {
-                self.shutdownTimer = Timer.scheduledTimer(timeInterval: 165,
-                                                          target: self,
-                                                          selector: #selector(self.terminateServer),
-                                                          userInfo: nil,
-                                                          repeats: false)
-            }
+    @objc
+    func doBtnSubmit() {
+        
     }
     
-    /* func goBack() -> WKNavigation? {
-        if self.webView.canGoBack {
-            return self.webView.go(to: self.webView.backForwardList.backItem!)
-        } else {
-            print("Can't go back")
-            var treeAddress = serverAddress
-            treeAddress = treeAddress?.appendingPathComponent("tree")
-            return self.webView.load(URLRequest(url: treeAddress!))
-        }
-    } */
 }
 
 
@@ -466,7 +419,7 @@ extension ViewController: WKUIDelegate {
     }
     
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-        // Method called after a web page has been loaded, included as a result of goBack()
+        // Method called after a web page has been loaded, including as a result of goBack()
         // or goForward().
         // More accurate to store the latest URL accessed than navigationAction()
         guard (webView.url != nil) else { return }
@@ -479,7 +432,35 @@ extension ViewController: WKUIDelegate {
             UserDefaults.standard.set(nil, forKey: "lastOpenUrlBookmark")
             notebookURL = nil
             kernelURL = nil
-            dismiss(animated: true)
-        } // back to documentBrowser
+            dismiss(animated: true) // back to documentBrowser
+        } else {
+            guard(webView.url != nil) else { return }
+            kernelURL = webView.url
+            var fileLocation = kernelURL!.path
+            fileLocation.removeFirst("/notebooks/".count)
+            var fileLocationURL = URL(fileURLWithPath: startingPath!)
+            if (fileLocation.starts(with: "Documents")) {
+                // local file
+                notebookURL = fileLocationURL.appendingPathComponent(fileLocation)
+            } else {
+                // distant file. Must find distant location, using stored information
+                for (notebookURLStored, kernelURLStored) in localFiles {
+                    var kernelURLStoredPath = kernelURLStored.path
+                    if (kernelURLStoredPath.hasPrefix("/private") && (!startingPath!.hasPrefix("/private"))) {
+                        kernelURLStoredPath = String(kernelURLStoredPath.dropFirst("/private".count))
+                    }
+                    if (kernelURLStoredPath.hasPrefix(startingPath!)) {
+                        kernelURLStoredPath = String(kernelURLStoredPath.dropFirst(startingPath!.count))
+                    }
+                    if (kernelURLStoredPath.hasPrefix("/")) { kernelURLStoredPath = String(kernelURLStoredPath.dropFirst()) }
+                    if (kernelURLStoredPath == fileLocation) {
+                        notebookURL = notebookURLStored
+                        break
+                    }
+                }
+            }
+            UserDefaults.standard.set(notebookURL, forKey: "lastOpenUrl")
+            setSessionAccessTime(url: webView.url!)
+        }
     }
 }

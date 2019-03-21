@@ -61,13 +61,13 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
     func documentBrowser(_ controller: UIDocumentBrowserViewController, didPickDocumentsAt documentURLs: [URL]) {
         // Present the Document View Controller for the first document that was picked.
         // If you support picking multiple items, make sure you handle them all.
-        for sourceURL in documentURLs {
+        /* for sourceURL in documentURLs {
             print("didPickDocumentsAt, presenting document: \(sourceURL)")
             presentDocument(at: sourceURL)
             // TODO: wait until document is fully loaded. 
-        }
-        // guard let sourceURL = documentURLs.first else { return }
-        // presentDocument(at: sourceURL)
+        } */
+        guard let sourceURL = documentURLs.first else { return }
+        presentDocument(at: sourceURL)
     }
     
     func documentBrowser(_ controller: UIDocumentBrowserViewController, didImportDocumentAt sourceURL: URL, toDestinationURL destinationURL: URL) {
