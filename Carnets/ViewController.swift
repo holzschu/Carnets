@@ -504,7 +504,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         webView.load(URLRequest(url: kernelURL!))
     }
     
-    
+    // As soon as the first keyboard has been released, prepare a callback for the next one:
     @objc private func prepareNextKeyboard() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: UIResponder.keyboardDidShowNotification, object: nil)
     }
@@ -544,15 +544,9 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     }
     
     @objc private func pasteAction(_ sender: UIBarButtonItem) {
-        // edit mode paste (fails)
-        // still fails (that's the last one).
-        // Also why is the bar disappearing? (because they change the font)
+        // edit mode paste (workd)
         let pastedString = UIPasteboard.general.string
         if (pastedString != nil) { webView.paste(pastedString) }
-        // $('#textarea').val('some text').trigger('paste');
-        // or
-        // const e = $.Event('paste');
-        // $('#textarea').val('some text').trigger(e);
         // command mode paste (works)
         /*
         webView.evaluateJavaScript("Jupyter.notebook.paste_cell_below();") { (result, error) in
@@ -572,7 +566,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         }
     }
 
-    // For add, run: keep notebook in edit mode, otherwise the keyboard will disappear
+    // For add cell and run cell: we keep the notebook in edit mode, otherwise the keyboard will disappear
     @objc private func addAction(_ sender: UIBarButtonItem) {
         webView.evaluateJavaScript("Jupyter.notebook.insert_cell_below(); Jupyter.notebook.select_next(true); Jupyter.notebook.focus_cell(); Jupyter.notebook.edit_mode();") { (result, error) in
             if error != nil {
