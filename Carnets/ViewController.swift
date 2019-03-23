@@ -190,6 +190,7 @@ func urlFromFileURL(fileURL: URL) -> URL {
 
 
 func saveDistantFile() {
+    guard (kernelURL != nil) else { return }
     var localFilePath = kernelURL!.path
     localFilePath = String(localFilePath.dropFirst("/notebooks".count))
     if (localFilePath.hasPrefix("/tmp")) {
@@ -282,6 +283,9 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             // if the file open is from another App, we copy the newly saved file too
             saveDistantFile()
         } else if (cmd == "back") {
+            // avoid infinite loops in back history.
+            // Same approach not required for forward history
+            // (also it does not work, forward history is cleared)
             if self.webView.canGoBack {
                 var position = -1
                 var backPageItem = self.webView.backForwardList.item(at: position)
@@ -343,9 +347,76 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         }
     }
         
-    var webView: WKWebView!
+    private var webView: WKWebView!
+    private var contentView: UIView?
+    
     var lastPageVisited: String!
-    var tbAccessoryView : UIToolbar?
+    // buttons
+    var undoButton: UIBarButtonItem?
+    var redoButton: UIBarButtonItem?
+    var saveButton: UIBarButtonItem?
+    var addButton: UIBarButtonItem?
+    var cutButton: UIBarButtonItem?
+    var copyButton: UIBarButtonItem?
+    var pasteButton: UIBarButtonItem?
+    var upButton: UIBarButtonItem?
+    var downButton: UIBarButtonItem?
+    var runButton: UIBarButtonItem?
+    var stopButton: UIBarButtonItem?
+    var doneButton: UIBarButtonItem?
+
+    func initializeButtons() {
+        // initializee button:
+        let fontSize: CGFloat = 18.0
+        cutButton = UIBarButtonItem(title: "\u{f0c4}", style: .plain, target: self, action: #selector(cutAction(_:)))
+        cutButton!.setTitleTextAttributes(
+            [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
+             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+        copyButton = UIBarButtonItem(title: "\u{f0c5}", style: .plain, target: self, action: #selector(copyAction(_:)))
+        copyButton!.setTitleTextAttributes(
+            [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
+             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+        pasteButton = UIBarButtonItem(title: "\u{f0ea}", style: .plain, target: self, action: #selector(pasteAction(_:)))
+        pasteButton!.setTitleTextAttributes(
+            [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
+             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+        saveButton = UIBarButtonItem(title: "\u{f0c7}", style: .plain, target: self, action: #selector(saveAction(_:)))
+        saveButton!.setTitleTextAttributes(
+            [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
+             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+        addButton = UIBarButtonItem(title: "\u{f067}", style: .plain, target: self, action: #selector(addAction(_:)))
+        addButton!.setTitleTextAttributes(
+            [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
+             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+        undoButton = UIBarButtonItem(title: "\u{f0e2}", style: .plain, target: self, action: #selector(undoAction(_:)))
+        undoButton!.setTitleTextAttributes(
+            [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
+             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+        redoButton = UIBarButtonItem(title: "\u{f01e}", style: .plain, target: self, action: #selector(redoAction(_:)))
+        redoButton!.setTitleTextAttributes(
+            [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
+             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+        upButton = UIBarButtonItem(title: "\u{f062}", style: .plain, target: self, action: #selector(upAction(_:)))
+        upButton!.setTitleTextAttributes(
+            [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
+             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+        downButton = UIBarButtonItem(title: "\u{f063}", style: .plain, target: self, action: #selector(downAction(_:)))
+        downButton!.setTitleTextAttributes(
+            [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
+             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+        runButton = UIBarButtonItem(title: "\u{f051}", style: .plain, target: self, action: #selector(runAction(_:)))
+        runButton!.setTitleTextAttributes(
+            [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
+             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+        stopButton = UIBarButtonItem(title: "\u{f04d}", style: .plain, target: self, action: #selector(stopAction(_:)))
+        stopButton!.setTitleTextAttributes(
+            [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
+             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+        doneButton = UIBarButtonItem(title: "[Esc]", style: .plain, target: self, action: #selector(escapeKey(_:)))
+        /* doneButton!.setTitleTextAttributes(
+            [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
+             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal) */
+    }
 
     override func loadView() {
         let contentController = WKUserContentController();
@@ -363,22 +434,69 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         webView.uiDelegate = self
         view = webView
         appWebView = webView
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(undoAction), name: .NSUndoManagerWillUndoChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(redoAction), name: .NSUndoManagerWillRedoChange, object: nil)
     }
     
     // This works in text-input mode:
-    @objc func escapeKey() {
-        print("Received escape key")
+    @objc func escapeKey(_ sender: UIBarButtonItem) {
+        webView.evaluateJavaScript("Jupyter.notebook.command_mode();") { (result, error) in
+            if error != nil {
+                print(error)
+                print(result)
+            }
+        }
     }
     
     override var keyCommands: [UIKeyCommand]? {
         return [
-            UIKeyCommand(input: UIKeyCommand.inputEscape, modifierFlags: .shift, action: #selector(escapeKey), discoverabilityTitle: "Escape Key")
+            UIKeyCommand(input: UIKeyCommand.inputEscape, modifierFlags: [], action: #selector(escapeKey), discoverabilityTitle: "Escape Key"),
+            // Cmd-Z is reserved by Apple. We can register it, but it won't work
+            UIKeyCommand(input: "z", modifierFlags: .command, action: #selector(undoAction), discoverabilityTitle: "Undo"),
+            UIKeyCommand(input: "z", modifierFlags: [.command, .shift], action: #selector(redoAction), discoverabilityTitle: "Redo"),
+            // control-Z is available
+            UIKeyCommand(input: "z", modifierFlags: .control, action: #selector(undoAction), discoverabilityTitle: "Undo"),
+            UIKeyCommand(input: "z", modifierFlags: [.control, .shift], action: #selector(redoAction), discoverabilityTitle: "Redo"),
+            // Cmd-S is not reserved, so this works:
+            UIKeyCommand(input: "s", modifierFlags: .command, action: #selector(saveAction), discoverabilityTitle: "Save")
         ]
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Add cell buttons at the bottom of the screen for iPad.
+        // From https://stackoverflow.com/questions/48978134/modifying-keyboard-toolbar-accessory-view-with-wkwebview
         webView.allowsBackForwardNavigationGestures = true
+        webView.loadHTMLString("<html><body><div contenteditable='true'></div></body></html>", baseURL: nil)
+        for subview in webView.scrollView.subviews {
+            if subview.classForCoder.description() == "WKContentView" {
+                contentView = subview
+            }
+        }
+        if (cutButton == nil) { initializeButtons() }
+        // Must be identical to code in keyboardDidShow()
+        // This will only apply to the first keyboard. We have to register a callback for
+        // the other keyboards.
+        // undo, redo, save, add, cut, copy, paste //  done, up, down, run, escape.
+        inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+            [doneButton!, undoButton!, redoButton!,
+             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+            // space?
+            saveButton!, addButton!,
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+            cutButton!, copyButton!, pasteButton!],
+            representativeItem: nil)]
+        inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+            [upButton!, downButton!,
+             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+             runButton!, // stopButton!,
+             ],
+            representativeItem: nil)]
+        // Don't prepare the keyboard until this one has disappeared, otherwise the buttons
+        // on the first keyboard disappear.
+        NotificationCenter.default.addObserver(self, selector: #selector(prepareNextKeyboard), name: UIResponder.keyboardDidHideNotification, object: nil)
+
         // in case Jupyter has started before the view is active (unlikely):
         guard (serverAddress != nil) else { return }
         guard (notebookURL != nil) else { return }
@@ -386,21 +504,158 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         webView.load(URLRequest(url: kernelURL!))
     }
     
-    @objc
-    func doBtnPrev() {
-        
+    
+    @objc private func prepareNextKeyboard() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: UIResponder.keyboardDidShowNotification, object: nil)
     }
     
-    @objc
-    func doBtnNext() {
-        
+    @objc private func cutAction(_ sender: UIBarButtonItem) {
+        // edit mode cut (works)
+        webView.evaluateJavaScript("document.execCommand('cut');") { (result, error) in
+        if error != nil {
+            print(error)
+            print(result)
+        }
+    }
+    // command mode cut (works)
+        /* webView.evaluateJavaScript("var index = Jupyter.notebook.get_selected_index(); Jupyter.notebook.cut_cell(); Jupyter.notebook.select(index);"){ (result, error) in
+            if error != nil {
+                print(error)
+                print(result)
+            }
+        } */
+    }
+    @objc private func copyAction(_ sender: UIBarButtonItem) {
+        // edit mode copy (works)
+        webView.evaluateJavaScript("document.execCommand('copy');") { (result, error) in
+            if error != nil {
+                print(error)
+                print(result)
+            }
+        }
+        // command mode copy (works)
+        // javascript code to copy cell
+        /* webView.evaluateJavaScript("Jupyter.notebook.copy_cell();") { (result, error) in
+            if error != nil {
+                print(error)
+                print(result)
+            }
+        } */
     }
     
-    @objc
-    func doBtnSubmit() {
-        
+    @objc private func pasteAction(_ sender: UIBarButtonItem) {
+        // edit mode paste (fails)
+        // still fails (that's the last one).
+        // Also why is the bar disappearing? (because they change the font)
+        let pastedString = UIPasteboard.general.string
+        if (pastedString != nil) { webView.paste(pastedString) }
+        // $('#textarea').val('some text').trigger('paste');
+        // or
+        // const e = $.Event('paste');
+        // $('#textarea').val('some text').trigger(e);
+        // command mode paste (works)
+        /*
+        webView.evaluateJavaScript("Jupyter.notebook.paste_cell_below();") { (result, error) in
+            if error != nil {
+                print(error)
+                print(result)
+            }
+        }*/
+    }
+
+    @objc private func saveAction(_ sender: UIBarButtonItem) {
+        webView.evaluateJavaScript("Jupyter.notebook.save_notebook();") { (result, error) in
+            if error != nil {
+                // print(error)
+                // print(result)
+            }
+        }
+    }
+
+    // For add, run: keep notebook in edit mode, otherwise the keyboard will disappear
+    @objc private func addAction(_ sender: UIBarButtonItem) {
+        webView.evaluateJavaScript("Jupyter.notebook.insert_cell_below(); Jupyter.notebook.select_next(true); Jupyter.notebook.focus_cell(); Jupyter.notebook.edit_mode();") { (result, error) in
+            if error != nil {
+                print(error)
+                print(result)
+            }
+        }
+    }
+
+    @objc private func runAction(_ sender: UIBarButtonItem) {
+        webView.evaluateJavaScript("Jupyter.notebook.execute_cell_and_select_below(); Jupyter.notebook.edit_mode();") { (result, error) in
+            if error != nil {
+                print(error)
+                print(result)
+            }
+        }
     }
     
+    @objc private func upAction(_ sender: UIBarButtonItem) {
+        webView.evaluateJavaScript("Jupyter.notebook.select_prev(true); Jupyter.notebook.focus_cell(); Jupyter.notebook.edit_mode();") { (result, error) in
+            if error != nil {
+                print(error)
+                print(result)
+            }
+        }
+    }
+
+    @objc private func downAction(_ sender: UIBarButtonItem) {
+        webView.evaluateJavaScript("Jupyter.notebook.select_next(true); Jupyter.notebook.focus_cell(); Jupyter.notebook.edit_mode();") { (result, error) in
+            if error != nil {
+                print(error)
+                print(result)
+            }
+        }
+    }
+
+    @objc private func stopAction(_ sender: UIBarButtonItem) {
+        // Does not work. Also, not desireable.
+        webView.evaluateJavaScript("Jupyter.notebook.kernel.interrupt();") { (result, error) in
+            if error != nil {
+                print(error)
+                print(result)
+            }
+        }
+    }
+
+    @objc private func undoAction(_ sender: UIBarButtonItem) {
+        // works
+        webView.evaluateJavaScript("Jupyter.notebook.get_selected_cell().code_mirror.execCommand('undo');") { (result, error) in
+            if error != nil {
+                print(error)
+                print(result)
+            }
+        }
+    }
+    
+    @objc private func redoAction(_ sender: UIBarButtonItem) {
+        // works
+        webView.evaluateJavaScript("Jupyter.notebook.get_selected_cell().code_mirror.execCommand('redo');") { (result, error) in
+            if error != nil {
+                print(error)
+                print(result)
+            }
+        }
+    }
+    
+    @objc private func keyboardDidShow() {
+        if (cutButton == nil) { initializeButtons() }
+        contentView?.inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+            [doneButton!, undoButton!, redoButton!,
+             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+             // space?
+                saveButton!, addButton!,
+                UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                cutButton!, copyButton!, pasteButton!],
+                representativeItem: nil)]
+        contentView?.inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+            [upButton!, downButton!,
+             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+             runButton!, // stopButton!,
+             ],
+            representativeItem: nil)]
+    }
 }
 
 
@@ -435,8 +690,9 @@ extension ViewController: WKUIDelegate {
             dismiss(animated: true) // back to documentBrowser
         } else {
             guard(webView.url != nil) else { return }
+            var fileLocation = webView.url!.path
+            if (!fileLocation.hasPrefix("/notebooks/")) { return } // Don't try to store if it's not a notebook
             kernelURL = webView.url
-            var fileLocation = kernelURL!.path
             fileLocation.removeFirst("/notebooks/".count)
             var fileLocationURL = URL(fileURLWithPath: startingPath!)
             if (fileLocation.starts(with: "Documents")) {

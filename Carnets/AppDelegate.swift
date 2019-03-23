@@ -195,6 +195,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let iCloudContainer = FileManager().url(forUbiquityContainerIdentifier: nil)
             })
         }
+        // NSLog("Available fonts: %@", UIFont.familyNames);
         return true
     }
 
