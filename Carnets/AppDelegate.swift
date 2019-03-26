@@ -128,6 +128,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             ios_system("jupyter-contrib nbextension install --user")
             ios_system("jupyter-nbextension install --user --py widgetsnbextension")
             ios_system("jupyter-nbextension enable --user --py widgetsnbextension")
+            ios_system("jupyter-nbextension install --user --py ipysheet")
+            ios_system("jupyter-nbextension enable --user --py ipysheet")
+            ios_system("jupyter-nbextension install --user --py ipysheet.renderer_nbext")
+            ios_system("jupyter-nbextension enable --user --py ipysheet.renderer_nbext")
             NSLog("Done upgrading Python files.")
             let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
             UserDefaults.standard.set(currentVersion, forKey: "versionInstalled")

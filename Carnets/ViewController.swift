@@ -688,7 +688,7 @@ extension ViewController: WKUIDelegate {
             if (!fileLocation.hasPrefix("/notebooks/")) { return } // Don't try to store if it's not a notebook
             kernelURL = webView.url
             fileLocation.removeFirst("/notebooks/".count)
-            var fileLocationURL = URL(fileURLWithPath: startingPath!)
+            let fileLocationURL = URL(fileURLWithPath: startingPath!)
             if (fileLocation.starts(with: "Documents")) {
                 // local file
                 notebookURL = fileLocationURL.appendingPathComponent(fileLocation)
