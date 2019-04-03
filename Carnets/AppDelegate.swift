@@ -125,13 +125,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 if (returnValue == -1) { NSLog("Could not unsetenv PYTHONPATH") }
             }
             NSLog("Installing extensions.")
+            if (numberOfRunningSessions() >= 4) {
+                NSLog("Removing one session before installing")
+                removeOldestSession()
+            }
+            var pid:pid_t = ios_fork()
             ios_system("jupyter-contrib nbextension install --user")
+            ios_waitpid(pid)
+            pid = ios_fork()
             ios_system("jupyter-nbextension install --user --py widgetsnbextension")
+            ios_waitpid(pid)
+            pid = ios_fork()
             ios_system("jupyter-nbextension enable --user --py widgetsnbextension")
+            ios_waitpid(pid)
+            pid = ios_fork()
             ios_system("jupyter-nbextension install --user --py ipysheet")
+            ios_waitpid(pid)
+            pid = ios_fork()
             ios_system("jupyter-nbextension enable --user --py ipysheet")
+            ios_waitpid(pid)
+            pid = ios_fork()
             ios_system("jupyter-nbextension install --user --py ipysheet.renderer_nbext")
+            ios_waitpid(pid)
+            pid = ios_fork()
             ios_system("jupyter-nbextension enable --user --py ipysheet.renderer_nbext")
+            ios_waitpid(pid)
             NSLog("Done upgrading Python files.")
             let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
             UserDefaults.standard.set(currentVersion, forKey: "versionInstalled")
@@ -196,7 +214,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let currentiCloudToken = FileManager().ubiquityIdentityToken
         if (currentiCloudToken != nil) {
             DispatchQueue.global().async(execute: {
-                let iCloudContainer = FileManager().url(forUbiquityContainerIdentifier: nil)
+                iCloudDocumentsURL = FileManager().url(forUbiquityContainerIdentifier: nil)
+                NSLog("iCloudContainer = \(iCloudDocumentsURL)")
             })
         }
         // NSLog("Available fonts: %@", UIFont.familyNames);
@@ -229,17 +248,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                   in: .userDomainMask,
                                                   appropriateFor: nil,
                                                   create: true)
-        startingPath = documentsURL.path
-        NSLog("Documents directory = \(documentsURL)")
-        startingPath = String(startingPath!.dropLast("/Documents".count))
-        NSLog("Starting path = \(startingPath)")
+        documentsPath = documentsURL.path
+        NSLog("Documents directory = \(documentsPath)")
         jupyterQueue.async {
             self.notebookServerRunning = true
             // start the Jupyter notebook server:
             // (the server will call openURL with the name of the local file)
             NSLog("Starting jupyter notebook server")
-            var shellCommand = "jupyter-notebook --notebook-dir "
-            shellCommand.append(startingPath!)
+            var shellCommand = "jupyter-notebook --notebook-dir /"
             ios_system(shellCommand)
             DispatchQueue.main.async {
                 self.notebookServerTerminated()

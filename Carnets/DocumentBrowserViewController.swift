@@ -43,7 +43,7 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
         // Set the URL for the new document here. Optionally, you can present a template chooser before calling the importHandler.
         let temporaryDirectoryURL = try! FileManager().url(for: .itemReplacementDirectory,
                                                            in: .userDomainMask,
-                                                           appropriateFor: URL(fileURLWithPath: startingPath!),
+                                                           appropriateFor: URL(fileURLWithPath: documentsPath!),
                                                            create: true)
         var temporaryFileURL = temporaryDirectoryURL
         temporaryFileURL.appendPathComponent("Untitled.ipynb")

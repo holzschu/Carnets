@@ -30,13 +30,13 @@ func addRunningSession(session: String, url: URL) {
     if (sessionID.hasPrefix("/")) {
         sessionID = String(sessionID.dropFirst())
     }
-    NSLog("Storing session url: \(url).")
+    print("Storing session url: \(url).")
     runningSessions.updateValue(sessionID, forKey: url)
     sessionAccessTime.updateValue(Date(), forKey: url)
 }
 
 func removeRunningSession(url: URL) {
-    NSLog("Removing session url: \(url)")
+    print("Removing session url: \(url)")
     if (runningSessions.removeValue(forKey: url) == nil) {
         NSLog("Warning - removing notebook that was not started: \(url)")
     }
@@ -68,6 +68,35 @@ func oldestRunningSessionURL() -> URL {
     }
     NSLog("Oldest session found: \(sessionURL)")
     return sessionURL!
+}
+
+func removeOldestSession() {
+    var oldestSessionURL = oldestRunningSessionURL()
+    var oldestSessionID = sessionID(url: oldestSessionURL)
+    while (oldestSessionID == nil) {
+        NSLog("Oldest session URL was not stored. Taking the next one")
+        removeRunningSession(url: oldestSessionURL)
+        oldestSessionURL = oldestRunningSessionURL()
+        oldestSessionID = sessionID(url: oldestSessionURL)
+    }
+    let urlDelete = serverAddress!.appendingPathComponent(oldestSessionID!)
+    var urlDeleteRequest = URLRequest(url: urlDelete)
+    urlDeleteRequest.httpMethod = "DELETE"
+    urlDeleteRequest.setValue("json", forHTTPHeaderField: "dataType")
+    let task = URLSession.shared.dataTask(with: urlDeleteRequest) { data, response, error in
+        if let error = error {
+            NSLog ("Error on DELETE: \(error)") // Could not delete the session
+            return
+        }
+        guard let response = response as? HTTPURLResponse,
+            (200...299).contains(response.statusCode) else {
+                removeRunningSession(url: oldestSessionURL) // session not found. Probably renamed.
+                NSLog ("Server error on DELETE")
+                return
+        }
+        removeRunningSession(url: oldestSessionURL)
+    }
+    task.resume()
 }
 
 func sessionID(url: URL) -> String? {
