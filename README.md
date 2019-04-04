@@ -3,9 +3,6 @@ Carnets is a stand-alone Jupyter notebook server and client. Edit your notebooks
 
 # To install without building: 
 
-
-Disable Link
-Copy Link
 Carnets has been approved for TestFlight by Apple. Click on this [link](https://testflight.apple.com/join/yevwlUs1) to join TestFlight.
 
 If that doesn't work, you can also send an [e-mail](mailto:carnets_jupyter@icloud.com) to receive an invitation. 
@@ -17,11 +14,15 @@ If that doesn't work, you can also send an [e-mail](mailto:carnets_jupyter@iclou
 
 # Known issues / things to do:
 
+- See [Project summary](https://github.com/holzschu/Carnets/projects/1)
 - We are leaking 8-9 file descriptors for each kernel launch, and one thread. Trying to addres either of these results in *more* file descriptors being leaked.
 - Ability to open notebooks in other applications (Safari, Juno...)
 
 # Recently fixed bugs:
 
+- Keyboard extension for iPads
+- Opening files in iCloud
+- Back/Forward buttons
 - Save notebooks when app becomes inactive / background.
 - Save last open notebook and restore when the app reopens.
 - Better user interface for startup screen / ability to open notebooks everywhere, in place.
