@@ -17,17 +17,17 @@ If that doesn't work, you can also send an [e-mail](mailto:carnets_jupyter@iclou
 
 # Known issues / things to do:
 
+- We are leaking 8-9 file descriptors for each kernel launch, and one thread. Trying to addres either of these results in *more* file descriptors being leaked.
+- Ability to open notebooks in other applications (Safari, Juno...)
+
+# Recently fixed bugs:
+
 - Save notebooks when app becomes inactive / background.
 - Save last open notebook and restore when the app reopens.
 - Better user interface for startup screen / ability to open notebooks everywhere, in place.
 - You can't have more than 5 kernels running simultaneously. 
 - Related: silently terminate oldest kernel when we approach the maximum number of kernels.
 - "Terminals" don't work. Todo: Remove the option from the menus.
-- We are leaking 8-9 file descriptors for each kernel launch, and one thread. Trying to addres either of these results in *more* file descriptors being leaked.
-- Ability to open notebooks in other applications (Safari, Juno...)
-
-# Recently fixed bugs:
-
 - Fixed: Starting the 10th or so kernel fails with `zmq.error.ZMQError: Too many open files`
 - "new file", "new notebook", "copy notebook" now open a new window (instead of opening a blank window).
 - Issue #3: "Kernel / restart and run all" does not work (kernel shudown followed by kernel restart does). Fixed with 9e3faa7
@@ -38,11 +38,11 @@ If that doesn't work, you can also send an [e-mail](mailto:carnets_jupyter@iclou
 If it's a pure python package, you can install it yourself:
 
 ```python
-!pip install packageName
+%pip install packageName
 ```
 and remove it if it doesn't work: 
 ```python
-!pip uninstall -y packageName
+%pip uninstall -y packageName
 ```
 (you need the "-y" flag because there is no interaction) 
 
