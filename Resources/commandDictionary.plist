@@ -284,70 +284,42 @@
 	</array>
 	<key>python3</key>
 	<array>
-		<string>Python3_ios.framework/Python3_ios</string>
+		<string>python3_ios.framework/python3_ios</string>
 		<string>python_main</string>
 		<string>3bBc:dEhiJm:OQ:RsStuUvVW:xX?</string>
 		<string>no</string>
 	</array>
 	<key>pythonA</key>
 	<array>
-		<string>PythonA.framework/PythonA</string>
+		<string>pythonA.framework/pythonA</string>
 		<string>python_main</string>
 		<string></string>
 		<string>no</string>
 	</array>
 	<key>pythonB</key>
 	<array>
-		<string>PythonB.framework/PythonB</string>
+		<string>pythonB.framework/pythonB</string>
 		<string>python_main</string>
 		<string></string>
 		<string>no</string>
 	</array>
 	<key>pythonC</key>
 	<array>
-		<string>PythonC.framework/PythonC</string>
+		<string>pythonC.framework/pythonC</string>
 		<string>python_main</string>
 		<string></string>
 		<string>no</string>
 	</array>
 	<key>pythonD</key>
 	<array>
-		<string>PythonD.framework/PythonD</string>
+		<string>pythonD.framework/pythonD</string>
 		<string>python_main</string>
 		<string></string>
 		<string>no</string>
 	</array>
 	<key>pythonE</key>
 	<array>
-		<string>PythonE.framework/PythonE</string>
-		<string>python_main</string>
-		<string></string>
-		<string>no</string>
-	</array>
-	<key>pythonF</key>
-	<array>
-		<string>PythonF.framework/PythonF</string>
-		<string>python_main</string>
-		<string></string>
-		<string>no</string>
-	</array>
-	<key>pythonG</key>
-	<array>
-		<string>PythonG.framework/PythonG</string>
-		<string>python_main</string>
-		<string></string>
-		<string>no</string>
-	</array>
-	<key>pythonH</key>
-	<array>
-		<string>PythonH.framework/PythonH</string>
-		<string>python_main</string>
-		<string></string>
-		<string>no</string>
-	</array>
-	<key>pythonI</key>
-	<array>
-		<string>PythonI.framework/PythonI</string>
+		<string>pythonE.framework/pythonE</string>
 		<string>python_main</string>
 		<string></string>
 		<string>no</string>

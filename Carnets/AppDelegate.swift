@@ -58,6 +58,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 (buildNumberInstalled < currentBuildInt))
     }
     
+    func clearOldDirectories() {
+        // packages installed in previous versions. Must remove before anything else or they mess things up.
+        let oldPythonDirectories = ["Library/lib/python3.7/site-packages/numpy-1.16.0-py3.7-macosx-12.1-iPad6,7.egg",
+                                    "Library/lib/python3.7/site-packages/matplotlib-3.0.2-py3.7.egg",
+                                    "Library/lib/python3.7/site-packages/kiwisolver-1.0.1-py3.7-macosx-12.1-iPad6,7.egg"]
+        let documentsUrl = try! FileManager().url(for: .documentDirectory,
+                                                  in: .userDomainMask,
+                                                  appropriateFor: nil,
+                                                  create: true)
+        let homeUrl = documentsUrl.deletingLastPathComponent()
+        for directoryName in oldPythonDirectories {
+            let homeDirectory = homeUrl.appendingPathComponent(directoryName)
+            if (FileManager().fileExists(atPath: homeDirectory.path)) {
+                try! FileManager().removeItem(at: homeDirectory)
+            }
+        }
+    }
+    
     func queueUpdatingPythonFiles() {
         // This operation (copy the files from the bundle directory to the $HOME/Library)
         // has two benefits:
@@ -83,9 +101,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                  "Library/lib/python3.7/site-packages/jupyter_highlight_selected_word-0.2.0-py3.7.egg",
                                  "Library/lib/python3.7/site-packages/jupyter_latex_envs-1.4.6-py3.7.egg",
                                  "Library/lib/python3.7/site-packages/jupyter_nbextensions_configurator-0.4.1-py3.7.egg",
-                                 "Library/lib/python3.7/site-packages/matplotlib-3.0.2-py3.7.egg",
-                                 "Library/lib/python3.7/site-packages/numpy-1.16.0-py3.7-macosx-12.1-iPad6,7.egg",
+                                 "Library/lib/python3.7/site-packages/kiwisolver-1.0.1-py3.7-macosx-10.9-x86_64.egg",
+                                 "Library/lib/python3.7/site-packages/matplotlib-3.0.3-py3.7-macosx-10.9-x86_64.egg",
+                                 "Library/lib/python3.7/site-packages/numpy-1.16.0-py3.7-macosx-10.9-x86_64.egg",
                                  "Library/lib/python3.7/site-packages/pyparsing-2.3.1-py3.7.egg",
+                                 "Library/lib/python3.7/site-packages/setuptools-40.8.0-py3.7.egg",
                                  "Library/lib/python3.7/site-packages/tornado-6.0.1-py3.7-macosx-12.1-iPad6,7.egg",
                                  ]
         for otherPythonDirectory in pythonDirectories {
@@ -188,6 +208,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setenv("CLICOLOR_FORCE", "1", 1)  // color ls
         setlocale(LC_CTYPE, "UTF-8");
         setlocale(LC_ALL, "UTF-8");
+        clearOldDirectories()
         if (needToUpdatePythonFiles()) {
             // start copying python files from App bundle to $HOME/Library
             // queue the copy operation so we can continue working.
@@ -210,12 +231,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ios_system("rm -rf $HOME/tmp/(A*")
         // iCloud abilities:
         // We check whether the user has iCloud ability here, and that the container exists
-        // We don't actually store things in iCloud explicitly. Users can access iCloud files.
         let currentiCloudToken = FileManager().ubiquityIdentityToken
         if (currentiCloudToken != nil) {
             DispatchQueue.global().async(execute: {
                 iCloudDocumentsURL = FileManager().url(forUbiquityContainerIdentifier: nil)
-                NSLog("iCloudContainer = \(iCloudDocumentsURL)")
+                if (iCloudDocumentsURL != nil) {
+                    // Create a document in the iCloud folder to make it visible.
+                    NSLog("iCloudContainer = \(iCloudDocumentsURL)")
+                    let iCloudDirectory = iCloudDocumentsURL?.appendingPathComponent("Documents")
+                    let bundleUrl = URL(fileURLWithPath: Bundle.main.resourcePath!)
+                    let welcomeFiles=["welcome/Welcome to Carnets.ipynb",
+                                      "welcome/top.png",
+                                      "welcome/bottom.png"]
+                    for fileName in welcomeFiles {
+                        let bundleFile = bundleUrl.appendingPathComponent(fileName)
+                        let iCloudFile = iCloudDirectory?.appendingPathComponent(fileName)
+                        let iCloudDirectoryWelcome = iCloudFile?.deletingLastPathComponent()
+                        print("Creating directory at \(iCloudDirectoryWelcome)")
+                        try! FileManager().createDirectory(atPath: iCloudDirectoryWelcome!.path, withIntermediateDirectories: true)
+                        if (!FileManager().fileExists(atPath: iCloudFile!.path)) {
+                            print("Copying item from \(bundleFile) to \(iCloudFile)")
+                            try! FileManager().copyItem(at: bundleFile, to: iCloudFile!)
+                        }
+
+                    }
+                }
             })
         }
         // NSLog("Available fonts: %@", UIFont.familyNames);

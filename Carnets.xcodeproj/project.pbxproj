@@ -7,14 +7,74 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		221BB16122625A99000AF355 /* pythonE-matplotlib._contour.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB15D22625A64000AF355 /* pythonE-matplotlib._contour.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB16222625A99000AF355 /* pythonE-matplotlib._image.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB15A22625A63000AF355 /* pythonE-matplotlib._image.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB16322625A99000AF355 /* pythonE-matplotlib._path.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB15E22625A64000AF355 /* pythonE-matplotlib._path.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB16422625A99000AF355 /* pythonE-matplotlib._png.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB15C22625A64000AF355 /* pythonE-matplotlib._png.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB16522625A99000AF355 /* pythonE-matplotlib._qhull.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB16022625A64000AF355 /* pythonE-matplotlib._qhull.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB16622625A99000AF355 /* pythonE-matplotlib._tri.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB15922625A63000AF355 /* pythonE-matplotlib._tri.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB16722625A99000AF355 /* pythonE-matplotlib.backends._backend_agg.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB15822625A63000AF355 /* pythonE-matplotlib.backends._backend_agg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB16822625A99000AF355 /* pythonE-matplotlib.ft2font.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB15F22625A64000AF355 /* pythonE-matplotlib.ft2font.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB16922625A99000AF355 /* pythonE-matplotlib.ttconv.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB15B22625A64000AF355 /* pythonE-matplotlib.ttconv.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB17322625AB3000AF355 /* pythonD-matplotlib._contour.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB16D22625AAC000AF355 /* pythonD-matplotlib._contour.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB17422625AB3000AF355 /* pythonD-matplotlib._image.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB17122625AAD000AF355 /* pythonD-matplotlib._image.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB17522625AB3000AF355 /* pythonD-matplotlib._path.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB16C22625AAC000AF355 /* pythonD-matplotlib._path.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB17622625AB3000AF355 /* pythonD-matplotlib._png.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB16B22625AAC000AF355 /* pythonD-matplotlib._png.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB17722625AB3000AF355 /* pythonD-matplotlib._qhull.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB16F22625AAD000AF355 /* pythonD-matplotlib._qhull.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB17822625AB3000AF355 /* pythonD-matplotlib._tri.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB16E22625AAD000AF355 /* pythonD-matplotlib._tri.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB17922625AB3000AF355 /* pythonD-matplotlib.backends._backend_agg.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB17022625AAD000AF355 /* pythonD-matplotlib.backends._backend_agg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB17A22625AB3000AF355 /* pythonD-matplotlib.ft2font.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB17222625AAD000AF355 /* pythonD-matplotlib.ft2font.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB17B22625AB3000AF355 /* pythonD-matplotlib.ttconv.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB16A22625AAC000AF355 /* pythonD-matplotlib.ttconv.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB18522625ACD000AF355 /* pythonC-matplotlib._contour.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB17C22625AC5000AF355 /* pythonC-matplotlib._contour.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB18622625ACD000AF355 /* pythonC-matplotlib._image.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB18022625AC6000AF355 /* pythonC-matplotlib._image.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB18722625ACD000AF355 /* pythonC-matplotlib._path.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB17E22625AC5000AF355 /* pythonC-matplotlib._path.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB18822625ACD000AF355 /* pythonC-matplotlib._png.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB18322625AC6000AF355 /* pythonC-matplotlib._png.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB18922625ACD000AF355 /* pythonC-matplotlib._qhull.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB17D22625AC5000AF355 /* pythonC-matplotlib._qhull.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB18A22625ACD000AF355 /* pythonC-matplotlib._tri.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB17F22625AC5000AF355 /* pythonC-matplotlib._tri.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB18B22625ACD000AF355 /* pythonC-matplotlib.backends._backend_agg.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB18122625AC6000AF355 /* pythonC-matplotlib.backends._backend_agg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB18C22625ACD000AF355 /* pythonC-matplotlib.ft2font.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB18422625AC6000AF355 /* pythonC-matplotlib.ft2font.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB18D22625ACD000AF355 /* pythonC-matplotlib.ttconv.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB18222625AC6000AF355 /* pythonC-matplotlib.ttconv.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB19722625AE0000AF355 /* pythonB-matplotlib._contour.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB18F22625ADA000AF355 /* pythonB-matplotlib._contour.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB19822625AE0000AF355 /* pythonB-matplotlib._image.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB18E22625ADA000AF355 /* pythonB-matplotlib._image.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB19922625AE0000AF355 /* pythonB-matplotlib._path.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB19422625ADB000AF355 /* pythonB-matplotlib._path.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB19A22625AE0000AF355 /* pythonB-matplotlib._png.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB19322625ADB000AF355 /* pythonB-matplotlib._png.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB19B22625AE0000AF355 /* pythonB-matplotlib._qhull.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB19222625ADA000AF355 /* pythonB-matplotlib._qhull.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB19C22625AE0000AF355 /* pythonB-matplotlib._tri.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB19522625ADB000AF355 /* pythonB-matplotlib._tri.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB19D22625AE0000AF355 /* pythonB-matplotlib.backends._backend_agg.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB19622625ADB000AF355 /* pythonB-matplotlib.backends._backend_agg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB19E22625AE0000AF355 /* pythonB-matplotlib.ft2font.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB19022625ADA000AF355 /* pythonB-matplotlib.ft2font.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB19F22625AE0000AF355 /* pythonB-matplotlib.ttconv.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB19122625ADA000AF355 /* pythonB-matplotlib.ttconv.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB1A922625AF6000AF355 /* pythonA-matplotlib._contour.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB1A622625AF1000AF355 /* pythonA-matplotlib._contour.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB1AA22625AF6000AF355 /* pythonA-matplotlib._image.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB1A522625AF1000AF355 /* pythonA-matplotlib._image.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB1AB22625AF6000AF355 /* pythonA-matplotlib._path.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB1A822625AF2000AF355 /* pythonA-matplotlib._path.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB1AC22625AF6000AF355 /* pythonA-matplotlib._png.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB1A122625AF0000AF355 /* pythonA-matplotlib._png.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB1AD22625AF6000AF355 /* pythonA-matplotlib._qhull.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB1A022625AF0000AF355 /* pythonA-matplotlib._qhull.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB1AE22625AF6000AF355 /* pythonA-matplotlib._tri.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB1A222625AF1000AF355 /* pythonA-matplotlib._tri.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB1AF22625AF6000AF355 /* pythonA-matplotlib.backends._backend_agg.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB1A722625AF1000AF355 /* pythonA-matplotlib.backends._backend_agg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB1B022625AF6000AF355 /* pythonA-matplotlib.ft2font.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB1A322625AF1000AF355 /* pythonA-matplotlib.ft2font.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB1B122625AF6000AF355 /* pythonA-matplotlib.ttconv.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB1A422625AF1000AF355 /* pythonA-matplotlib.ttconv.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB1BB22625B14000AF355 /* python3_ios-matplotlib._contour.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB1B522625B0A000AF355 /* python3_ios-matplotlib._contour.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB1BC22625B14000AF355 /* python3_ios-matplotlib._image.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB1B222625B0A000AF355 /* python3_ios-matplotlib._image.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB1BD22625B14000AF355 /* python3_ios-matplotlib._path.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB1B622625B0B000AF355 /* python3_ios-matplotlib._path.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB1BE22625B14000AF355 /* python3_ios-matplotlib._png.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB1B922625B0B000AF355 /* python3_ios-matplotlib._png.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB1BF22625B14000AF355 /* python3_ios-matplotlib._qhull.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB1B822625B0B000AF355 /* python3_ios-matplotlib._qhull.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB1C022625B14000AF355 /* python3_ios-matplotlib._tri.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB1B422625B0A000AF355 /* python3_ios-matplotlib._tri.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB1C122625B14000AF355 /* python3_ios-matplotlib.backends._backend_agg.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB1B322625B0A000AF355 /* python3_ios-matplotlib.backends._backend_agg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB1C222625B14000AF355 /* python3_ios-matplotlib.ft2font.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB1BA22625B0B000AF355 /* python3_ios-matplotlib.ft2font.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		221BB1C322625B14000AF355 /* python3_ios-matplotlib.ttconv.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB1B722625B0B000AF355 /* python3_ios-matplotlib.ttconv.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22288E312212099D0081D86C /* ios_system.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750D921FCA4CF00241F27 /* ios_system.framework */; };
-		22288E33221209A40081D86C /* Python3_ios.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22288E232212098C0081D86C /* Python3_ios.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22288E34221209A40081D86C /* PythonA.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22288E1D2212098C0081D86C /* PythonA.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22288E35221209A40081D86C /* PythonB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22288E1C2212098C0081D86C /* PythonB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22288E36221209A40081D86C /* PythonC.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22288E202212098C0081D86C /* PythonC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22288E37221209A40081D86C /* PythonD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22288E212212098C0081D86C /* PythonD.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22288E38221209A40081D86C /* PythonE.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22288E1E2212098C0081D86C /* PythonE.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2239A8DB2212106A005C73D0 /* openblas.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22288E222212098C0081D86C /* openblas.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22623B3D225B6B0E0002DB71 /* python3_ios.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B3B225B6B090002DB71 /* python3_ios.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22623B3F225B6B0E0002DB71 /* pythonA.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B38225B6B090002DB71 /* pythonA.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22623B41225B6B0E0002DB71 /* pythonB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B39225B6B090002DB71 /* pythonB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22623B43225B6B0E0002DB71 /* pythonC.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B37225B6B090002DB71 /* pythonC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22623B45225B6B0E0002DB71 /* pythonD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B3A225B6B090002DB71 /* pythonD.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22623B47225B6B0E0002DB71 /* pythonE.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B36225B6B090002DB71 /* pythonE.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22623B6B225B87C60002DB71 /* pythonA-kiwisolver.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B69225B87C50002DB71 /* pythonA-kiwisolver.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22623B71225B8AAD0002DB71 /* pythonB-kiwisolver.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B6C225B8AAB0002DB71 /* pythonB-kiwisolver.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22623B73225B8AAD0002DB71 /* pythonE-kiwisolver.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B6D225B8AAC0002DB71 /* pythonE-kiwisolver.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22623B75225B8AAD0002DB71 /* pythonC-kiwisolver.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B6E225B8AAC0002DB71 /* pythonC-kiwisolver.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22623B77225B8AAD0002DB71 /* pythonD-kiwisolver.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B6F225B8AAC0002DB71 /* pythonD-kiwisolver.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22623B7A225B8ACE0002DB71 /* python3_ios-kiwisolver.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B78225B8ACD0002DB71 /* python3_ios-kiwisolver.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		229F12222243BC2E006487FD /* FontAwesome.otf in Resources */ = {isa = PBXBuildFile; fileRef = 229F12212243BAAE006487FD /* FontAwesome.otf */; };
 		22A1C69E21FE4143001B49F0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A1C69D21FE4142001B49F0 /* ViewController.swift */; };
 		22A9B758223BD58700F2D2FF /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C9A7802236CEDD0016B538 /* Document.swift */; };
@@ -36,10 +96,47 @@
 		22B7515021FCCB9F00241F27 /* commandDictionary.plist in Resources */ = {isa = PBXBuildFile; fileRef = 22B7514F21FCCB9F00241F27 /* commandDictionary.plist */; };
 		22C9A7842236CEDE0016B538 /* DocumentBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C9A7812236CEDE0016B538 /* DocumentBrowserViewController.swift */; };
 		22C9A7AC223804210016B538 /* runningSessions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C9A7AB223804210016B538 /* runningSessions.swift */; };
+		22EF1E48225BE1C40058BEAA /* pythonA-numpy.core._dummy.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E46225BE1BA0058BEAA /* pythonA-numpy.core._dummy.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E4A225BE1C40058BEAA /* pythonA-numpy.core._multiarray_umath.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E45225BE1BA0058BEAA /* pythonA-numpy.core._multiarray_umath.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E4C225BE1C40058BEAA /* pythonA-numpy.fft.fftpack_lite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E41225BE1BA0058BEAA /* pythonA-numpy.fft.fftpack_lite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E4E225BE1C40058BEAA /* pythonA-numpy.linalg._umath_linalg.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E44225BE1BA0058BEAA /* pythonA-numpy.linalg._umath_linalg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E50225BE1C40058BEAA /* pythonA-numpy.linalg.lapack_lite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E42225BE1BA0058BEAA /* pythonA-numpy.linalg.lapack_lite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E52225BE1C40058BEAA /* pythonA-numpy.random.mtrand.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E43225BE1BA0058BEAA /* pythonA-numpy.random.mtrand.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E6C225BE5E20058BEAA /* pythonB-numpy.core._dummy.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E64225BE5D60058BEAA /* pythonB-numpy.core._dummy.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E6E225BE5E20058BEAA /* pythonB-numpy.core._multiarray_umath.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E5B225BE5D60058BEAA /* pythonB-numpy.core._multiarray_umath.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E70225BE5E20058BEAA /* pythonB-numpy.fft.fftpack_lite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E68225BE5D70058BEAA /* pythonB-numpy.fft.fftpack_lite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E72225BE5E20058BEAA /* pythonB-numpy.linalg._umath_linalg.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E6A225BE5D70058BEAA /* pythonB-numpy.linalg._umath_linalg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E74225BE5E30058BEAA /* pythonB-numpy.linalg.lapack_lite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E61225BE5D60058BEAA /* pythonB-numpy.linalg.lapack_lite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E76225BE5E30058BEAA /* pythonB-numpy.random.mtrand.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E59225BE5D50058BEAA /* pythonB-numpy.random.mtrand.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E78225BE5E30058BEAA /* pythonC-numpy.core._dummy.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E57225BE5D50058BEAA /* pythonC-numpy.core._dummy.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E7A225BE5E30058BEAA /* pythonC-numpy.core._multiarray_umath.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E56225BE5D50058BEAA /* pythonC-numpy.core._multiarray_umath.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E7C225BE5E30058BEAA /* pythonC-numpy.fft.fftpack_lite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E66225BE5D70058BEAA /* pythonC-numpy.fft.fftpack_lite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E7E225BE5E30058BEAA /* pythonC-numpy.linalg._umath_linalg.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E53225BE5D50058BEAA /* pythonC-numpy.linalg._umath_linalg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E80225BE5E30058BEAA /* pythonC-numpy.linalg.lapack_lite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E67225BE5D70058BEAA /* pythonC-numpy.linalg.lapack_lite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E82225BE5E30058BEAA /* pythonC-numpy.random.mtrand.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E5A225BE5D60058BEAA /* pythonC-numpy.random.mtrand.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E84225BE5E30058BEAA /* pythonD-numpy.core._dummy.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E5F225BE5D60058BEAA /* pythonD-numpy.core._dummy.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E86225BE5E30058BEAA /* pythonD-numpy.core._multiarray_umath.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E62225BE5D60058BEAA /* pythonD-numpy.core._multiarray_umath.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E88225BE5E30058BEAA /* pythonD-numpy.fft.fftpack_lite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E54225BE5D50058BEAA /* pythonD-numpy.fft.fftpack_lite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E8A225BE5E30058BEAA /* pythonD-numpy.linalg._umath_linalg.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E60225BE5D60058BEAA /* pythonD-numpy.linalg._umath_linalg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E8C225BE5E40058BEAA /* pythonD-numpy.linalg.lapack_lite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E5C225BE5D60058BEAA /* pythonD-numpy.linalg.lapack_lite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E8E225BE5E40058BEAA /* pythonD-numpy.random.mtrand.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E69225BE5D70058BEAA /* pythonD-numpy.random.mtrand.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E90225BE5E40058BEAA /* pythonE-numpy.core._dummy.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E5D225BE5D60058BEAA /* pythonE-numpy.core._dummy.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E92225BE5E40058BEAA /* pythonE-numpy.core._multiarray_umath.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E5E225BE5D60058BEAA /* pythonE-numpy.core._multiarray_umath.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E94225BE5E40058BEAA /* pythonE-numpy.fft.fftpack_lite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E63225BE5D60058BEAA /* pythonE-numpy.fft.fftpack_lite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E96225BE5E40058BEAA /* pythonE-numpy.linalg._umath_linalg.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E65225BE5D70058BEAA /* pythonE-numpy.linalg._umath_linalg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E98225BE5E40058BEAA /* pythonE-numpy.linalg.lapack_lite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E58225BE5D50058BEAA /* pythonE-numpy.linalg.lapack_lite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1E9A225BE5E40058BEAA /* pythonE-numpy.random.mtrand.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E55225BE5D50058BEAA /* pythonE-numpy.random.mtrand.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1EA2225BE6090058BEAA /* python3_ios-numpy.core._dummy.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1EA0225BE6020058BEAA /* python3_ios-numpy.core._dummy.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1EA4225BE6090058BEAA /* python3_ios-numpy.core._multiarray_umath.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E9B225BE6000058BEAA /* python3_ios-numpy.core._multiarray_umath.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1EA6225BE6090058BEAA /* python3_ios-numpy.fft.fftpack_lite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E9E225BE6010058BEAA /* python3_ios-numpy.fft.fftpack_lite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1EA8225BE6090058BEAA /* python3_ios-numpy.linalg._umath_linalg.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E9D225BE6010058BEAA /* python3_ios-numpy.linalg._umath_linalg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1EAA225BE6090058BEAA /* python3_ios-numpy.linalg.lapack_lite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E9F225BE6010058BEAA /* python3_ios-numpy.linalg.lapack_lite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22EF1EAC225BE6090058BEAA /* python3_ios-numpy.random.mtrand.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E9C225BE6000058BEAA /* python3_ios-numpy.random.mtrand.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22F03F712219D9EF00EBEA0B /* Library in Resources */ = {isa = PBXBuildFile; fileRef = 22F03F702219D9E500EBEA0B /* Library */; };
 		22F03F73222087AB00EBEA0B /* ListPythonFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F03F72222087AB00EBEA0B /* ListPythonFiles.swift */; };
 		22FDD69E22119AEC003FABFE /* freetype.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750EA21FCA4D100241F27 /* freetype.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22FDD69F22119AEC003FABFE /* harfbuzz.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750CF21FCA4CE00241F27 /* harfbuzz.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22FFDCF32263D78F003E97CF /* welcome in Resources */ = {isa = PBXBuildFile; fileRef = 22FFDCF22263D78F003E97CF /* welcome */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -49,26 +146,122 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				2239A8DB2212106A005C73D0 /* openblas.framework in Embed Frameworks */,
+				22B7511A21FCA53200241F27 /* ios_system.framework in Embed Frameworks */,
+				22B7512821FCA53200241F27 /* openssl.framework in Embed Frameworks */,
+				22B7512121FCA53200241F27 /* libssh2.framework in Embed Frameworks */,
+				22B7514221FCA53300241F27 /* ssh_cmd.framework in Embed Frameworks */,
 				22B7514421FCA53300241F27 /* tar.framework in Embed Frameworks */,
 				22B7514021FCA53300241F27 /* shell.framework in Embed Frameworks */,
-				22B7514221FCA53300241F27 /* ssh_cmd.framework in Embed Frameworks */,
-				22B7512121FCA53200241F27 /* libssh2.framework in Embed Frameworks */,
-				22B7512621FCA53200241F27 /* network_ios.framework in Embed Frameworks */,
-				22B7511221FCA53200241F27 /* curl_ios.framework in Embed Frameworks */,
 				22B7514621FCA53300241F27 /* text.framework in Embed Frameworks */,
-				22B7510E21FCA53200241F27 /* awk.framework in Embed Frameworks */,
-				22B7512821FCA53200241F27 /* openssl.framework in Embed Frameworks */,
-				22B7511421FCA53200241F27 /* files.framework in Embed Frameworks */,
+				2239A8DB2212106A005C73D0 /* openblas.framework in Embed Frameworks */,
 				22FDD69E22119AEC003FABFE /* freetype.framework in Embed Frameworks */,
 				22FDD69F22119AEC003FABFE /* harfbuzz.framework in Embed Frameworks */,
-				22B7511A21FCA53200241F27 /* ios_system.framework in Embed Frameworks */,
-				22288E33221209A40081D86C /* Python3_ios.framework in Embed Frameworks */,
-				22288E34221209A40081D86C /* PythonA.framework in Embed Frameworks */,
-				22288E35221209A40081D86C /* PythonB.framework in Embed Frameworks */,
-				22288E36221209A40081D86C /* PythonC.framework in Embed Frameworks */,
-				22288E37221209A40081D86C /* PythonD.framework in Embed Frameworks */,
-				22288E38221209A40081D86C /* PythonE.framework in Embed Frameworks */,
+				22B7510E21FCA53200241F27 /* awk.framework in Embed Frameworks */,
+				22B7511221FCA53200241F27 /* curl_ios.framework in Embed Frameworks */,
+				22B7511421FCA53200241F27 /* files.framework in Embed Frameworks */,
+				22B7512621FCA53200241F27 /* network_ios.framework in Embed Frameworks */,
+				22623B3D225B6B0E0002DB71 /* python3_ios.framework in Embed Frameworks */,
+				22623B7A225B8ACE0002DB71 /* python3_ios-kiwisolver.framework in Embed Frameworks */,
+				22EF1EA4225BE6090058BEAA /* python3_ios-numpy.core._multiarray_umath.framework in Embed Frameworks */,
+				22EF1EAA225BE6090058BEAA /* python3_ios-numpy.linalg.lapack_lite.framework in Embed Frameworks */,
+				22EF1EA6225BE6090058BEAA /* python3_ios-numpy.fft.fftpack_lite.framework in Embed Frameworks */,
+				22EF1EA2225BE6090058BEAA /* python3_ios-numpy.core._dummy.framework in Embed Frameworks */,
+				22EF1EA8225BE6090058BEAA /* python3_ios-numpy.linalg._umath_linalg.framework in Embed Frameworks */,
+				22EF1EAC225BE6090058BEAA /* python3_ios-numpy.random.mtrand.framework in Embed Frameworks */,
+				221BB1BB22625B14000AF355 /* python3_ios-matplotlib._contour.framework in Embed Frameworks */,
+				221BB1BC22625B14000AF355 /* python3_ios-matplotlib._image.framework in Embed Frameworks */,
+				221BB1BD22625B14000AF355 /* python3_ios-matplotlib._path.framework in Embed Frameworks */,
+				221BB1BE22625B14000AF355 /* python3_ios-matplotlib._png.framework in Embed Frameworks */,
+				221BB1BF22625B14000AF355 /* python3_ios-matplotlib._qhull.framework in Embed Frameworks */,
+				221BB1C022625B14000AF355 /* python3_ios-matplotlib._tri.framework in Embed Frameworks */,
+				221BB1C122625B14000AF355 /* python3_ios-matplotlib.backends._backend_agg.framework in Embed Frameworks */,
+				221BB1C222625B14000AF355 /* python3_ios-matplotlib.ft2font.framework in Embed Frameworks */,
+				221BB1C322625B14000AF355 /* python3_ios-matplotlib.ttconv.framework in Embed Frameworks */,
+				22623B3F225B6B0E0002DB71 /* pythonA.framework in Embed Frameworks */,
+				22623B6B225B87C60002DB71 /* pythonA-kiwisolver.framework in Embed Frameworks */,
+				22EF1E4E225BE1C40058BEAA /* pythonA-numpy.linalg._umath_linalg.framework in Embed Frameworks */,
+				22EF1E4A225BE1C40058BEAA /* pythonA-numpy.core._multiarray_umath.framework in Embed Frameworks */,
+				22EF1E52225BE1C40058BEAA /* pythonA-numpy.random.mtrand.framework in Embed Frameworks */,
+				22EF1E4C225BE1C40058BEAA /* pythonA-numpy.fft.fftpack_lite.framework in Embed Frameworks */,
+				22EF1E50225BE1C40058BEAA /* pythonA-numpy.linalg.lapack_lite.framework in Embed Frameworks */,
+				22EF1E48225BE1C40058BEAA /* pythonA-numpy.core._dummy.framework in Embed Frameworks */,
+				221BB1A922625AF6000AF355 /* pythonA-matplotlib._contour.framework in Embed Frameworks */,
+				221BB1AA22625AF6000AF355 /* pythonA-matplotlib._image.framework in Embed Frameworks */,
+				221BB1AB22625AF6000AF355 /* pythonA-matplotlib._path.framework in Embed Frameworks */,
+				221BB1AC22625AF6000AF355 /* pythonA-matplotlib._png.framework in Embed Frameworks */,
+				221BB1AD22625AF6000AF355 /* pythonA-matplotlib._qhull.framework in Embed Frameworks */,
+				221BB1AE22625AF6000AF355 /* pythonA-matplotlib._tri.framework in Embed Frameworks */,
+				221BB1AF22625AF6000AF355 /* pythonA-matplotlib.backends._backend_agg.framework in Embed Frameworks */,
+				221BB1B022625AF6000AF355 /* pythonA-matplotlib.ft2font.framework in Embed Frameworks */,
+				221BB1B122625AF6000AF355 /* pythonA-matplotlib.ttconv.framework in Embed Frameworks */,
+				22623B41225B6B0E0002DB71 /* pythonB.framework in Embed Frameworks */,
+				22623B71225B8AAD0002DB71 /* pythonB-kiwisolver.framework in Embed Frameworks */,
+				22EF1E76225BE5E30058BEAA /* pythonB-numpy.random.mtrand.framework in Embed Frameworks */,
+				22EF1E74225BE5E30058BEAA /* pythonB-numpy.linalg.lapack_lite.framework in Embed Frameworks */,
+				22EF1E70225BE5E20058BEAA /* pythonB-numpy.fft.fftpack_lite.framework in Embed Frameworks */,
+				22EF1E6C225BE5E20058BEAA /* pythonB-numpy.core._dummy.framework in Embed Frameworks */,
+				22EF1E72225BE5E20058BEAA /* pythonB-numpy.linalg._umath_linalg.framework in Embed Frameworks */,
+				22EF1E6E225BE5E20058BEAA /* pythonB-numpy.core._multiarray_umath.framework in Embed Frameworks */,
+				221BB19722625AE0000AF355 /* pythonB-matplotlib._contour.framework in Embed Frameworks */,
+				221BB19822625AE0000AF355 /* pythonB-matplotlib._image.framework in Embed Frameworks */,
+				221BB19922625AE0000AF355 /* pythonB-matplotlib._path.framework in Embed Frameworks */,
+				221BB19A22625AE0000AF355 /* pythonB-matplotlib._png.framework in Embed Frameworks */,
+				221BB19B22625AE0000AF355 /* pythonB-matplotlib._qhull.framework in Embed Frameworks */,
+				221BB19C22625AE0000AF355 /* pythonB-matplotlib._tri.framework in Embed Frameworks */,
+				221BB19D22625AE0000AF355 /* pythonB-matplotlib.backends._backend_agg.framework in Embed Frameworks */,
+				221BB19E22625AE0000AF355 /* pythonB-matplotlib.ft2font.framework in Embed Frameworks */,
+				221BB19F22625AE0000AF355 /* pythonB-matplotlib.ttconv.framework in Embed Frameworks */,
+				22623B43225B6B0E0002DB71 /* pythonC.framework in Embed Frameworks */,
+				22623B75225B8AAD0002DB71 /* pythonC-kiwisolver.framework in Embed Frameworks */,
+				22EF1E7E225BE5E30058BEAA /* pythonC-numpy.linalg._umath_linalg.framework in Embed Frameworks */,
+				22EF1E78225BE5E30058BEAA /* pythonC-numpy.core._dummy.framework in Embed Frameworks */,
+				22EF1E80225BE5E30058BEAA /* pythonC-numpy.linalg.lapack_lite.framework in Embed Frameworks */,
+				22EF1E82225BE5E30058BEAA /* pythonC-numpy.random.mtrand.framework in Embed Frameworks */,
+				22EF1E7C225BE5E30058BEAA /* pythonC-numpy.fft.fftpack_lite.framework in Embed Frameworks */,
+				22EF1E7A225BE5E30058BEAA /* pythonC-numpy.core._multiarray_umath.framework in Embed Frameworks */,
+				221BB18522625ACD000AF355 /* pythonC-matplotlib._contour.framework in Embed Frameworks */,
+				221BB18622625ACD000AF355 /* pythonC-matplotlib._image.framework in Embed Frameworks */,
+				221BB18722625ACD000AF355 /* pythonC-matplotlib._path.framework in Embed Frameworks */,
+				221BB18822625ACD000AF355 /* pythonC-matplotlib._png.framework in Embed Frameworks */,
+				221BB18922625ACD000AF355 /* pythonC-matplotlib._qhull.framework in Embed Frameworks */,
+				221BB18A22625ACD000AF355 /* pythonC-matplotlib._tri.framework in Embed Frameworks */,
+				221BB18B22625ACD000AF355 /* pythonC-matplotlib.backends._backend_agg.framework in Embed Frameworks */,
+				221BB18C22625ACD000AF355 /* pythonC-matplotlib.ft2font.framework in Embed Frameworks */,
+				221BB18D22625ACD000AF355 /* pythonC-matplotlib.ttconv.framework in Embed Frameworks */,
+				22623B45225B6B0E0002DB71 /* pythonD.framework in Embed Frameworks */,
+				22623B77225B8AAD0002DB71 /* pythonD-kiwisolver.framework in Embed Frameworks */,
+				22EF1E84225BE5E30058BEAA /* pythonD-numpy.core._dummy.framework in Embed Frameworks */,
+				22EF1E8C225BE5E40058BEAA /* pythonD-numpy.linalg.lapack_lite.framework in Embed Frameworks */,
+				22EF1E8A225BE5E30058BEAA /* pythonD-numpy.linalg._umath_linalg.framework in Embed Frameworks */,
+				22EF1E8E225BE5E40058BEAA /* pythonD-numpy.random.mtrand.framework in Embed Frameworks */,
+				22EF1E88225BE5E30058BEAA /* pythonD-numpy.fft.fftpack_lite.framework in Embed Frameworks */,
+				22EF1E86225BE5E30058BEAA /* pythonD-numpy.core._multiarray_umath.framework in Embed Frameworks */,
+				221BB17322625AB3000AF355 /* pythonD-matplotlib._contour.framework in Embed Frameworks */,
+				221BB17422625AB3000AF355 /* pythonD-matplotlib._image.framework in Embed Frameworks */,
+				221BB17522625AB3000AF355 /* pythonD-matplotlib._path.framework in Embed Frameworks */,
+				221BB17622625AB3000AF355 /* pythonD-matplotlib._png.framework in Embed Frameworks */,
+				221BB17722625AB3000AF355 /* pythonD-matplotlib._qhull.framework in Embed Frameworks */,
+				221BB17822625AB3000AF355 /* pythonD-matplotlib._tri.framework in Embed Frameworks */,
+				221BB17922625AB3000AF355 /* pythonD-matplotlib.backends._backend_agg.framework in Embed Frameworks */,
+				221BB17A22625AB3000AF355 /* pythonD-matplotlib.ft2font.framework in Embed Frameworks */,
+				221BB17B22625AB3000AF355 /* pythonD-matplotlib.ttconv.framework in Embed Frameworks */,
+				22623B47225B6B0E0002DB71 /* pythonE.framework in Embed Frameworks */,
+				22623B73225B8AAD0002DB71 /* pythonE-kiwisolver.framework in Embed Frameworks */,
+				22EF1E9A225BE5E40058BEAA /* pythonE-numpy.random.mtrand.framework in Embed Frameworks */,
+				22EF1E98225BE5E40058BEAA /* pythonE-numpy.linalg.lapack_lite.framework in Embed Frameworks */,
+				22EF1E96225BE5E40058BEAA /* pythonE-numpy.linalg._umath_linalg.framework in Embed Frameworks */,
+				22EF1E94225BE5E40058BEAA /* pythonE-numpy.fft.fftpack_lite.framework in Embed Frameworks */,
+				22EF1E90225BE5E40058BEAA /* pythonE-numpy.core._dummy.framework in Embed Frameworks */,
+				22EF1E92225BE5E40058BEAA /* pythonE-numpy.core._multiarray_umath.framework in Embed Frameworks */,
+				221BB16122625A99000AF355 /* pythonE-matplotlib._contour.framework in Embed Frameworks */,
+				221BB16222625A99000AF355 /* pythonE-matplotlib._image.framework in Embed Frameworks */,
+				221BB16322625A99000AF355 /* pythonE-matplotlib._path.framework in Embed Frameworks */,
+				221BB16422625A99000AF355 /* pythonE-matplotlib._png.framework in Embed Frameworks */,
+				221BB16522625A99000AF355 /* pythonE-matplotlib._qhull.framework in Embed Frameworks */,
+				221BB16622625A99000AF355 /* pythonE-matplotlib._tri.framework in Embed Frameworks */,
+				221BB16722625A99000AF355 /* pythonE-matplotlib.backends._backend_agg.framework in Embed Frameworks */,
+				221BB16822625A99000AF355 /* pythonE-matplotlib.ft2font.framework in Embed Frameworks */,
+				221BB16922625A99000AF355 /* pythonE-matplotlib.ttconv.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -76,13 +269,73 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		22288E1C2212098C0081D86C /* PythonB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PythonB.framework; path = Frameworks/PythonB.framework; sourceTree = "<group>"; };
-		22288E1D2212098C0081D86C /* PythonA.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PythonA.framework; path = Frameworks/PythonA.framework; sourceTree = "<group>"; };
-		22288E1E2212098C0081D86C /* PythonE.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PythonE.framework; path = Frameworks/PythonE.framework; sourceTree = "<group>"; };
-		22288E202212098C0081D86C /* PythonC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PythonC.framework; path = Frameworks/PythonC.framework; sourceTree = "<group>"; };
-		22288E212212098C0081D86C /* PythonD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PythonD.framework; path = Frameworks/PythonD.framework; sourceTree = "<group>"; };
+		221BB15822625A63000AF355 /* pythonE-matplotlib.backends._backend_agg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-matplotlib.backends._backend_agg.framework"; path = "Frameworks/pythonE-matplotlib.backends._backend_agg.framework"; sourceTree = "<group>"; };
+		221BB15922625A63000AF355 /* pythonE-matplotlib._tri.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-matplotlib._tri.framework"; path = "Frameworks/pythonE-matplotlib._tri.framework"; sourceTree = "<group>"; };
+		221BB15A22625A63000AF355 /* pythonE-matplotlib._image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-matplotlib._image.framework"; path = "Frameworks/pythonE-matplotlib._image.framework"; sourceTree = "<group>"; };
+		221BB15B22625A64000AF355 /* pythonE-matplotlib.ttconv.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-matplotlib.ttconv.framework"; path = "Frameworks/pythonE-matplotlib.ttconv.framework"; sourceTree = "<group>"; };
+		221BB15C22625A64000AF355 /* pythonE-matplotlib._png.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-matplotlib._png.framework"; path = "Frameworks/pythonE-matplotlib._png.framework"; sourceTree = "<group>"; };
+		221BB15D22625A64000AF355 /* pythonE-matplotlib._contour.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-matplotlib._contour.framework"; path = "Frameworks/pythonE-matplotlib._contour.framework"; sourceTree = "<group>"; };
+		221BB15E22625A64000AF355 /* pythonE-matplotlib._path.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-matplotlib._path.framework"; path = "Frameworks/pythonE-matplotlib._path.framework"; sourceTree = "<group>"; };
+		221BB15F22625A64000AF355 /* pythonE-matplotlib.ft2font.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-matplotlib.ft2font.framework"; path = "Frameworks/pythonE-matplotlib.ft2font.framework"; sourceTree = "<group>"; };
+		221BB16022625A64000AF355 /* pythonE-matplotlib._qhull.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-matplotlib._qhull.framework"; path = "Frameworks/pythonE-matplotlib._qhull.framework"; sourceTree = "<group>"; };
+		221BB16A22625AAC000AF355 /* pythonD-matplotlib.ttconv.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-matplotlib.ttconv.framework"; path = "Frameworks/pythonD-matplotlib.ttconv.framework"; sourceTree = "<group>"; };
+		221BB16B22625AAC000AF355 /* pythonD-matplotlib._png.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-matplotlib._png.framework"; path = "Frameworks/pythonD-matplotlib._png.framework"; sourceTree = "<group>"; };
+		221BB16C22625AAC000AF355 /* pythonD-matplotlib._path.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-matplotlib._path.framework"; path = "Frameworks/pythonD-matplotlib._path.framework"; sourceTree = "<group>"; };
+		221BB16D22625AAC000AF355 /* pythonD-matplotlib._contour.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-matplotlib._contour.framework"; path = "Frameworks/pythonD-matplotlib._contour.framework"; sourceTree = "<group>"; };
+		221BB16E22625AAD000AF355 /* pythonD-matplotlib._tri.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-matplotlib._tri.framework"; path = "Frameworks/pythonD-matplotlib._tri.framework"; sourceTree = "<group>"; };
+		221BB16F22625AAD000AF355 /* pythonD-matplotlib._qhull.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-matplotlib._qhull.framework"; path = "Frameworks/pythonD-matplotlib._qhull.framework"; sourceTree = "<group>"; };
+		221BB17022625AAD000AF355 /* pythonD-matplotlib.backends._backend_agg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-matplotlib.backends._backend_agg.framework"; path = "Frameworks/pythonD-matplotlib.backends._backend_agg.framework"; sourceTree = "<group>"; };
+		221BB17122625AAD000AF355 /* pythonD-matplotlib._image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-matplotlib._image.framework"; path = "Frameworks/pythonD-matplotlib._image.framework"; sourceTree = "<group>"; };
+		221BB17222625AAD000AF355 /* pythonD-matplotlib.ft2font.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-matplotlib.ft2font.framework"; path = "Frameworks/pythonD-matplotlib.ft2font.framework"; sourceTree = "<group>"; };
+		221BB17C22625AC5000AF355 /* pythonC-matplotlib._contour.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-matplotlib._contour.framework"; path = "Frameworks/pythonC-matplotlib._contour.framework"; sourceTree = "<group>"; };
+		221BB17D22625AC5000AF355 /* pythonC-matplotlib._qhull.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-matplotlib._qhull.framework"; path = "Frameworks/pythonC-matplotlib._qhull.framework"; sourceTree = "<group>"; };
+		221BB17E22625AC5000AF355 /* pythonC-matplotlib._path.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-matplotlib._path.framework"; path = "Frameworks/pythonC-matplotlib._path.framework"; sourceTree = "<group>"; };
+		221BB17F22625AC5000AF355 /* pythonC-matplotlib._tri.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-matplotlib._tri.framework"; path = "Frameworks/pythonC-matplotlib._tri.framework"; sourceTree = "<group>"; };
+		221BB18022625AC6000AF355 /* pythonC-matplotlib._image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-matplotlib._image.framework"; path = "Frameworks/pythonC-matplotlib._image.framework"; sourceTree = "<group>"; };
+		221BB18122625AC6000AF355 /* pythonC-matplotlib.backends._backend_agg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-matplotlib.backends._backend_agg.framework"; path = "Frameworks/pythonC-matplotlib.backends._backend_agg.framework"; sourceTree = "<group>"; };
+		221BB18222625AC6000AF355 /* pythonC-matplotlib.ttconv.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-matplotlib.ttconv.framework"; path = "Frameworks/pythonC-matplotlib.ttconv.framework"; sourceTree = "<group>"; };
+		221BB18322625AC6000AF355 /* pythonC-matplotlib._png.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-matplotlib._png.framework"; path = "Frameworks/pythonC-matplotlib._png.framework"; sourceTree = "<group>"; };
+		221BB18422625AC6000AF355 /* pythonC-matplotlib.ft2font.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-matplotlib.ft2font.framework"; path = "Frameworks/pythonC-matplotlib.ft2font.framework"; sourceTree = "<group>"; };
+		221BB18E22625ADA000AF355 /* pythonB-matplotlib._image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-matplotlib._image.framework"; path = "Frameworks/pythonB-matplotlib._image.framework"; sourceTree = "<group>"; };
+		221BB18F22625ADA000AF355 /* pythonB-matplotlib._contour.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-matplotlib._contour.framework"; path = "Frameworks/pythonB-matplotlib._contour.framework"; sourceTree = "<group>"; };
+		221BB19022625ADA000AF355 /* pythonB-matplotlib.ft2font.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-matplotlib.ft2font.framework"; path = "Frameworks/pythonB-matplotlib.ft2font.framework"; sourceTree = "<group>"; };
+		221BB19122625ADA000AF355 /* pythonB-matplotlib.ttconv.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-matplotlib.ttconv.framework"; path = "Frameworks/pythonB-matplotlib.ttconv.framework"; sourceTree = "<group>"; };
+		221BB19222625ADA000AF355 /* pythonB-matplotlib._qhull.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-matplotlib._qhull.framework"; path = "Frameworks/pythonB-matplotlib._qhull.framework"; sourceTree = "<group>"; };
+		221BB19322625ADB000AF355 /* pythonB-matplotlib._png.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-matplotlib._png.framework"; path = "Frameworks/pythonB-matplotlib._png.framework"; sourceTree = "<group>"; };
+		221BB19422625ADB000AF355 /* pythonB-matplotlib._path.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-matplotlib._path.framework"; path = "Frameworks/pythonB-matplotlib._path.framework"; sourceTree = "<group>"; };
+		221BB19522625ADB000AF355 /* pythonB-matplotlib._tri.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-matplotlib._tri.framework"; path = "Frameworks/pythonB-matplotlib._tri.framework"; sourceTree = "<group>"; };
+		221BB19622625ADB000AF355 /* pythonB-matplotlib.backends._backend_agg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-matplotlib.backends._backend_agg.framework"; path = "Frameworks/pythonB-matplotlib.backends._backend_agg.framework"; sourceTree = "<group>"; };
+		221BB1A022625AF0000AF355 /* pythonA-matplotlib._qhull.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-matplotlib._qhull.framework"; path = "Frameworks/pythonA-matplotlib._qhull.framework"; sourceTree = "<group>"; };
+		221BB1A122625AF0000AF355 /* pythonA-matplotlib._png.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-matplotlib._png.framework"; path = "Frameworks/pythonA-matplotlib._png.framework"; sourceTree = "<group>"; };
+		221BB1A222625AF1000AF355 /* pythonA-matplotlib._tri.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-matplotlib._tri.framework"; path = "Frameworks/pythonA-matplotlib._tri.framework"; sourceTree = "<group>"; };
+		221BB1A322625AF1000AF355 /* pythonA-matplotlib.ft2font.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-matplotlib.ft2font.framework"; path = "Frameworks/pythonA-matplotlib.ft2font.framework"; sourceTree = "<group>"; };
+		221BB1A422625AF1000AF355 /* pythonA-matplotlib.ttconv.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-matplotlib.ttconv.framework"; path = "Frameworks/pythonA-matplotlib.ttconv.framework"; sourceTree = "<group>"; };
+		221BB1A522625AF1000AF355 /* pythonA-matplotlib._image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-matplotlib._image.framework"; path = "Frameworks/pythonA-matplotlib._image.framework"; sourceTree = "<group>"; };
+		221BB1A622625AF1000AF355 /* pythonA-matplotlib._contour.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-matplotlib._contour.framework"; path = "Frameworks/pythonA-matplotlib._contour.framework"; sourceTree = "<group>"; };
+		221BB1A722625AF1000AF355 /* pythonA-matplotlib.backends._backend_agg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-matplotlib.backends._backend_agg.framework"; path = "Frameworks/pythonA-matplotlib.backends._backend_agg.framework"; sourceTree = "<group>"; };
+		221BB1A822625AF2000AF355 /* pythonA-matplotlib._path.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-matplotlib._path.framework"; path = "Frameworks/pythonA-matplotlib._path.framework"; sourceTree = "<group>"; };
+		221BB1B222625B0A000AF355 /* python3_ios-matplotlib._image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-matplotlib._image.framework"; path = "Frameworks/python3_ios-matplotlib._image.framework"; sourceTree = "<group>"; };
+		221BB1B322625B0A000AF355 /* python3_ios-matplotlib.backends._backend_agg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-matplotlib.backends._backend_agg.framework"; path = "Frameworks/python3_ios-matplotlib.backends._backend_agg.framework"; sourceTree = "<group>"; };
+		221BB1B422625B0A000AF355 /* python3_ios-matplotlib._tri.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-matplotlib._tri.framework"; path = "Frameworks/python3_ios-matplotlib._tri.framework"; sourceTree = "<group>"; };
+		221BB1B522625B0A000AF355 /* python3_ios-matplotlib._contour.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-matplotlib._contour.framework"; path = "Frameworks/python3_ios-matplotlib._contour.framework"; sourceTree = "<group>"; };
+		221BB1B622625B0B000AF355 /* python3_ios-matplotlib._path.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-matplotlib._path.framework"; path = "Frameworks/python3_ios-matplotlib._path.framework"; sourceTree = "<group>"; };
+		221BB1B722625B0B000AF355 /* python3_ios-matplotlib.ttconv.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-matplotlib.ttconv.framework"; path = "Frameworks/python3_ios-matplotlib.ttconv.framework"; sourceTree = "<group>"; };
+		221BB1B822625B0B000AF355 /* python3_ios-matplotlib._qhull.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-matplotlib._qhull.framework"; path = "Frameworks/python3_ios-matplotlib._qhull.framework"; sourceTree = "<group>"; };
+		221BB1B922625B0B000AF355 /* python3_ios-matplotlib._png.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-matplotlib._png.framework"; path = "Frameworks/python3_ios-matplotlib._png.framework"; sourceTree = "<group>"; };
+		221BB1BA22625B0B000AF355 /* python3_ios-matplotlib.ft2font.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-matplotlib.ft2font.framework"; path = "Frameworks/python3_ios-matplotlib.ft2font.framework"; sourceTree = "<group>"; };
 		22288E222212098C0081D86C /* openblas.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = openblas.framework; path = Frameworks/openblas.framework; sourceTree = "<group>"; };
-		22288E232212098C0081D86C /* Python3_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Python3_ios.framework; path = Frameworks/Python3_ios.framework; sourceTree = "<group>"; };
+		22623B36225B6B090002DB71 /* pythonE.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pythonE.framework; path = Frameworks/pythonE.framework; sourceTree = "<group>"; };
+		22623B37225B6B090002DB71 /* pythonC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pythonC.framework; path = Frameworks/pythonC.framework; sourceTree = "<group>"; };
+		22623B38225B6B090002DB71 /* pythonA.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pythonA.framework; path = Frameworks/pythonA.framework; sourceTree = "<group>"; };
+		22623B39225B6B090002DB71 /* pythonB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pythonB.framework; path = Frameworks/pythonB.framework; sourceTree = "<group>"; };
+		22623B3A225B6B090002DB71 /* pythonD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pythonD.framework; path = Frameworks/pythonD.framework; sourceTree = "<group>"; };
+		22623B3B225B6B090002DB71 /* python3_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = python3_ios.framework; path = Frameworks/python3_ios.framework; sourceTree = "<group>"; };
+		22623B69225B87C50002DB71 /* pythonA-kiwisolver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-kiwisolver.framework"; path = "Frameworks/pythonA-kiwisolver.framework"; sourceTree = "<group>"; };
+		22623B6C225B8AAB0002DB71 /* pythonB-kiwisolver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-kiwisolver.framework"; path = "Frameworks/pythonB-kiwisolver.framework"; sourceTree = "<group>"; };
+		22623B6D225B8AAC0002DB71 /* pythonE-kiwisolver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-kiwisolver.framework"; path = "Frameworks/pythonE-kiwisolver.framework"; sourceTree = "<group>"; };
+		22623B6E225B8AAC0002DB71 /* pythonC-kiwisolver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-kiwisolver.framework"; path = "Frameworks/pythonC-kiwisolver.framework"; sourceTree = "<group>"; };
+		22623B6F225B8AAC0002DB71 /* pythonD-kiwisolver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-kiwisolver.framework"; path = "Frameworks/pythonD-kiwisolver.framework"; sourceTree = "<group>"; };
+		22623B78225B8ACD0002DB71 /* python3_ios-kiwisolver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-kiwisolver.framework"; path = "Frameworks/python3_ios-kiwisolver.framework"; sourceTree = "<group>"; };
 		229BB8D32210DC8F0070FD71 /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
 		229BB8D52210DCA30070FD71 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		229F12212243BAAE006487FD /* FontAwesome.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.otf; path = "Library/lib/python3.7/site-packages/notebook/static/components/font-awesome/fonts/FontAwesome.otf"; sourceTree = "<group>"; };
@@ -111,9 +364,46 @@
 		22C9A7812236CEDE0016B538 /* DocumentBrowserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentBrowserViewController.swift; sourceTree = "<group>"; };
 		22C9A7822236CEDE0016B538 /* DocumentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentViewController.swift; sourceTree = "<group>"; };
 		22C9A7AB223804210016B538 /* runningSessions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = runningSessions.swift; sourceTree = "<group>"; };
+		22EF1E41225BE1BA0058BEAA /* pythonA-numpy.fft.fftpack_lite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-numpy.fft.fftpack_lite.framework"; path = "Frameworks/pythonA-numpy.fft.fftpack_lite.framework"; sourceTree = "<group>"; };
+		22EF1E42225BE1BA0058BEAA /* pythonA-numpy.linalg.lapack_lite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-numpy.linalg.lapack_lite.framework"; path = "Frameworks/pythonA-numpy.linalg.lapack_lite.framework"; sourceTree = "<group>"; };
+		22EF1E43225BE1BA0058BEAA /* pythonA-numpy.random.mtrand.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-numpy.random.mtrand.framework"; path = "Frameworks/pythonA-numpy.random.mtrand.framework"; sourceTree = "<group>"; };
+		22EF1E44225BE1BA0058BEAA /* pythonA-numpy.linalg._umath_linalg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-numpy.linalg._umath_linalg.framework"; path = "Frameworks/pythonA-numpy.linalg._umath_linalg.framework"; sourceTree = "<group>"; };
+		22EF1E45225BE1BA0058BEAA /* pythonA-numpy.core._multiarray_umath.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-numpy.core._multiarray_umath.framework"; path = "Frameworks/pythonA-numpy.core._multiarray_umath.framework"; sourceTree = "<group>"; };
+		22EF1E46225BE1BA0058BEAA /* pythonA-numpy.core._dummy.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-numpy.core._dummy.framework"; path = "Frameworks/pythonA-numpy.core._dummy.framework"; sourceTree = "<group>"; };
+		22EF1E53225BE5D50058BEAA /* pythonC-numpy.linalg._umath_linalg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-numpy.linalg._umath_linalg.framework"; path = "Frameworks/pythonC-numpy.linalg._umath_linalg.framework"; sourceTree = "<group>"; };
+		22EF1E54225BE5D50058BEAA /* pythonD-numpy.fft.fftpack_lite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-numpy.fft.fftpack_lite.framework"; path = "Frameworks/pythonD-numpy.fft.fftpack_lite.framework"; sourceTree = "<group>"; };
+		22EF1E55225BE5D50058BEAA /* pythonE-numpy.random.mtrand.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-numpy.random.mtrand.framework"; path = "Frameworks/pythonE-numpy.random.mtrand.framework"; sourceTree = "<group>"; };
+		22EF1E56225BE5D50058BEAA /* pythonC-numpy.core._multiarray_umath.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-numpy.core._multiarray_umath.framework"; path = "Frameworks/pythonC-numpy.core._multiarray_umath.framework"; sourceTree = "<group>"; };
+		22EF1E57225BE5D50058BEAA /* pythonC-numpy.core._dummy.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-numpy.core._dummy.framework"; path = "Frameworks/pythonC-numpy.core._dummy.framework"; sourceTree = "<group>"; };
+		22EF1E58225BE5D50058BEAA /* pythonE-numpy.linalg.lapack_lite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-numpy.linalg.lapack_lite.framework"; path = "Frameworks/pythonE-numpy.linalg.lapack_lite.framework"; sourceTree = "<group>"; };
+		22EF1E59225BE5D50058BEAA /* pythonB-numpy.random.mtrand.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-numpy.random.mtrand.framework"; path = "Frameworks/pythonB-numpy.random.mtrand.framework"; sourceTree = "<group>"; };
+		22EF1E5A225BE5D60058BEAA /* pythonC-numpy.random.mtrand.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-numpy.random.mtrand.framework"; path = "Frameworks/pythonC-numpy.random.mtrand.framework"; sourceTree = "<group>"; };
+		22EF1E5B225BE5D60058BEAA /* pythonB-numpy.core._multiarray_umath.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-numpy.core._multiarray_umath.framework"; path = "Frameworks/pythonB-numpy.core._multiarray_umath.framework"; sourceTree = "<group>"; };
+		22EF1E5C225BE5D60058BEAA /* pythonD-numpy.linalg.lapack_lite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-numpy.linalg.lapack_lite.framework"; path = "Frameworks/pythonD-numpy.linalg.lapack_lite.framework"; sourceTree = "<group>"; };
+		22EF1E5D225BE5D60058BEAA /* pythonE-numpy.core._dummy.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-numpy.core._dummy.framework"; path = "Frameworks/pythonE-numpy.core._dummy.framework"; sourceTree = "<group>"; };
+		22EF1E5E225BE5D60058BEAA /* pythonE-numpy.core._multiarray_umath.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-numpy.core._multiarray_umath.framework"; path = "Frameworks/pythonE-numpy.core._multiarray_umath.framework"; sourceTree = "<group>"; };
+		22EF1E5F225BE5D60058BEAA /* pythonD-numpy.core._dummy.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-numpy.core._dummy.framework"; path = "Frameworks/pythonD-numpy.core._dummy.framework"; sourceTree = "<group>"; };
+		22EF1E60225BE5D60058BEAA /* pythonD-numpy.linalg._umath_linalg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-numpy.linalg._umath_linalg.framework"; path = "Frameworks/pythonD-numpy.linalg._umath_linalg.framework"; sourceTree = "<group>"; };
+		22EF1E61225BE5D60058BEAA /* pythonB-numpy.linalg.lapack_lite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-numpy.linalg.lapack_lite.framework"; path = "Frameworks/pythonB-numpy.linalg.lapack_lite.framework"; sourceTree = "<group>"; };
+		22EF1E62225BE5D60058BEAA /* pythonD-numpy.core._multiarray_umath.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-numpy.core._multiarray_umath.framework"; path = "Frameworks/pythonD-numpy.core._multiarray_umath.framework"; sourceTree = "<group>"; };
+		22EF1E63225BE5D60058BEAA /* pythonE-numpy.fft.fftpack_lite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-numpy.fft.fftpack_lite.framework"; path = "Frameworks/pythonE-numpy.fft.fftpack_lite.framework"; sourceTree = "<group>"; };
+		22EF1E64225BE5D60058BEAA /* pythonB-numpy.core._dummy.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-numpy.core._dummy.framework"; path = "Frameworks/pythonB-numpy.core._dummy.framework"; sourceTree = "<group>"; };
+		22EF1E65225BE5D70058BEAA /* pythonE-numpy.linalg._umath_linalg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-numpy.linalg._umath_linalg.framework"; path = "Frameworks/pythonE-numpy.linalg._umath_linalg.framework"; sourceTree = "<group>"; };
+		22EF1E66225BE5D70058BEAA /* pythonC-numpy.fft.fftpack_lite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-numpy.fft.fftpack_lite.framework"; path = "Frameworks/pythonC-numpy.fft.fftpack_lite.framework"; sourceTree = "<group>"; };
+		22EF1E67225BE5D70058BEAA /* pythonC-numpy.linalg.lapack_lite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-numpy.linalg.lapack_lite.framework"; path = "Frameworks/pythonC-numpy.linalg.lapack_lite.framework"; sourceTree = "<group>"; };
+		22EF1E68225BE5D70058BEAA /* pythonB-numpy.fft.fftpack_lite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-numpy.fft.fftpack_lite.framework"; path = "Frameworks/pythonB-numpy.fft.fftpack_lite.framework"; sourceTree = "<group>"; };
+		22EF1E69225BE5D70058BEAA /* pythonD-numpy.random.mtrand.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-numpy.random.mtrand.framework"; path = "Frameworks/pythonD-numpy.random.mtrand.framework"; sourceTree = "<group>"; };
+		22EF1E6A225BE5D70058BEAA /* pythonB-numpy.linalg._umath_linalg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-numpy.linalg._umath_linalg.framework"; path = "Frameworks/pythonB-numpy.linalg._umath_linalg.framework"; sourceTree = "<group>"; };
+		22EF1E9B225BE6000058BEAA /* python3_ios-numpy.core._multiarray_umath.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-numpy.core._multiarray_umath.framework"; path = "Frameworks/python3_ios-numpy.core._multiarray_umath.framework"; sourceTree = "<group>"; };
+		22EF1E9C225BE6000058BEAA /* python3_ios-numpy.random.mtrand.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-numpy.random.mtrand.framework"; path = "Frameworks/python3_ios-numpy.random.mtrand.framework"; sourceTree = "<group>"; };
+		22EF1E9D225BE6010058BEAA /* python3_ios-numpy.linalg._umath_linalg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-numpy.linalg._umath_linalg.framework"; path = "Frameworks/python3_ios-numpy.linalg._umath_linalg.framework"; sourceTree = "<group>"; };
+		22EF1E9E225BE6010058BEAA /* python3_ios-numpy.fft.fftpack_lite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-numpy.fft.fftpack_lite.framework"; path = "Frameworks/python3_ios-numpy.fft.fftpack_lite.framework"; sourceTree = "<group>"; };
+		22EF1E9F225BE6010058BEAA /* python3_ios-numpy.linalg.lapack_lite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-numpy.linalg.lapack_lite.framework"; path = "Frameworks/python3_ios-numpy.linalg.lapack_lite.framework"; sourceTree = "<group>"; };
+		22EF1EA0225BE6020058BEAA /* python3_ios-numpy.core._dummy.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-numpy.core._dummy.framework"; path = "Frameworks/python3_ios-numpy.core._dummy.framework"; sourceTree = "<group>"; };
 		22F03F702219D9E500EBEA0B /* Library */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Library; sourceTree = "<group>"; };
 		22F03F72222087AB00EBEA0B /* ListPythonFiles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListPythonFiles.swift; sourceTree = "<group>"; };
 		22FA33E62238491700A13D55 /* Carnets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Carnets.entitlements; sourceTree = "<group>"; };
+		22FFDCF22263D78F003E97CF /* welcome */ = {isa = PBXFileReference; lastKnownFileType = folder; path = welcome; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +430,7 @@
 		22B750A321FC671700241F27 = {
 			isa = PBXGroup;
 			children = (
+				22FFDCF22263D78F003E97CF /* welcome */,
 				22F03F702219D9E500EBEA0B /* Library */,
 				22B750AE21FC671700241F27 /* Carnets */,
 				22B750AD21FC671700241F27 /* Products */,
@@ -178,15 +469,111 @@
 		22B750C121FC8F2C00241F27 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				221BB1B522625B0A000AF355 /* python3_ios-matplotlib._contour.framework */,
+				221BB1B222625B0A000AF355 /* python3_ios-matplotlib._image.framework */,
+				221BB1B622625B0B000AF355 /* python3_ios-matplotlib._path.framework */,
+				221BB1B922625B0B000AF355 /* python3_ios-matplotlib._png.framework */,
+				221BB1B822625B0B000AF355 /* python3_ios-matplotlib._qhull.framework */,
+				221BB1B422625B0A000AF355 /* python3_ios-matplotlib._tri.framework */,
+				221BB1B322625B0A000AF355 /* python3_ios-matplotlib.backends._backend_agg.framework */,
+				221BB1BA22625B0B000AF355 /* python3_ios-matplotlib.ft2font.framework */,
+				221BB1B722625B0B000AF355 /* python3_ios-matplotlib.ttconv.framework */,
+				221BB1A622625AF1000AF355 /* pythonA-matplotlib._contour.framework */,
+				221BB1A522625AF1000AF355 /* pythonA-matplotlib._image.framework */,
+				221BB1A822625AF2000AF355 /* pythonA-matplotlib._path.framework */,
+				221BB1A122625AF0000AF355 /* pythonA-matplotlib._png.framework */,
+				221BB1A022625AF0000AF355 /* pythonA-matplotlib._qhull.framework */,
+				221BB1A222625AF1000AF355 /* pythonA-matplotlib._tri.framework */,
+				221BB1A722625AF1000AF355 /* pythonA-matplotlib.backends._backend_agg.framework */,
+				221BB1A322625AF1000AF355 /* pythonA-matplotlib.ft2font.framework */,
+				221BB1A422625AF1000AF355 /* pythonA-matplotlib.ttconv.framework */,
+				221BB18F22625ADA000AF355 /* pythonB-matplotlib._contour.framework */,
+				221BB18E22625ADA000AF355 /* pythonB-matplotlib._image.framework */,
+				221BB19422625ADB000AF355 /* pythonB-matplotlib._path.framework */,
+				221BB19322625ADB000AF355 /* pythonB-matplotlib._png.framework */,
+				221BB19222625ADA000AF355 /* pythonB-matplotlib._qhull.framework */,
+				221BB19522625ADB000AF355 /* pythonB-matplotlib._tri.framework */,
+				221BB19622625ADB000AF355 /* pythonB-matplotlib.backends._backend_agg.framework */,
+				221BB19022625ADA000AF355 /* pythonB-matplotlib.ft2font.framework */,
+				221BB19122625ADA000AF355 /* pythonB-matplotlib.ttconv.framework */,
+				221BB17C22625AC5000AF355 /* pythonC-matplotlib._contour.framework */,
+				221BB18022625AC6000AF355 /* pythonC-matplotlib._image.framework */,
+				221BB17E22625AC5000AF355 /* pythonC-matplotlib._path.framework */,
+				221BB18322625AC6000AF355 /* pythonC-matplotlib._png.framework */,
+				221BB17D22625AC5000AF355 /* pythonC-matplotlib._qhull.framework */,
+				221BB17F22625AC5000AF355 /* pythonC-matplotlib._tri.framework */,
+				221BB18122625AC6000AF355 /* pythonC-matplotlib.backends._backend_agg.framework */,
+				221BB18422625AC6000AF355 /* pythonC-matplotlib.ft2font.framework */,
+				221BB18222625AC6000AF355 /* pythonC-matplotlib.ttconv.framework */,
+				221BB16D22625AAC000AF355 /* pythonD-matplotlib._contour.framework */,
+				221BB17122625AAD000AF355 /* pythonD-matplotlib._image.framework */,
+				221BB16C22625AAC000AF355 /* pythonD-matplotlib._path.framework */,
+				221BB16B22625AAC000AF355 /* pythonD-matplotlib._png.framework */,
+				221BB16F22625AAD000AF355 /* pythonD-matplotlib._qhull.framework */,
+				221BB16E22625AAD000AF355 /* pythonD-matplotlib._tri.framework */,
+				221BB17022625AAD000AF355 /* pythonD-matplotlib.backends._backend_agg.framework */,
+				221BB17222625AAD000AF355 /* pythonD-matplotlib.ft2font.framework */,
+				221BB16A22625AAC000AF355 /* pythonD-matplotlib.ttconv.framework */,
+				221BB15D22625A64000AF355 /* pythonE-matplotlib._contour.framework */,
+				221BB15A22625A63000AF355 /* pythonE-matplotlib._image.framework */,
+				221BB15E22625A64000AF355 /* pythonE-matplotlib._path.framework */,
+				221BB15C22625A64000AF355 /* pythonE-matplotlib._png.framework */,
+				221BB16022625A64000AF355 /* pythonE-matplotlib._qhull.framework */,
+				221BB15922625A63000AF355 /* pythonE-matplotlib._tri.framework */,
+				221BB15822625A63000AF355 /* pythonE-matplotlib.backends._backend_agg.framework */,
+				221BB15F22625A64000AF355 /* pythonE-matplotlib.ft2font.framework */,
+				221BB15B22625A64000AF355 /* pythonE-matplotlib.ttconv.framework */,
+				22EF1EA0225BE6020058BEAA /* python3_ios-numpy.core._dummy.framework */,
+				22EF1E9B225BE6000058BEAA /* python3_ios-numpy.core._multiarray_umath.framework */,
+				22EF1E9E225BE6010058BEAA /* python3_ios-numpy.fft.fftpack_lite.framework */,
+				22EF1E9D225BE6010058BEAA /* python3_ios-numpy.linalg._umath_linalg.framework */,
+				22EF1E9F225BE6010058BEAA /* python3_ios-numpy.linalg.lapack_lite.framework */,
+				22EF1E9C225BE6000058BEAA /* python3_ios-numpy.random.mtrand.framework */,
+				22EF1E64225BE5D60058BEAA /* pythonB-numpy.core._dummy.framework */,
+				22EF1E5B225BE5D60058BEAA /* pythonB-numpy.core._multiarray_umath.framework */,
+				22EF1E68225BE5D70058BEAA /* pythonB-numpy.fft.fftpack_lite.framework */,
+				22EF1E6A225BE5D70058BEAA /* pythonB-numpy.linalg._umath_linalg.framework */,
+				22EF1E61225BE5D60058BEAA /* pythonB-numpy.linalg.lapack_lite.framework */,
+				22EF1E59225BE5D50058BEAA /* pythonB-numpy.random.mtrand.framework */,
+				22EF1E57225BE5D50058BEAA /* pythonC-numpy.core._dummy.framework */,
+				22EF1E56225BE5D50058BEAA /* pythonC-numpy.core._multiarray_umath.framework */,
+				22EF1E66225BE5D70058BEAA /* pythonC-numpy.fft.fftpack_lite.framework */,
+				22EF1E53225BE5D50058BEAA /* pythonC-numpy.linalg._umath_linalg.framework */,
+				22EF1E67225BE5D70058BEAA /* pythonC-numpy.linalg.lapack_lite.framework */,
+				22EF1E5A225BE5D60058BEAA /* pythonC-numpy.random.mtrand.framework */,
+				22EF1E5F225BE5D60058BEAA /* pythonD-numpy.core._dummy.framework */,
+				22EF1E62225BE5D60058BEAA /* pythonD-numpy.core._multiarray_umath.framework */,
+				22EF1E54225BE5D50058BEAA /* pythonD-numpy.fft.fftpack_lite.framework */,
+				22EF1E60225BE5D60058BEAA /* pythonD-numpy.linalg._umath_linalg.framework */,
+				22EF1E5C225BE5D60058BEAA /* pythonD-numpy.linalg.lapack_lite.framework */,
+				22EF1E69225BE5D70058BEAA /* pythonD-numpy.random.mtrand.framework */,
+				22EF1E5D225BE5D60058BEAA /* pythonE-numpy.core._dummy.framework */,
+				22EF1E5E225BE5D60058BEAA /* pythonE-numpy.core._multiarray_umath.framework */,
+				22EF1E63225BE5D60058BEAA /* pythonE-numpy.fft.fftpack_lite.framework */,
+				22EF1E65225BE5D70058BEAA /* pythonE-numpy.linalg._umath_linalg.framework */,
+				22EF1E58225BE5D50058BEAA /* pythonE-numpy.linalg.lapack_lite.framework */,
+				22EF1E55225BE5D50058BEAA /* pythonE-numpy.random.mtrand.framework */,
+				22EF1E46225BE1BA0058BEAA /* pythonA-numpy.core._dummy.framework */,
+				22EF1E45225BE1BA0058BEAA /* pythonA-numpy.core._multiarray_umath.framework */,
+				22EF1E41225BE1BA0058BEAA /* pythonA-numpy.fft.fftpack_lite.framework */,
+				22EF1E44225BE1BA0058BEAA /* pythonA-numpy.linalg._umath_linalg.framework */,
+				22EF1E42225BE1BA0058BEAA /* pythonA-numpy.linalg.lapack_lite.framework */,
+				22EF1E43225BE1BA0058BEAA /* pythonA-numpy.random.mtrand.framework */,
+				22623B78225B8ACD0002DB71 /* python3_ios-kiwisolver.framework */,
+				22623B6C225B8AAB0002DB71 /* pythonB-kiwisolver.framework */,
+				22623B6E225B8AAC0002DB71 /* pythonC-kiwisolver.framework */,
+				22623B6F225B8AAC0002DB71 /* pythonD-kiwisolver.framework */,
+				22623B6D225B8AAC0002DB71 /* pythonE-kiwisolver.framework */,
+				22623B69225B87C50002DB71 /* pythonA-kiwisolver.framework */,
 				229BB8D52210DCA30070FD71 /* libc++.tbd */,
 				229BB8D32210DC8F0070FD71 /* libbz2.tbd */,
+				22623B3B225B6B090002DB71 /* python3_ios.framework */,
+				22623B38225B6B090002DB71 /* pythonA.framework */,
+				22623B39225B6B090002DB71 /* pythonB.framework */,
+				22623B37225B6B090002DB71 /* pythonC.framework */,
+				22623B3A225B6B090002DB71 /* pythonD.framework */,
+				22623B36225B6B090002DB71 /* pythonE.framework */,
 				22288E222212098C0081D86C /* openblas.framework */,
-				22288E232212098C0081D86C /* Python3_ios.framework */,
-				22288E1D2212098C0081D86C /* PythonA.framework */,
-				22288E1C2212098C0081D86C /* PythonB.framework */,
-				22288E202212098C0081D86C /* PythonC.framework */,
-				22288E212212098C0081D86C /* PythonD.framework */,
-				22288E1E2212098C0081D86C /* PythonE.framework */,
 				22B750DB21FCA4CF00241F27 /* awk.framework */,
 				22B750D621FCA4CF00241F27 /* curl_ios.framework */,
 				22B750DA21FCA4CF00241F27 /* files.framework */,
@@ -272,6 +659,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22FFDCF32263D78F003E97CF /* welcome in Resources */,
 				22B750BA21FC671900241F27 /* LaunchScreen.storyboard in Resources */,
 				22B750B721FC671900241F27 /* Assets.xcassets in Resources */,
 				22B750B521FC671700241F27 /* Main.storyboard in Resources */,
