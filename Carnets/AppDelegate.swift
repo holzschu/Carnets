@@ -104,6 +104,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                  "Library/lib/python3.7/site-packages/kiwisolver-1.0.1-py3.7-macosx-10.9-x86_64.egg",
                                  "Library/lib/python3.7/site-packages/matplotlib-3.0.3-py3.7-macosx-10.9-x86_64.egg",
                                  "Library/lib/python3.7/site-packages/numpy-1.16.0-py3.7-macosx-10.9-x86_64.egg",
+                                 "Library/lib/python3.7/site-packages/pandas-0.24.2-py3.7-macosx-10.9-x86_64.egg",
                                  "Library/lib/python3.7/site-packages/pyparsing-2.3.1-py3.7.egg",
                                  "Library/lib/python3.7/site-packages/setuptools-40.8.0-py3.7.egg",
                                  "Library/lib/python3.7/site-packages/tornado-6.0.1-py3.7-macosx-12.1-iPad6,7.egg",

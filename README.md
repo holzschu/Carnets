@@ -3,9 +3,11 @@ Carnets is a stand-alone Jupyter notebook server and client. Edit your notebooks
 
 # To install without building: 
 
-Carnets has been approved for TestFlight by Apple. Click on this [link](https://testflight.apple.com/join/yevwlUs1) to join TestFlight.
+Carnets is now available on the [AppStore](https://holzschu.github.io/Carnets_Jupyter/). 
 
-If that doesn't work, you can also send an [e-mail](mailto:carnets_jupyter@icloud.com) to receive an invitation. 
+For the latest version, use the [TestFlight](https://testflight.apple.com/join/yevwlUs1) link. This version has more features, but also more bugs.
+
+If the link doesn't work, you can also send an [e-mail](mailto:carnets_jupyter@icloud.com) to receive a TestFlight invitation. 
 
 # To build it yourself: 
 - clone the git repository

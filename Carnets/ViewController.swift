@@ -9,6 +9,7 @@
 import UIKit
 import WebKit
 import UserNotifications
+import ExternalAccessory
 import ios_system
 
 var serverAddress: URL!
@@ -26,38 +27,6 @@ var appWebView: WKWebView!
 var bookmarks: [URL: Data] = [:]  // bookmarks, indexed by URL. So bookmarks[fileUrl] is a bookmark for the file fileUrl.
 var distantFiles: [URL: URL] = [:]  // correspondent between distant file and local file. distantFile = distantFiles[localFile]
 
-
-extension String {
-    
-    func toCString() -> UnsafePointer<Int8>? {
-        let nsSelf: NSString = self as NSString
-        return nsSelf.cString(using: String.Encoding.utf8.rawValue)
-    }
-    
-    var utf8CString: UnsafeMutablePointer<Int8> {
-        return UnsafeMutablePointer(mutating: (self as NSString).utf8String!)
-    }
-    
-}
-
-func convertCArguments(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>?) -> [String]? {
-    
-    var args = [String]()
-    
-    for i in 0..<Int(argc) {
-        
-        guard let argC = argv?[i] else {
-            return nil
-        }
-        
-        let arg = String(cString: argC)
-        
-        args.append(arg)
-        
-    }
-    
-    return args
-}
 
 // is this file URL inside the App sandbox or not? (do we need to copy it locally?)
 func insideSandbox(fileURL: URL) -> Bool {
@@ -215,9 +184,6 @@ func urlFromFileURL(fileURL: URL) -> URL {
  URLThumbnailDictionaryItem.NSThumbnail1024x1024SizeKey: thumbnail ]
  ] }
  */
-
-// TODO: renaming file inside
-// TODO: revert dictionary? localFilePath -> kernelURL? direct access?
 
 func saveDistantFile() {
     guard (kernelURL != nil) else { return }
@@ -401,6 +367,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     var runButton: UIBarButtonItem?
     var stopButton: UIBarButtonItem?
     var doneButton: UIBarButtonItem?
+    var tabButton: UIBarButtonItem?
 
     func initializeButtons() {
         // initializee button:
@@ -449,7 +416,15 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         stopButton!.setTitleTextAttributes(
             [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
              NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
-        doneButton = UIBarButtonItem(title: "[Esc]", style: .plain, target: self, action: #selector(escapeKey(_:)))
+        // "escape" button, using UTF-8
+        doneButton = UIBarButtonItem(title: "␛", style: .plain, target: self, action: #selector(escapeKey(_:)))
+        doneButton!.setTitleTextAttributes(
+            [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 2.1*fontSize),
+             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+        tabButton = UIBarButtonItem(title: "⇥", style: .plain, target: self, action: #selector(autocompleteAction(_:)))
+        tabButton!.setTitleTextAttributes(
+            [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 1.5*fontSize),
+             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
         /* doneButton!.setTitleTextAttributes(
             [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
              NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal) */
@@ -500,6 +475,33 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         ]
     }
     
+    func needTabKey() -> Bool {
+        // Is a tab key already present? If yes, don't show one.
+        // connectedAccessories is empty even if there is a connected keyboard.
+        // let accessoryManager: EAAccessoryManager = EAAccessoryManager.shared()
+        // let connectedAccessories = accessoryManager.connectedAccessories
+        let deviceModel = UIDevice.current.modelName
+        if (!deviceModel.hasPrefix("iPad")) { return true } // iPhone, iPod: minimalist keyboard.
+        if (deviceModel.hasPrefix("iPad6")) {
+            if ((deviceModel == "iPad6,7") || (deviceModel == "iPad6,8")) {
+                return false // iPad Pro 12.9" 1st gen
+            } else {
+                return true
+            }
+        }
+        if (deviceModel.hasPrefix("iPad7")) {
+            if ((deviceModel == "iPad7,1") || (deviceModel == "iPad7,2")) {
+                return false // iPad Pro 12.9" 2nd gen
+            } else {
+                return true
+            }
+        }
+        if (deviceModel.hasPrefix("iPad8")) {
+            return false // iPad Pro 11" or iPad Pro 12.9" 3rd gen
+        }
+        return true // All other iPad models.
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Add cell buttons at the bottom of the screen for iPad.
@@ -516,14 +518,25 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         // This will only apply to the first keyboard. We have to register a callback for
         // the other keyboards.
         // undo, redo, save, add, cut, copy, paste //  done, up, down, run, escape.
-        inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
-            [doneButton!, undoButton!, redoButton!,
-             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-            // space?
-            saveButton!, addButton!,
-            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-            cutButton!, copyButton!, pasteButton!],
-            representativeItem: nil)]
+        if (needTabKey()) {
+            inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                [tabButton!, doneButton!, undoButton!, redoButton!,
+                 UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                 // space?
+                 saveButton!, addButton!,
+                 UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                cutButton!, copyButton!, pasteButton!],
+                representativeItem: nil)]
+        } else {
+            inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                [doneButton!, undoButton!, redoButton!,
+                 UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                 // space?
+                 saveButton!, addButton!,
+                 UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                 cutButton!, copyButton!, pasteButton!],
+                 representativeItem: nil)]
+        }
         inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
             [upButton!, downButton!,
              UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
@@ -546,14 +559,26 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: UIResponder.keyboardDidShowNotification, object: nil)
     }
     
+    @objc private func autocompleteAction(_ sender: UIBarButtonItem) {
+        // edit mode autocomplete
+        // Create a "tab" keydown event. Either autocomplete or indent code
+        // TODO: if shift is selected on keyboard, un-indent code.
+        webView.evaluateJavaScript("var event = new KeyboardEvent('keydown', {which:9, keyCode:9, bubbles:true}); if (!Jupyter.notebook.get_selected_cell().handle_keyevent(Jupyter.notebook.get_selected_cell().code_mirror, event)) { Jupyter.notebook.get_selected_cell().code_mirror.execCommand('defaultSoftTab');} ") { (result, error) in
+            if error != nil {
+                print(error)
+                print(result)
+            }
+        }
+    }
+    
     @objc private func cutAction(_ sender: UIBarButtonItem) {
         // edit mode cut (works)
         webView.evaluateJavaScript("document.execCommand('cut');") { (result, error) in
-        if error != nil {
-            print(error)
-            print(result)
+            if error != nil {
+                print(error)
+                print(result)
+            }
         }
-    }
     // command mode cut (works)
         /* webView.evaluateJavaScript("var index = Jupyter.notebook.get_selected_index(); Jupyter.notebook.cut_cell(); Jupyter.notebook.select(index);"){ (result, error) in
             if error != nil {
@@ -581,7 +606,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     }
     
     @objc private func pasteAction(_ sender: UIBarButtonItem) {
-        // edit mode paste (workd)
+        // edit mode paste (works)
         let pastedString = UIPasteboard.general.string
         if (pastedString != nil) { webView.paste(pastedString) }
         // command mode paste (works)
@@ -672,14 +697,26 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     
     @objc private func keyboardDidShow() {
         if (cutButton == nil) { initializeButtons() }
-        contentView?.inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
-            [doneButton!, undoButton!, redoButton!,
-             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-             // space?
-                saveButton!, addButton!,
-                UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-                cutButton!, copyButton!, pasteButton!],
-                representativeItem: nil)]
+        
+        if (needTabKey()) {
+            contentView?.inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                [tabButton!, doneButton!, undoButton!, redoButton!,
+                 UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                 // space?
+                    saveButton!, addButton!,
+                    UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                    cutButton!, copyButton!, pasteButton!],
+                    representativeItem: nil)]
+        } else {
+            contentView?.inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                [doneButton!, undoButton!, redoButton!,
+                 UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                 // space?
+                    saveButton!, addButton!,
+                    UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                    cutButton!, copyButton!, pasteButton!],
+                    representativeItem: nil)]
+        }
         contentView?.inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
             [upButton!, downButton!,
              UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
