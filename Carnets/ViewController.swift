@@ -28,6 +28,24 @@ var bookmarks: [URL: Data] = [:]  // bookmarks, indexed by URL. So bookmarks[fil
 var distantFiles: [URL: URL] = [:]  // correspondent between distant file and local file. distantFile = distantFiles[localFile]
 
 
+var screenWidth: CGFloat {
+    if screenOrientation.isPortrait {
+        return UIScreen.main.bounds.size.width
+    } else {
+        return UIScreen.main.bounds.size.height
+    }
+}
+var screenHeight: CGFloat {
+    if screenOrientation.isPortrait {
+        return UIScreen.main.bounds.size.height
+    } else {
+        return UIScreen.main.bounds.size.width
+    }
+}
+var screenOrientation: UIInterfaceOrientation {
+    return UIApplication.shared.statusBarOrientation
+}
+
 // is this file URL inside the App sandbox or not? (do we need to copy it locally?)
 func insideSandbox(fileURL: URL) -> Bool {
     let filePath = fileURL.path
@@ -368,10 +386,14 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     var stopButton: UIBarButtonItem?
     var doneButton: UIBarButtonItem?
     var tabButton: UIBarButtonItem?
+    var shiftTabButton: UIBarButtonItem?
+    var leadingButtons: [UIBarButtonItem]?
 
     func initializeButtons() {
         // initializee button:
-        let fontSize: CGFloat = 18.0
+        var fontSize: CGFloat = screenWidth / 50
+        print("Screen width = \(screenWidth), fontSize = \(fontSize)")
+        if (fontSize > 18) { fontSize = 18.0 }
         cutButton = UIBarButtonItem(title: "\u{f0c4}", style: .plain, target: self, action: #selector(cutAction(_:)))
         cutButton!.setTitleTextAttributes(
             [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
@@ -421,13 +443,16 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         doneButton!.setTitleTextAttributes(
             [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 2.1*fontSize),
              NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+        // "tab" button, using UTF-8
         tabButton = UIBarButtonItem(title: "⇥", style: .plain, target: self, action: #selector(autocompleteAction(_:)))
         tabButton!.setTitleTextAttributes(
             [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 1.5*fontSize),
              NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
-        /* doneButton!.setTitleTextAttributes(
-            [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
-             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal) */
+        // "shift-tab" button, using UTF-8
+        shiftTabButton = UIBarButtonItem(title: "⇤", style: .plain, target: self, action: #selector(shiftTabAction(_:)))
+        shiftTabButton!.setTitleTextAttributes(
+            [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 1.5*fontSize),
+             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
     }
 
     override func loadView() {
@@ -518,25 +543,23 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         // This will only apply to the first keyboard. We have to register a callback for
         // the other keyboards.
         // undo, redo, save, add, cut, copy, paste //  done, up, down, run, escape.
+        var leadingButtons: [UIBarButtonItem] =  [doneButton!]
         if (needTabKey()) {
-            inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
-                [tabButton!, doneButton!, undoButton!, redoButton!,
-                 UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-                 // space?
-                 saveButton!, addButton!,
-                 UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-                cutButton!, copyButton!, pasteButton!],
-                representativeItem: nil)]
-        } else {
-            inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
-                [doneButton!, undoButton!, redoButton!,
-                 UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-                 // space?
-                 saveButton!, addButton!,
-                 UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-                 cutButton!, copyButton!, pasteButton!],
-                 representativeItem: nil)]
+            leadingButtons.append(tabButton!)
         }
+        leadingButtons.append(shiftTabButton!)
+        leadingButtons.append(undoButton!)
+        leadingButtons.append(redoButton!)
+        leadingButtons.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
+        leadingButtons.append(saveButton!)
+        leadingButtons.append(addButton!)
+        leadingButtons.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
+        leadingButtons.append(cutButton!)
+        leadingButtons.append(copyButton!)
+        leadingButtons.append(pasteButton!)
+        
+        inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+            leadingButtons, representativeItem: nil)]
         inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
             [upButton!, downButton!,
              UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
@@ -562,7 +585,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     @objc private func autocompleteAction(_ sender: UIBarButtonItem) {
         // edit mode autocomplete
         // Create a "tab" keydown event. Either autocomplete or indent code
-        // TODO: if shift is selected on keyboard, un-indent code.
+        // TODO: if shift is selected on keyboard, un-indent code (and remove shiftTabAction)
         webView.evaluateJavaScript("var event = new KeyboardEvent('keydown', {which:9, keyCode:9, bubbles:true}); if (!Jupyter.notebook.get_selected_cell().handle_keyevent(Jupyter.notebook.get_selected_cell().code_mirror, event)) { Jupyter.notebook.get_selected_cell().code_mirror.execCommand('defaultSoftTab');} ") { (result, error) in
             if error != nil {
                 print(error)
@@ -571,6 +594,17 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         }
     }
     
+    @objc private func shiftTabAction(_ sender: UIBarButtonItem) {
+        // edit mode autocomplete
+        // Create a "shift + tab" keydown event. Either print function help or unindent code
+        webView.evaluateJavaScript("var event = new KeyboardEvent('keydown', {which:9, keyCode:9, shiftKey:true, bubbles:true}); if (!Jupyter.notebook.get_selected_cell().handle_keyevent(Jupyter.notebook.get_selected_cell().code_mirror, event)) { Jupyter.notebook.get_selected_cell().code_mirror.execCommand('indentLess');} ") { (result, error) in
+            if error != nil {
+                print(error)
+                print(result)
+            }
+        }
+    }
+
     @objc private func cutAction(_ sender: UIBarButtonItem) {
         // edit mode cut (works)
         webView.evaluateJavaScript("document.execCommand('cut');") { (result, error) in
@@ -698,25 +732,23 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     @objc private func keyboardDidShow() {
         if (cutButton == nil) { initializeButtons() }
         
+        var leadingButtons: [UIBarButtonItem] =  [doneButton!]
         if (needTabKey()) {
-            contentView?.inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
-                [tabButton!, doneButton!, undoButton!, redoButton!,
-                 UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-                 // space?
-                    saveButton!, addButton!,
-                    UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-                    cutButton!, copyButton!, pasteButton!],
-                    representativeItem: nil)]
-        } else {
-            contentView?.inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
-                [doneButton!, undoButton!, redoButton!,
-                 UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-                 // space?
-                    saveButton!, addButton!,
-                    UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-                    cutButton!, copyButton!, pasteButton!],
-                    representativeItem: nil)]
+            leadingButtons.append(tabButton!)
         }
+        leadingButtons.append(shiftTabButton!)
+        leadingButtons.append(undoButton!)
+        leadingButtons.append(redoButton!)
+        leadingButtons.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
+        leadingButtons.append(saveButton!)
+        leadingButtons.append(addButton!)
+        leadingButtons.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
+        leadingButtons.append(cutButton!)
+        leadingButtons.append(copyButton!)
+        leadingButtons.append(pasteButton!)
+        
+        contentView?.inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+            leadingButtons, representativeItem: nil)]
         contentView?.inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
             [upButton!, downButton!,
              UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),

@@ -230,6 +230,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ios_system("rm -f $HOME/Library/Jupyter/runtime/*.html")
         ios_system("rm -f $HOME/Library/Jupyter/runtime/*.json")
         ios_system("rm -rf $HOME/tmp/(A*")
+        // SSL_CERT_FILE location:
+        let libraryURL = try! FileManager().url(for: .libraryDirectory,
+                                                in: .userDomainMask,
+                                                appropriateFor: nil,
+                                                create: true)
+        let sslCertLocation = libraryURL.appendingPathComponent("lib/python3.7/site-packages/certifi/cacert.pem")
+        setenv("SSL_CERT_FILE", sslCertLocation.path, 1); // SLL cacert.pem in ~/Library/ib/python3.7/site-packages/certifi/cacert.pem
         // iCloud abilities:
         // We check whether the user has iCloud ability here, and that the container exists
         let currentiCloudToken = FileManager().ubiquityIdentityToken
@@ -254,7 +261,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             print("Copying item from \(bundleFile) to \(iCloudFile)")
                             try! FileManager().copyItem(at: bundleFile, to: iCloudFile!)
                         }
-
                     }
                 }
             })
