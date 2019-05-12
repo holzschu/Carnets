@@ -441,17 +441,18 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         // "escape" button, using UTF-8
         doneButton = UIBarButtonItem(title: "␛", style: .plain, target: self, action: #selector(escapeKey(_:)))
         doneButton!.setTitleTextAttributes(
-            [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 2.1*fontSize),
+            [NSAttributedString.Key.font : UIFont(name: "Apple Symbols", size: 1.8*fontSize)!,
              NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
         // "tab" button, using UTF-8
         tabButton = UIBarButtonItem(title: "⇥", style: .plain, target: self, action: #selector(autocompleteAction(_:)))
+        // UIFont.systemFont(ofSize: 1.5*fontSize),
         tabButton!.setTitleTextAttributes(
-            [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 1.5*fontSize),
+            [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 1.8*fontSize),
              NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
         // "shift-tab" button, using UTF-8
         shiftTabButton = UIBarButtonItem(title: "⇤", style: .plain, target: self, action: #selector(shiftTabAction(_:)))
         shiftTabButton!.setTitleTextAttributes(
-            [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 1.5*fontSize),
+            [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 1.8*fontSize),
              NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
     }
 

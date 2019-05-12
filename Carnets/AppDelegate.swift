@@ -26,7 +26,54 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var alertShutdownTimer: Timer!
     var urlShutdownRequest: URLRequest!
     var shutdownTaskIdentifier: UIBackgroundTaskIdentifier!
-
+    
+    func copyWelcomeFileToiCloud() {
+        // Create a "welcome" document in the iCloud folder.
+        // This file has instructions and details.
+        // It also forces the iCloud folder to become visible.
+        // The "welcome" directory in an On-Demand Resource. It will be downloaded *only* if it's needed.
+        DispatchQueue.global().async(execute: {
+            iCloudDocumentsURL = FileManager().url(forUbiquityContainerIdentifier: nil)
+            if (iCloudDocumentsURL != nil) {
+                // Create a document in the iCloud folder to make it visible.
+                NSLog("iCloudContainer = \(iCloudDocumentsURL)")
+                let iCloudDirectory = iCloudDocumentsURL?.appendingPathComponent("Documents")
+                let iCloudDirectoryWelcome = iCloudDirectory?.appendingPathComponent("welcome")
+                if (!FileManager().fileExists(atPath: iCloudDirectoryWelcome!.path)) {
+                    NSLog("Creating iCloud welcome directory")
+                    try! FileManager().createDirectory(atPath: iCloudDirectoryWelcome!.path, withIntermediateDirectories: true)
+                    // download the resource from the iTunes store:
+                    let libraryBundleResource = NSBundleResourceRequest(tags: ["welcome"])
+                    NSLog("Begin downloading welcome resources")
+                    var completionHandlerCompleted = false
+                    libraryBundleResource.beginAccessingResources(completionHandler: { (error) in
+                        if let error = error {
+                            var message = "Error in downloading welcome resource: "
+                            message.append(error.localizedDescription)
+                            NSLog(message)
+                        } else {
+                            NSLog("Welcome resource succesfully downloaded")
+                            let welcomeFiles=["welcome/Welcome to Carnets.ipynb",
+                                              "welcome/top.png",
+                                              "welcome/bottom.png"]
+                            for fileName in welcomeFiles {
+                                let welcomeFileLocation = libraryBundleResource.bundle.path(forResource: fileName, ofType: nil)
+                                if ((welcomeFileLocation) != nil) {
+                                    let iCloudFile = iCloudDirectory?.appendingPathComponent(fileName)
+                                    if (!FileManager().fileExists(atPath: iCloudFile!.path) && FileManager().fileExists(atPath: welcomeFileLocation!)) {
+                                        print("Copying item from \(welcomeFileLocation) to \(iCloudFile)")
+                                        try! FileManager().copyItem(atPath: welcomeFileLocation!, toPath: iCloudFile!.path)
+                                    }
+                                }
+                            }
+                        }
+                        libraryBundleResource.endAccessingResources()
+                    })
+                }
+            }
+        })
+    }
+    
     
     func needToUpdatePythonFiles() -> Bool {
         // do it with UserDefaults, not storing in files
@@ -40,6 +87,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let libLocation = libraryURL.appendingPathComponent("lib")
         let pythonFilesPresent = FileManager().fileExists(atPath: libLocation.path)
         if (!pythonFilesPresent) {
+            return true
+        }
+        let firstFileLocation = libraryURL.appendingPathComponent("lib/python3.7/zipfile.py")
+        do {
+            let firstFileAttribute = try FileManager().attributesOfItem(atPath: firstFileLocation.path)
+            if (!(firstFileAttribute[FileAttributeKey.type] as? String == FileAttributeType.typeSymbolicLink.rawValue)) { return true }
+            let destination = try FileManager().destinationOfSymbolicLink(atPath: firstFileLocation.path)
+            if (!FileManager().fileExists(atPath: destination)) { return true }
+        }
+        catch {
+            NSLog("lib/python3.7/zipfile.py generated an error: \(error)")
             return true
         }
         // Python files are present. Which version?
@@ -129,11 +187,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let homeFile = homeUrl.appendingPathComponent(fileName)
                 let homeDirectory = homeFile.deletingLastPathComponent()
                 try! FileManager().createDirectory(atPath: homeDirectory.path, withIntermediateDirectories: true)
-                if (FileManager().fileExists(atPath: homeFile.path)) {
-                    // this is an update: we remove the previous version:
-                    try! FileManager().removeItem(at: homeFile)
+                do {
+                    let firstFileAttribute = try FileManager().attributesOfItem(atPath: homeFile.path)
+                    if (firstFileAttribute[FileAttributeKey.type] as? String == FileAttributeType.typeSymbolicLink.rawValue) {
+                        let destination = try! FileManager().destinationOfSymbolicLink(atPath: homeFile.path)
+                        if (!FileManager().fileExists(atPath: destination)) {
+                            try! FileManager().removeItem(at: homeFile)
+                            try! FileManager().createSymbolicLink(at: homeFile, withDestinationURL: bundleFile)
+                        }
+                    }
                 }
-                try! FileManager().copyItem(at: bundleFile, to: homeFile)
+                catch {
+                    do {
+                        try FileManager().createSymbolicLink(at: homeFile, withDestinationURL: bundleFile)
+                    }
+                    catch {
+                        NSLog("Can't create file: \(homeFile.path): \(error)")
+                    }
+                }
             }
         }
         // Done, now update the installed version:
@@ -210,6 +281,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setlocale(LC_CTYPE, "UTF-8");
         setlocale(LC_ALL, "UTF-8");
         clearOldDirectories()
+        // Loading on-demand resources:
+        // ODR only work through AppStore (TestFlight or Download), not Xcode
+        // Only to be used for non-essential stuff.
+        // welcome = welcome message, copied to iCloud folder (can be unloaded)
+        // nbextensions = only if it works
+        // widgets = 
         if (needToUpdatePythonFiles()) {
             // start copying python files from App bundle to $HOME/Library
             // queue the copy operation so we can continue working.
@@ -230,7 +307,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ios_system("rm -f $HOME/Library/Jupyter/runtime/*.html")
         ios_system("rm -f $HOME/Library/Jupyter/runtime/*.json")
         ios_system("rm -rf $HOME/tmp/(A*")
-        // SSL_CERT_FILE location:
+        // SSL certificate location:
         let libraryURL = try! FileManager().url(for: .libraryDirectory,
                                                 in: .userDomainMask,
                                                 appropriateFor: nil,
@@ -241,31 +318,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // We check whether the user has iCloud ability here, and that the container exists
         let currentiCloudToken = FileManager().ubiquityIdentityToken
         if (currentiCloudToken != nil) {
-            DispatchQueue.global().async(execute: {
-                iCloudDocumentsURL = FileManager().url(forUbiquityContainerIdentifier: nil)
-                if (iCloudDocumentsURL != nil) {
-                    // Create a document in the iCloud folder to make it visible.
-                    NSLog("iCloudContainer = \(iCloudDocumentsURL)")
-                    let iCloudDirectory = iCloudDocumentsURL?.appendingPathComponent("Documents")
-                    let bundleUrl = URL(fileURLWithPath: Bundle.main.resourcePath!)
-                    let welcomeFiles=["welcome/Welcome to Carnets.ipynb",
-                                      "welcome/top.png",
-                                      "welcome/bottom.png"]
-                    for fileName in welcomeFiles {
-                        let bundleFile = bundleUrl.appendingPathComponent(fileName)
-                        let iCloudFile = iCloudDirectory?.appendingPathComponent(fileName)
-                        let iCloudDirectoryWelcome = iCloudFile?.deletingLastPathComponent()
-                        print("Creating directory at \(iCloudDirectoryWelcome)")
-                        try! FileManager().createDirectory(atPath: iCloudDirectoryWelcome!.path, withIntermediateDirectories: true)
-                        if (!FileManager().fileExists(atPath: iCloudFile!.path)) {
-                            print("Copying item from \(bundleFile) to \(iCloudFile)")
-                            try! FileManager().copyItem(at: bundleFile, to: iCloudFile!)
-                        }
-                    }
-                }
-            })
+            copyWelcomeFileToiCloud()
         }
-        // NSLog("Available fonts: %@", UIFont.familyNames);
+        // print("Available fonts: \(UIFont.familyNames)");
         return true
     }
 
@@ -296,7 +351,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                   appropriateFor: nil,
                                                   create: true)
         documentsPath = documentsURL.path
-        NSLog("Documents directory = \(documentsPath)")
+        // NSLog("Documents directory = \(documentsPath)")
         jupyterQueue.async {
             self.notebookServerRunning = true
             // start the Jupyter notebook server:
