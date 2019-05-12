@@ -62,6 +62,7 @@
 		221BB1C222625B14000AF355 /* python3_ios-matplotlib.ft2font.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB1BA22625B0B000AF355 /* python3_ios-matplotlib.ft2font.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		221BB1C322625B14000AF355 /* python3_ios-matplotlib.ttconv.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB1B722625B0B000AF355 /* python3_ios-matplotlib.ttconv.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22288E312212099D0081D86C /* ios_system.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750D921FCA4CF00241F27 /* ios_system.framework */; };
+		222975B82286E7B5009D93ED /* welcome in Resources */ = {isa = PBXBuildFile; fileRef = 22FFDCF22263D78F003E97CF /* welcome */; settings = {ASSET_TAGS = (welcome, ); }; };
 		2239A8DB2212106A005C73D0 /* openblas.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22288E222212098C0081D86C /* openblas.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22623B3D225B6B0E0002DB71 /* python3_ios.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B3B225B6B090002DB71 /* python3_ios.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22623B3F225B6B0E0002DB71 /* pythonA.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B38225B6B090002DB71 /* pythonA.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -75,6 +76,7 @@
 		22623B75225B8AAD0002DB71 /* pythonC-kiwisolver.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B6E225B8AAC0002DB71 /* pythonC-kiwisolver.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22623B77225B8AAD0002DB71 /* pythonD-kiwisolver.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B6F225B8AAC0002DB71 /* pythonD-kiwisolver.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22623B7A225B8ACE0002DB71 /* python3_ios-kiwisolver.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B78225B8ACD0002DB71 /* python3_ios-kiwisolver.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2270A7D42286AA110049A307 /* Library in Resources */ = {isa = PBXBuildFile; fileRef = 22F03F702219D9E500EBEA0B /* Library */; };
 		2273F72A2269E95400256401 /* python3_ios-pandas._libs.algos.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2273F6512269E91000256401 /* python3_ios-pandas._libs.algos.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2273F72B2269E95400256401 /* python3_ios-pandas._libs.groupby.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2273F6E02269E92100256401 /* python3_ios-pandas._libs.groupby.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2273F72C2269E95400256401 /* python3_ios-pandas._libs.hashing.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2273F63E2269E90E00256401 /* python3_ios-pandas._libs.hashing.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -323,6 +325,7 @@
 		2273F81F2269E95800256401 /* pythonE-pandas.util._move.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2273F6542269E91000256401 /* pythonE-pandas.util._move.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2273F825226C612900256401 /* UIDevice+Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2273F823226C612900256401 /* UIDevice+Name.swift */; };
 		2273F826226C612900256401 /* String+C.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2273F824226C612900256401 /* String+C.swift */; };
+		2287075222821D25003FF17A /* Apple Symbols.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2287075122821D1E003FF17A /* Apple Symbols.ttf */; };
 		229F12222243BC2E006487FD /* FontAwesome.otf in Resources */ = {isa = PBXBuildFile; fileRef = 229F12212243BAAE006487FD /* FontAwesome.otf */; };
 		22A1C69E21FE4143001B49F0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A1C69D21FE4142001B49F0 /* ViewController.swift */; };
 		22A9B758223BD58700F2D2FF /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C9A7802236CEDD0016B538 /* Document.swift */; };
@@ -380,11 +383,9 @@
 		22EF1EA8225BE6090058BEAA /* python3_ios-numpy.linalg._umath_linalg.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E9D225BE6010058BEAA /* python3_ios-numpy.linalg._umath_linalg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22EF1EAA225BE6090058BEAA /* python3_ios-numpy.linalg.lapack_lite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E9F225BE6010058BEAA /* python3_ios-numpy.linalg.lapack_lite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22EF1EAC225BE6090058BEAA /* python3_ios-numpy.random.mtrand.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E9C225BE6000058BEAA /* python3_ios-numpy.random.mtrand.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22F03F712219D9EF00EBEA0B /* Library in Resources */ = {isa = PBXBuildFile; fileRef = 22F03F702219D9E500EBEA0B /* Library */; };
 		22F03F73222087AB00EBEA0B /* ListPythonFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F03F72222087AB00EBEA0B /* ListPythonFiles.swift */; };
 		22FDD69E22119AEC003FABFE /* freetype.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750EA21FCA4D100241F27 /* freetype.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22FDD69F22119AEC003FABFE /* harfbuzz.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750CF21FCA4CE00241F27 /* harfbuzz.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22FFDCF32263D78F003E97CF /* welcome in Resources */ = {isa = PBXBuildFile; fileRef = 22FFDCF22263D78F003E97CF /* welcome */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1078,6 +1079,7 @@
 		2273F7292269E92C00256401 /* pythonC-pandas._libs.indexing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-pandas._libs.indexing.framework"; path = "Frameworks/pythonC-pandas._libs.indexing.framework"; sourceTree = "<group>"; };
 		2273F823226C612900256401 /* UIDevice+Name.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIDevice+Name.swift"; path = "Util/UIDevice+Name.swift"; sourceTree = "<group>"; };
 		2273F824226C612900256401 /* String+C.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+C.swift"; path = "Util/String+C.swift"; sourceTree = "<group>"; };
+		2287075122821D1E003FF17A /* Apple Symbols.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Apple Symbols.ttf"; path = "../../../../../System/Library/Fonts/Apple Symbols.ttf"; sourceTree = "<group>"; };
 		229BB8D32210DC8F0070FD71 /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
 		229BB8D52210DCA30070FD71 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		229F12212243BAAE006487FD /* FontAwesome.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.otf; path = "Library/lib/python3.7/site-packages/notebook/static/components/font-awesome/fonts/FontAwesome.otf"; sourceTree = "<group>"; };
@@ -1163,8 +1165,11 @@
 		221EE18021FCCBDB00D0394F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				22FFDCF22263D78F003E97CF /* welcome */,
+				22F03F702219D9E500EBEA0B /* Library */,
 				22B7514F21FCCB9F00241F27 /* commandDictionary.plist */,
 				229F12212243BAAE006487FD /* FontAwesome.otf */,
+				2287075122821D1E003FF17A /* Apple Symbols.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1564,8 +1569,6 @@
 		22B750A321FC671700241F27 = {
 			isa = PBXGroup;
 			children = (
-				22FFDCF22263D78F003E97CF /* welcome */,
-				22F03F702219D9E500EBEA0B /* Library */,
 				22B750AE21FC671700241F27 /* Carnets */,
 				22B750AD21FC671700241F27 /* Products */,
 				221EE18021FCCBDB00D0394F /* Resources */,
@@ -1656,6 +1659,9 @@
 		22B750A421FC671700241F27 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				KnownAssetTags = (
+					welcome,
+				);
 				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = AsheKube;
@@ -1697,12 +1703,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22FFDCF32263D78F003E97CF /* welcome in Resources */,
 				22B750BA21FC671900241F27 /* LaunchScreen.storyboard in Resources */,
 				22B750B721FC671900241F27 /* Assets.xcassets in Resources */,
 				22B750B521FC671700241F27 /* Main.storyboard in Resources */,
+				222975B82286E7B5009D93ED /* welcome in Resources */,
+				2270A7D42286AA110049A307 /* Library in Resources */,
 				22B7515021FCCB9F00241F27 /* commandDictionary.plist in Resources */,
-				22F03F712219D9EF00EBEA0B /* Library in Resources */,
+				2287075222821D25003FF17A /* Apple Symbols.ttf in Resources */,
 				229F12222243BC2E006487FD /* FontAwesome.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
