@@ -17,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     private let jupyterQueue = DispatchQueue(label: "Jupyter-notebook", qos: .userInteractive) // high priority
+    private let moveFilesQueue = DispatchQueue(label: "moveFiles", qos: .utility) // low priority
     var notebookServerRunning: Bool = false
     var shutdownRequest: Bool = false
     var mustRecompilePythonFiles: Bool = false
@@ -26,6 +27,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var alertShutdownTimer: Timer!
     var urlShutdownRequest: URLRequest!
     var shutdownTaskIdentifier: UIBackgroundTaskIdentifier!
+    // on-demand resources, barrier booleans for synchronization:
+    var versionUpToDate = true
+    var libraryFilesUpToDate = true
+    var updateExtensionsRunning = false
     
     func copyWelcomeFileToiCloud() {
         // Create a "welcome" document in the iCloud folder.
@@ -43,10 +48,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     NSLog("Creating iCloud welcome directory")
                     try! FileManager().createDirectory(atPath: iCloudDirectoryWelcome!.path, withIntermediateDirectories: true)
                     // download the resource from the iTunes store:
-                    let libraryBundleResource = NSBundleResourceRequest(tags: ["welcome"])
+                    let welcomeBundleResource = NSBundleResourceRequest(tags: ["welcome"])
                     NSLog("Begin downloading welcome resources")
-                    var completionHandlerCompleted = false
-                    libraryBundleResource.beginAccessingResources(completionHandler: { (error) in
+                    welcomeBundleResource.beginAccessingResources(completionHandler: { (error) in
                         if let error = error {
                             var message = "Error in downloading welcome resource: "
                             message.append(error.localizedDescription)
@@ -57,23 +61,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                               "welcome/top.png",
                                               "welcome/bottom.png"]
                             for fileName in welcomeFiles {
-                                let welcomeFileLocation = libraryBundleResource.bundle.path(forResource: fileName, ofType: nil)
+                                let welcomeFileLocation = welcomeBundleResource.bundle.path(forResource: fileName, ofType: nil)
                                 if ((welcomeFileLocation) != nil) {
                                     let iCloudFile = iCloudDirectory?.appendingPathComponent(fileName)
                                     if (!FileManager().fileExists(atPath: iCloudFile!.path) && FileManager().fileExists(atPath: welcomeFileLocation!)) {
-                                        print("Copying item from \(welcomeFileLocation) to \(iCloudFile)")
+                                        // print("Copying item from \(welcomeFileLocation) to \(iCloudFile)")
                                         try! FileManager().copyItem(atPath: welcomeFileLocation!, toPath: iCloudFile!.path)
                                     }
                                 }
                             }
                         }
-                        libraryBundleResource.endAccessingResources()
+                        welcomeBundleResource.endAccessingResources()
                     })
                 }
             }
         })
     }
     
+    func linkedFileExists(directory: URL, fileName: String) -> Bool {
+        // Check whether the file linked by fileName in directory actually exists
+        // (if fileName does not exist, we also return false)
+        if (!FileManager().fileExists(atPath: directory.appendingPathComponent("lib").path)) {
+            return false
+        }
+        let fileLocation = directory.appendingPathComponent(fileName)
+        do {
+            let fileAttribute = try FileManager().attributesOfItem(atPath: fileLocation.path)
+            if (!(fileAttribute[FileAttributeKey.type] as? String == FileAttributeType.typeSymbolicLink.rawValue)) { return false }
+            let destination = try FileManager().destinationOfSymbolicLink(atPath: fileLocation.path)
+            return FileManager().fileExists(atPath: destination)
+        }
+        catch {
+            NSLog("\(fileName) generated an error: \(error)")
+            return false
+        }
+    }
     
     func needToUpdatePythonFiles() -> Bool {
         // do it with UserDefaults, not storing in files
@@ -84,20 +106,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                 in: .userDomainMask,
                                                 appropriateFor: nil,
                                                 create: true)
-        let libLocation = libraryURL.appendingPathComponent("lib")
-        let pythonFilesPresent = FileManager().fileExists(atPath: libLocation.path)
-        if (!pythonFilesPresent) {
-            return true
-        }
-        let firstFileLocation = libraryURL.appendingPathComponent("lib/python3.7/zipfile.py")
-        do {
-            let firstFileAttribute = try FileManager().attributesOfItem(atPath: firstFileLocation.path)
-            if (!(firstFileAttribute[FileAttributeKey.type] as? String == FileAttributeType.typeSymbolicLink.rawValue)) { return true }
-            let destination = try FileManager().destinationOfSymbolicLink(atPath: firstFileLocation.path)
-            if (!FileManager().fileExists(atPath: destination)) { return true }
-        }
-        catch {
-            NSLog("lib/python3.7/zipfile.py generated an error: \(error)")
+        if (!linkedFileExists(directory: libraryURL, fileName: PythonFiles[0])) {
             return true
         }
         // Python files are present. Which version?
@@ -145,27 +154,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // and offer (through user preference) the possibility to reset the install.
         // Maybe: major version = erase everything (except site-packages?), minor version = just copy?
         NSLog("Updating python files")
-        let moveFilesQueue = DispatchQueue(label: "moveFiles", qos: .utility) // low priority
-        let bundleUrl = URL(fileURLWithPath: Bundle.main.resourcePath!)
+        let bundleUrl = URL(fileURLWithPath: Bundle.main.resourcePath!).appendingPathComponent("Library")
         // setting up PYTHONPATH (temporary) so Jupyter can start while we copy items:
         let originalPythonpath = getenv("PYTHONPATH")
-        let mainPythonUrl = bundleUrl.appendingPathComponent("Library/lib/python3.7")
+        let mainPythonUrl = bundleUrl.appendingPathComponent("lib/python3.7")
         var newPythonPath = mainPythonUrl.path
-        let pythonDirectories = ["Library/lib/python3.7/site-packages",
-                                 "Library/lib/python3.7/site-packages/cffi-1.11.5-py3.7-macosx-12.1-iPad6,7.egg",
-                                 "Library/lib/python3.7/site-packages/cycler-0.10.0-py3.7.egg",
-                                 "Library/lib/python3.7/site-packages/jupyter_contrib_core-0.3.3-py3.7.egg",
-                                 "Library/lib/python3.7/site-packages/jupyter_contrib_nbextensions-0.5.1-py3.7.egg",
-                                 "Library/lib/python3.7/site-packages/jupyter_highlight_selected_word-0.2.0-py3.7.egg",
-                                 "Library/lib/python3.7/site-packages/jupyter_latex_envs-1.4.6-py3.7.egg",
-                                 "Library/lib/python3.7/site-packages/jupyter_nbextensions_configurator-0.4.1-py3.7.egg",
-                                 "Library/lib/python3.7/site-packages/kiwisolver-1.0.1-py3.7-macosx-10.9-x86_64.egg",
-                                 "Library/lib/python3.7/site-packages/matplotlib-3.0.3-py3.7-macosx-10.9-x86_64.egg",
-                                 "Library/lib/python3.7/site-packages/numpy-1.16.0-py3.7-macosx-10.9-x86_64.egg",
-                                 "Library/lib/python3.7/site-packages/pandas-0.24.2-py3.7-macosx-10.9-x86_64.egg",
-                                 "Library/lib/python3.7/site-packages/pyparsing-2.3.1-py3.7.egg",
-                                 "Library/lib/python3.7/site-packages/setuptools-40.8.0-py3.7.egg",
-                                 "Library/lib/python3.7/site-packages/tornado-6.0.1-py3.7-macosx-12.1-iPad6,7.egg",
+        let pythonDirectories = ["lib/python3.7/site-packages",
+                                 "lib/python3.7/site-packages/cffi-1.11.5-py3.7-macosx-12.1-iPad6,7.egg",
+                                 "lib/python3.7/site-packages/cycler-0.10.0-py3.7.egg",
+                                 "lib/python3.7/site-packages/kiwisolver-1.0.1-py3.7-macosx-10.9-x86_64.egg",
+                                 "lib/python3.7/site-packages/matplotlib-3.0.3-py3.7-macosx-10.9-x86_64.egg",
+                                 "lib/python3.7/site-packages/numpy-1.16.0-py3.7-macosx-10.9-x86_64.egg",
+                                 "lib/python3.7/site-packages/pandas-0.24.2-py3.7-macosx-10.9-x86_64.egg",
+                                 "lib/python3.7/site-packages/pyparsing-2.3.1-py3.7.egg",
+                                 "lib/python3.7/site-packages/setuptools-40.8.0-py3.7.egg",
+                                 "lib/python3.7/site-packages/tornado-6.0.1-py3.7-macosx-12.1-iPad6,7.egg",
+                                 "lib/python3.7/site-packages/jupyter_nbextensions_configurator-0.4.1-py3.7.egg",
+                                 "lib/python3.7/site-packages/jupyter_contrib_core-0.3.3-py3.7.egg",
+                                 "lib/python3.7/site-packages/jupyter_contrib_nbextensions-0.5.1-py3.7.egg",
+                                 "lib/python3.7/site-packages/jupyter_highlight_selected_word-0.2.0-py3.7.egg",
+                                 "lib/python3.7/site-packages/jupyter_latex_envs-1.4.6-py3.7.egg",
                                  ]
         for otherPythonDirectory in pythonDirectories {
             let secondaryPythonUrl = bundleUrl.appendingPathComponent(otherPythonDirectory)
@@ -180,21 +188,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                   in: .userDomainMask,
                                                   appropriateFor: nil,
                                                   create: true)
-        let homeUrl = documentsUrl.deletingLastPathComponent()
+        let homeUrl = documentsUrl.deletingLastPathComponent().appendingPathComponent("Library")
         for fileName in PythonFiles {
+            let bundleFile = bundleUrl.appendingPathComponent(fileName)
+            if (!FileManager().fileExists(atPath: bundleFile.path)) {
+                NSLog("queueUpdatingPythonFiles: requested file \(bundleFile.path) does not exist")
+                continue
+            }
+            // Symbolic links are both faster to create and use less disk space.
+            // We just have to make sure the destination exists
             moveFilesQueue.async{
-                let bundleFile = bundleUrl.appendingPathComponent(fileName)
                 let homeFile = homeUrl.appendingPathComponent(fileName)
                 let homeDirectory = homeFile.deletingLastPathComponent()
                 try! FileManager().createDirectory(atPath: homeDirectory.path, withIntermediateDirectories: true)
                 do {
                     let firstFileAttribute = try FileManager().attributesOfItem(atPath: homeFile.path)
                     if (firstFileAttribute[FileAttributeKey.type] as? String == FileAttributeType.typeSymbolicLink.rawValue) {
+                        // It's a symbolic link, does the destination exist?
                         let destination = try! FileManager().destinationOfSymbolicLink(atPath: homeFile.path)
                         if (!FileManager().fileExists(atPath: destination)) {
                             try! FileManager().removeItem(at: homeFile)
                             try! FileManager().createSymbolicLink(at: homeFile, withDestinationURL: bundleFile)
                         }
+                    } else {
+                        // Not a symbolic link, replace:
+                        try! FileManager().removeItem(at: homeFile)
+                        try! FileManager().createSymbolicLink(at: homeFile, withDestinationURL: bundleFile)
                     }
                 }
                 catch {
@@ -216,39 +235,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let returnValue = unsetenv("PYTHONPATH")
                 if (returnValue == -1) { NSLog("Could not unsetenv PYTHONPATH") }
             }
-            NSLog("Installing extensions.")
-            if (numberOfRunningSessions() >= 4) {
-                NSLog("Removing one session before installing")
-                removeOldestSession()
-            }
-            var pid:pid_t = ios_fork()
-            ios_system("jupyter-contrib nbextension install --user")
-            ios_waitpid(pid)
-            pid = ios_fork()
-            ios_system("jupyter-nbextension install --user --py widgetsnbextension")
-            ios_waitpid(pid)
-            pid = ios_fork()
-            ios_system("jupyter-nbextension enable --user --py widgetsnbextension")
-            ios_waitpid(pid)
-            pid = ios_fork()
-            ios_system("jupyter-nbextension install --user --py ipysheet")
-            ios_waitpid(pid)
-            pid = ios_fork()
-            ios_system("jupyter-nbextension enable --user --py ipysheet")
-            ios_waitpid(pid)
-            pid = ios_fork()
-            ios_system("jupyter-nbextension install --user --py ipysheet.renderer_nbext")
-            ios_waitpid(pid)
-            pid = ios_fork()
-            ios_system("jupyter-nbextension enable --user --py ipysheet.renderer_nbext")
-            ios_waitpid(pid)
-            NSLog("Done upgrading Python files.")
-            let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
-            UserDefaults.standard.set(currentVersion, forKey: "versionInstalled")
-            let currentBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as! String
-            UserDefaults.standard.set(currentBuild, forKey: "buildNumber")
+            self.libraryFilesUpToDate = true
         }
-        // Compiling seems to take a toll on interactivity
+        // Compiling seems to take a toll on interactivity. We disable it.
         /*
         for fileName in PythonFiles {
             moveFilesQueue.async{
@@ -268,6 +257,114 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         */
     }
     
+    func updateExtensionsIfNeeded() {
+        if (updateExtensionsRunning) { return } // Don't run this more than once
+        updateExtensionsRunning = true
+        let documentsUrl = try! FileManager().url(for: .documentDirectory,
+                                                  in: .userDomainMask,
+                                                  appropriateFor: nil,
+                                                  create: true)
+        let homeUrl = documentsUrl.deletingLastPathComponent().appendingPathComponent("Library")
+        let libraryURL = try! FileManager().url(for: .libraryDirectory,
+                                                in: .userDomainMask,
+                                                appropriateFor: nil,
+                                                create: true)
+        // If the files exist, no need to continue:
+        // (unless we had to update the Library files too)
+        if (versionUpToDate && linkedFileExists(directory: libraryURL.appendingPathComponent("lib"), fileName: extensionsFiles[0])) {
+            updateExtensionsRunning = false
+            return
+        }
+        // The symbolic links have to be recreated every time we restart the app, but the data does not need to be downloaded.
+        // download the resource from the iTunes store:
+        UserDefaults.standard.set(false, forKey: "extensionsEnabled") // tell others that we are busy updating extensions
+        let extensionsBundleResource = NSBundleResourceRequest(tags: ["extensions"])
+        NSLog("Begin downloading extensions resources")
+        extensionsBundleResource.beginAccessingResources(completionHandler: { (error) in
+            if let error = error {
+                var message = "Error in downloading extensions resource: "
+                message.append(error.localizedDescription)
+                NSLog(message)
+                self.updateExtensionsRunning = false
+            } else {
+                NSLog("extensions resource succesfully downloaded")
+                for fileName in extensionsFiles {
+                    var fullFileName = "ODR_extensions/"
+                    fullFileName.append(fileName)
+                    let extensionsFileLocation = extensionsBundleResource.bundle.path(forResource: fullFileName, ofType: nil)
+                    if (extensionsFileLocation == nil) {
+                        NSLog("updateExtensionsIfNeeded: file \(fileName) not found")
+                        continue
+                    }
+                    self.moveFilesQueue.async{
+                        let homeFile = homeUrl.appendingPathComponent(fileName)
+                        let homeDirectory = homeFile.deletingLastPathComponent()
+                        try! FileManager().createDirectory(atPath: homeDirectory.path, withIntermediateDirectories: true)
+                        do {
+                            let firstFileAttribute = try FileManager().attributesOfItem(atPath: homeFile.path)
+                            if (firstFileAttribute[FileAttributeKey.type] as? String == FileAttributeType.typeSymbolicLink.rawValue) {
+                                let destination = try! FileManager().destinationOfSymbolicLink(atPath: homeFile.path)
+                                if (!FileManager().fileExists(atPath: destination)) {
+                                    try! FileManager().removeItem(at: homeFile)
+                                    try! FileManager().createSymbolicLink(atPath: homeFile.path, withDestinationPath: extensionsFileLocation!)
+                                }
+                            } else {
+                                // Not a symbolic link:
+                                try! FileManager().removeItem(at: homeFile)
+                                try! FileManager().createSymbolicLink(atPath: homeFile.path, withDestinationPath: extensionsFileLocation!)
+                            }
+                        }
+                        catch {
+                            do {
+                                try FileManager().createSymbolicLink(atPath: homeFile.path, withDestinationPath: extensionsFileLocation!)
+                            }
+                            catch {
+                                NSLog("Can't create file: \(homeFile.path): \(error)")
+                            }
+                        }
+                    }
+                }
+                self.moveFilesQueue.async{
+                    NSLog("Done linking files.")
+                    // wait until Python files have been updated, if needed:
+                    while (!self.libraryFilesUpToDate) { }
+                    NSLog("Installing extensions.")
+                    var pid:pid_t = ios_fork()
+                    ios_system("jupyter-contrib nbextension install --user")
+                    ios_waitpid(pid)
+                    pid = ios_fork()
+                    NSLog("Installing widgets.")
+                    ios_system("jupyter-nbextension install --user --py widgetsnbextension")
+                    ios_waitpid(pid)
+                    pid = ios_fork()
+                    ios_system("jupyter-nbextension enable --user --py widgetsnbextension")
+                    ios_waitpid(pid)
+                    pid = ios_fork()
+                    ios_system("jupyter-nbextension install --user --py ipysheet")
+                    ios_waitpid(pid)
+                    pid = ios_fork()
+                    ios_system("jupyter-nbextension enable --user --py ipysheet")
+                    ios_waitpid(pid)
+                    pid = ios_fork()
+                    ios_system("jupyter-nbextension install --user --py ipysheet.renderer_nbext")
+                    ios_waitpid(pid)
+                    pid = ios_fork()
+                    ios_system("jupyter-nbextension enable --user --py ipysheet.renderer_nbext")
+                    ios_waitpid(pid)
+                    UserDefaults.standard.set(true, forKey: "widgetsEnabled")
+                    NSLog("Done upgrading Python files, extensions and widgets.")
+                    let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
+                    UserDefaults.standard.set(currentVersion, forKey: "versionInstalled")
+                    let currentBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as! String
+                    UserDefaults.standard.set(currentBuild, forKey: "buildNumber")
+                    self.versionUpToDate = true
+                    extensionsBundleResource.endAccessingResources()
+                    self.updateExtensionsRunning = false
+               }
+            }
+        })
+    }
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         // initialize ios_system:
@@ -282,16 +379,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setlocale(LC_ALL, "UTF-8");
         clearOldDirectories()
         // Loading on-demand resources:
-        // ODR only work through AppStore (TestFlight or Download), not Xcode
-        // Only to be used for non-essential stuff.
         // welcome = welcome message, copied to iCloud folder (can be unloaded)
-        // nbextensions = only if it works
-        // widgets = 
+        // nbextensions = Python extensions
         if (needToUpdatePythonFiles()) {
             // start copying python files from App bundle to $HOME/Library
             // queue the copy operation so we can continue working.
+            versionUpToDate = false
+            libraryFilesUpToDate = false
             queueUpdatingPythonFiles()
         }
+        updateExtensionsIfNeeded()
         let center = UNUserNotificationCenter.current()
         // Request permission to display alerts and play sounds.
         center.requestAuthorization(options: [.alert, .sound])
@@ -300,6 +397,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         // Setup a way for the webview to tell us the user has requested to quit
         NotificationCenter.default.addObserver(self, selector: #selector(self.shutdownRequested), name: NSNotification.Name(rawValue: notificationQuitRequested), object: nil)
+        // Detect changes in user defaults:
+        NotificationCenter.default.addObserver(self, selector: #selector(self.settingsChanged), name: UserDefaults.didChangeNotification, object: nil)
         // add our own function "openurl"
         replaceCommand("openurl", "openURL_internal", true)
         // When it quits normally, the Jupyter server removes these files
@@ -327,7 +426,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     @objc func shutdownRequested() {
         shutdownRequest = true
     }
-    
+
+    @objc func settingsChanged() {
+        // UserDefaults.didChangeNotification is called every time the window becomes active
+        // We only act if things have really changed.
+    }
+
     func notebookServerTerminated() {
         // the server (jupyter-notebook) has been terminated. Either because the user requested it,
         // or because it crashed down. If it's the former, close the window. The latter, restart.
@@ -357,7 +461,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // start the Jupyter notebook server:
             // (the server will call openURL with the name of the local file)
             NSLog("Starting jupyter notebook server")
-            var shellCommand = "jupyter-notebook --notebook-dir /"
+            let shellCommand = "jupyter-notebook --notebook-dir /"
             ios_system(shellCommand)
             DispatchQueue.main.async {
                 self.notebookServerTerminated()
@@ -384,7 +488,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             clearAllRunningSessions()
         }
         task.resume()
-        // cancel the alert:
+        // cancel the alert (if it was set):
         let notificationCenter = UNUserNotificationCenter.current()
         notificationCenter.removeDeliveredNotifications(withIdentifiers: ["CarnetsShutdownAlert"])
         shutdownTimer = nil
@@ -405,27 +509,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         urlShutdownRequest = URLRequest(url: urlPost)
         urlShutdownRequest.httpMethod = "POST"
         // Configure the alert (if needed) at 2:15 mn:
-        let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.getNotificationSettings { (settings) in
-            if (settings.authorizationStatus == .authorized) {
-                let shutdownAlertContent = UNMutableNotificationContent()
-                if settings.alertSetting == .enabled {
-                    shutdownAlertContent.title = NSString.localizedUserNotificationString(forKey: "Carnets shutdown alert", arguments: nil)
-                    shutdownAlertContent.body = NSString.localizedUserNotificationString(forKey: "Carnets is about to terminate. Click here if you want to continue.", arguments: nil)
-                }
-                if settings.soundSetting == .enabled {
-                    shutdownAlertContent.sound = UNNotificationSound.default
-                }
-                let localShutdownNotification = UNNotificationRequest(identifier: "CarnetsShutdownAlert",
-                                                                      content: shutdownAlertContent,
-                                                                      trigger: UNTimeIntervalNotificationTrigger(timeInterval: (135), repeats: false))
-                notificationCenter.add(localShutdownNotification, withCompletionHandler: { (error) in
-                    if let error = error {
-                        var message = "Error in setting up the alert: "
-                        message.append(error.localizedDescription)
-                        NSLog(message)
+        if (UserDefaults.standard.bool(forKey: "alert_preference")) {
+            let notificationCenter = UNUserNotificationCenter.current()
+            notificationCenter.getNotificationSettings { (settings) in
+                if (settings.authorizationStatus == .authorized) {
+                    let shutdownAlertContent = UNMutableNotificationContent()
+                    if settings.alertSetting == .enabled {
+                        shutdownAlertContent.title = NSString.localizedUserNotificationString(forKey: "Carnets shutdown alert", arguments: nil)
+                        shutdownAlertContent.body = NSString.localizedUserNotificationString(forKey: "Carnets is about to terminate. Click here if you want to continue.", arguments: nil)
                     }
-                })
+                    if settings.soundSetting == .enabled {
+                        shutdownAlertContent.sound = UNNotificationSound.default
+                    }
+                    let localShutdownNotification = UNNotificationRequest(identifier: "CarnetsShutdownAlert",
+                                                                          content: shutdownAlertContent,
+                                                                          trigger: UNTimeIntervalNotificationTrigger(timeInterval: (135), repeats: false))
+                    notificationCenter.add(localShutdownNotification, withCompletionHandler: { (error) in
+                        if let error = error {
+                            var message = "Error in setting up the alert: "
+                            message.append(error.localizedDescription)
+                            NSLog(message)
+                        }
+                    })
+                }
             }
         }
         // Set up a timer to close everything at 2:45 mn
