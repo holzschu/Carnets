@@ -1,0 +1,3 @@
+[console_scripts]
+jupyter-contrib = jupyter_contrib_core.application:main
+

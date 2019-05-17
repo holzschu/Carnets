@@ -1,0 +1,29 @@
+Metadata-Version: 2.1
+Name: jupyter-nbextensions-configurator
+Version: 0.4.1
+Summary: jupyter serverextension providing configuration interfaces for nbextensions.
+Home-page: https://github.com/jupyter-contrib/jupyter_nbextensions_configurator
+Author: jcb91, jupyter-contrib developers
+Author-email: joshuacookebarnes@gmail.com
+License: BSD 3-clause
+Download-URL: https://github.com/jupyter-contrib/jupyter_nbextensions_configurator/tarball/0.4.1
+Description: 
+        The jupyter_nbextensions_configurator jupyter server extension provides
+        graphical user interfaces for configuring which nbextensions are enabled (load
+        automatically for every notebook), and display their readme files.
+        In addition, for nbextensions which include an appropriate yaml descriptor
+        file, the interface also provides controls to configure the nbextensions'
+        options.
+        
+Keywords: Jupyter,notebook
+Platform: any
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: JavaScript
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Utilities
+Provides-Extra: test

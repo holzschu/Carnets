@@ -1,0 +1,79 @@
+{% extends "page.html" %}
+
+{% block title %}{{page_title}}{% endblock %}
+
+{% block stylesheet %}
+{{super()}}
+{% endblock %}
+
+{% block params %}
+
+data-base-url="{{base_url | urlencode}}"
+data-md-url="{{md_url | urlencode}}""
+
+{% endblock %}
+
+{% block headercontainer %}
+
+<div class="pull-left rendermd-page-title-wrap">
+	<span class="rendermd-page-title">{{ page_title }}</span>
+</div>
+
+{% endblock %}
+
+{% block header %}
+
+{% endblock %}
+
+{% block site %}
+
+{# the "rendered_html" class, will make everything look like notebook-formatted markdown cells. The custom css loaded by render.js is used to add backgrounds for <code> and <pre> blocks and snippets #}
+<div id="render-container" class="container rendered_html"></div>
+
+{% endblock %}
+
+{% block script %}
+
+	{{super()}}
+	<script type="text/javascript">
+		sys_info = {{sys_info|safe}};
+	</script>
+	
+	<script type="text/javascript" charset="utf-8">
+		(function () {
+			var nb_v_arr = sys_info.notebook_version.split('.');
+			if (Number(nb_v_arr[0]) == 5 && Number(nb_v_arr[1]) > 0) {
+				console.log(
+					'[nbextensions_configurator] patching requirejs config for notebook',
+					sys_info.notebook_version);
+				require.config({paths: {
+					jed: 'components/jed/jed',
+					json: 'components/requirejs-plugins/src/json',
+					text: 'components/requirejs-text/text',
+					moment: 'components/moment/min/moment-with-locales'
+				}});
+				if (!require.defined('json!base/../../i18n/nbjs.json')) {
+					define('json!base/../../i18n/nbjs.json', function() { return {
+						"domain": "nbjs",
+						"supported_languages": [],
+						"locale_data": {"nbjs": {"": {"domain": "nbjs"}}}
+					}; });
+				}
+			}
+		})(); // end ugly nb 5.1 hacks IIFE
+		require(['jquery'], function (jq) {
+			// hack to fix notebook 4.2.1
+			// see https://github.com/jupyter/notebook/pull/1399
+			if (jq === undefined) {
+				require.undef('jquery');
+				require.undef('jquery-ui');
+				require.undef('jqueryui');
+				require.undef('bootstrap');
+			}
+			require(["nbextensions/nbextensions_configurator/render/render"], function(rendermd_module) {
+				rendermd_module.render_markdown_page();
+			});
+		});
+	</script>
+
+{% endblock %}

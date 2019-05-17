@@ -1,0 +1,5 @@
+ipython
+jupyter_core
+nbconvert
+notebook>=4.0
+traitlets>=4.1

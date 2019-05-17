@@ -1,0 +1,44 @@
+Type: IPython Notebook Extension
+Name: (some) LaTeX environments for Jupyter
+Description: Enable to use laTeX environments in Jupyter's markdown cells
+Link: README.md
+Icon: icon.png
+Main: latex_envs.js
+Compatibility: Jupyter (4.x, 5.x) 
+Parameters:
+- name: latex_envs.LaTeX_envs_menu_present
+  description: LaTeX_envs menu (insert environments) present
+  input_type: checkbox
+  default: true
+- name: latex_envs.eqLabelWithNumbers
+  description: Label equation with numbers (otherwise with their \label{} key)
+  input_type: checkbox
+  default: true 
+- name: latex_envs.report_style_numbering
+  description: Number environments as section.num
+  input_type: checkbox
+  default: false  
+- name: latex_envs.autocomplete
+  description: Automatically complete LaTeX commands while typing
+  input_type: checkbox
+  default: true    
+- name: latex_envs.autoclose
+  description: Automatically close '$$, '()', '{}', '[]' while typing
+  input_type: checkbox
+  default: false  
+- name: latex_envs.user_envs_cfg
+  description: Use customized environments as given in 'user_envs.json' (in the extension directory)
+  input_type: checkbox
+  default: false  
+- name: latex_envs.bibliofile
+  description: BibTeX filename (in current directory)
+  input_type: text
+  default: biblio.bib
+- name: latex_envs.hotkeys.equation
+  description: Hotkey used to insert equation environment
+  input_type: hotkey
+  default: Ctrl-E
+- name: latex_envs.hotkeys.itemize
+  description: Hotkey used to insert itemize environment
+  input_type: hotkey
+  default: Ctrl-I

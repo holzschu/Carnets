@@ -1,0 +1,250 @@
+/* nbext-page-title-wrap and nbext-page-title
+   are styled to match the notebook save widget */
+.nbext-page-title-wrap {
+    margin-top: 6px;
+}
+
+.nbext-page-title {
+    height: 1em;
+    line-height: 1em;
+    padding: 3px;
+    margin-left: 16px;
+    border: none;
+    font-size: 146.5%;
+    border-radius: 2px;
+}
+
+.nbext-showhide-incompat {
+    padding-bottom: 0.5em;
+    /* the selector is hidden by default, revealed by js if any incompatible
+       nbextensions are found */
+    display: none;
+}
+
+.nbextensions-configurator-container {
+    margin-top: 4px;
+}
+
+/* styles for the nbextension-selector nav links */
+
+.nbext-selector {
+    border-bottom: 1px solid #888;
+    padding-bottom: 1em;
+}
+
+.nbext-selector-loading {
+    text-align: center;
+}
+
+.nbext-selector > nav > .nav > li {
+    margin: 0;
+}
+
+.nbext-selector > nav > .nav > li > a {
+    padding: 2px 6px;
+}
+
+.nbext-selector > nav > .nav > li > a > .nbext-enable-toggle {
+    padding-right: 0.5em;
+    display: inline-block;
+}
+
+.nbext-selector > nav > .nav > li > a > .nbext-enable-toggle:before {
+    /* fa-square-o */
+    content: "\f096";
+}
+
+.nbext-selector > nav > .nav > li > a > .nbext-enabled:before {
+    /* fa-check-square-o */
+    content: "\f046";
+}
+
+.nbext-selector > nav > .nav > li.disabled > a > .nbext-enable-toggle {
+    width: auto;
+}
+
+.nbext-selector > nav > .nav > li.disabled > a > .nbext-enable-toggle:before {
+    /* fa-ban */
+    content: "\f05e";
+}
+
+.nbext-selector > nav > .nav > li.disabled > a > .nbext-enabled:before {
+    /* fa-exclamation-circle */
+    content: "\f06a";
+}
+
+/* bugfix for using .container with padding: we need 15px extra to width. */
+@media (min-width: 768px) and (max-width: 783px) {
+    .container {
+        width: auto;
+    }
+}
+
+/* collapsible panel header styling */
+.nbext-params .panel-heading,
+.nbext-readme .panel-heading {
+    font-size: 17px; /* to match h4 */
+    cursor: pointer;
+}
+
+/* styles for elements in an nbextension's UI */
+
+.nbext-enable-btns .btn {
+    border-radius: 4px;
+}
+
+.nbext-enable-btns .btn[disabled] {
+    color: #cccccc;
+}
+
+.nbext-icon {
+    margin-left: 8px;
+    text-align: center;
+}
+
+.nbext-icon img {
+    max-height: 120px;
+    max-width: 100%;
+}
+
+.nbext-icon,
+.nbext-desc,
+.nbext-enable-btns,
+.nbext-params {
+    margin-bottom: 8px;
+}
+
+.nbext-enable-btns {
+    margin-top: 8px;
+}
+
+/* styles for list inputs */
+
+.nbext-list-element,
+.nbext-list-element-placeholder {
+    margin-bottom: 2px;
+}
+
+.nbext-list-element-placeholder {
+    height: 32px;
+    width: 100%;
+    border: 1px solid #fcefa1;
+    background-color: #fbf9ee;
+    color: #363636;
+}
+
+.nbext-list-element:only-child > .handle {
+    display: none;
+}
+
+.nbext-list-element:only-child > .handle + .form-control {
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+
+.nbext-list-wrap > .input-group > .btn {
+    font-size: inherit;
+}
+
+/* stuff for filter -------------------------------------------------------- */
+
+.nbext-filter-grp {
+    padding-bottom: 0.5em;
+}
+
+.nbext-filter-label:after {
+    content: 'filter:';
+}
+
+/* make actual input transparent, and its parent look like it's the input */
+.nbext-filter-grp > .nbext-filter-input-wrap {
+    display: flex;
+    flex-direction: row;
+    cursor: text;
+}
+
+/* the subwrap should fill remaining horizontal space contains the input itself plus an icon to clear it. */
+.nbext-filter-input-wrap > .nbext-filter-input-subwrap {
+    flex-grow: 1
+}
+
+.nbext-filter-input-wrap > .nbext-filter-input-subwrap,
+.nbext-filter-input-wrap > .nbext-filter-input-subwrap > input {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+}
+
+.nbext-filter-input-wrap > .nbext-filter-input-subwrap > input {
+    width: 100%;
+}
+
+/* clear-search icon */
+.nbext-filter-input-wrap > .nbext-filter-input-subwrap > .fa {
+    position: absolute;
+    right: 12px;
+    top: calc(50% - 6px);
+    cursor: pointer;
+}
+
+.nbext-filter-input-wrap > .nbext-filter-input-subwrap:first-child > input + .fa {
+    display: none;
+}
+
+/* limit max height of tag menu */
+.nbext-filter-menu {
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+/* override jquery-ui styling as we can't remove the ui-menu-item class (it's used by jqueryui script) */
+.nbext-filter-menu.dropdown-menu > li > a:hover,
+.nbext-filter-menu.dropdown-menu > li > a:focus,
+.nbext-filter-menu.dropdown-menu > li > a.ui-state-focus {
+    color: #555;
+    border: none;
+    background-color: #e7e7e7;
+    background-image: none;
+    border-radius: 0;
+}
+
+/* ensure spacing between tags in the filter box */
+.nbext-filter-tag {
+    margin-right: 6px;
+}
+
+/* tag classes to mimic bootstrap primary buttons */
+.nbext-filter-tag > * {
+    position: relative;
+    float: left;
+    white-space: nowrap;
+    border-radius: 2px;
+    padding: 0 6px;
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.nbext-filter-tag > :first-child {
+    padding-right: 3px;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.nbext-filter-tag > :last-child {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.nbext-filter-tag > :last-child:hover {
+    background-color: #286090;
+    border-color: #204d74;
+}

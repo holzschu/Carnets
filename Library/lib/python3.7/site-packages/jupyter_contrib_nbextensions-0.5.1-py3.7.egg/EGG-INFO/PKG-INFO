@@ -1,0 +1,39 @@
+Metadata-Version: 2.1
+Name: jupyter-contrib-nbextensions
+Version: 0.5.1
+Summary: A collection of Jupyter nbextensions.
+Home-page: https://github.com/ipython-contrib/jupyter_contrib_nbextensions.git
+Author: ipython-contrib and jupyter-contrib developers
+Author-email: jupytercontrib@gmail.com
+License: BSD
+Download-URL: https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tarball/0.5.1
+Description: 
+        Contains a collection of extensions that add functionality to the Jupyter
+        notebook. These extensions are mostly written in Javascript, and are loaded
+        locally in the browser.
+        
+        Read
+        `the documentation <https://jupyter-contrib-nbextensions.readthedocs.io>`_
+        for more information.
+        
+        The
+        `jupyter-contrib repository <https://github.com/ipython-contrib/jupyter_contrib_nbextensions>`_
+        is maintained independently by a group of users and developers, and is not
+        officially related to the Jupyter development team.
+        
+        The maturity of the provided extensions varies, so please check
+        `the repository issues page <https://github.com/ipython-contrib/jupyter_contrib_nbextensions/issues>`_
+        if you encounter any problems, and create a new issue if needed!
+        
+Keywords: IPython,Jupyter,notebook
+Platform: Any
+Classifier: Development Status :: 1 - Planning
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: JavaScript
+Classifier: Programming Language :: Python
+Classifier: Topic :: Utilities
+Provides-Extra: test

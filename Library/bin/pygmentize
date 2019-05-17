@@ -1,0 +1,12 @@
+#!/var/mobile/Containers/Data/Application/EB768CE0-A764-4058-914E-C213876012C3/Library/bin/python3
+# EASY-INSTALL-ENTRY-SCRIPT: 'Pygments==2.3.1','console_scripts','pygmentize'
+__requires__ = 'Pygments==2.3.1'
+import re
+import sys
+from pkg_resources import load_entry_point
+
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw?|\.exe)?$', '', sys.argv[0])
+    sys.exit(
+        load_entry_point('Pygments==2.3.1', 'console_scripts', 'pygmentize')()
+    )

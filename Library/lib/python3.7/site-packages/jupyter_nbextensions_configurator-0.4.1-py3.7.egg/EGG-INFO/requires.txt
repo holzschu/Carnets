@@ -1,0 +1,15 @@
+jupyter_contrib_core>=0.3.3
+jupyter_core
+notebook>=4.0
+pyyaml
+tornado
+traitlets
+
+[test]
+jupyter_contrib_core[testing_utils]
+nose
+requests
+selenium
+
+[test:python_version == "2.7"]
+mock

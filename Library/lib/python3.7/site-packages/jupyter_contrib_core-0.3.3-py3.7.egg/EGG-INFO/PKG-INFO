@@ -1,0 +1,39 @@
+Metadata-Version: 2.0
+Name: jupyter-contrib-core
+Version: 0.3.3
+Summary: Common utilities for jupyter-contrib projects.
+Home-page: https://github.com/jupyter-contrib/jupyter_contrib_core
+Author: jcb91, jupyter-contrib developers
+Author-email: joshuacookebarnes@gmail.com
+License: BSD 3-clause
+Download-URL: https://github.com/jupyter-contrib/jupyter_contrib_core/tarball/0.3.3
+Keywords: Jupyter,notebook
+Platform: any
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: JavaScript
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Utilities
+Requires-Dist: jupyter-core
+Requires-Dist: notebook (>=4.0)
+Requires-Dist: setuptools
+Requires-Dist: tornado
+Requires-Dist: traitlets
+Provides-Extra: testing_utils
+Requires-Dist: nose; extra == 'testing_utils'
+Provides-Extra: testing_utils
+Requires-Dist: mock; python_version == "2.7" and extra == 'testing_utils'
+
+
+Common utilities for jupyter-contrib projects. Includes:
+
+-   providing a notebook-4.2-compatible nbextension API in order to
+    smooth over differences in versions 4.0 and 4.1
+-   common application components and cli scripts
+-   utility classes and functions for use in tests
+
+

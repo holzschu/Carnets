@@ -15,10 +15,4 @@ curl -OL $HHROOT/ios_system/releases/download/v$IOS_SYSTEM_VER/release.tar.gz
 echo "Downloading header file:"
 curl -OL $HHROOT/ios_system/releases/download/v$IOS_SYSTEM_VER/ios_error.h 
 
-echo "Downloading python files:"
-rm -rf "${PWD}/Library"
-mkdir -p "${PWD}/Library"
-(cd "${PWD}/Library" ; curl -OL https://github.com/holzschu/python3_ios/releases/download/v1.0/release.tar.gz ; tar xzf release.tar.gz ; rm release.tar.gz)
-echo "Patching Javascript files:"
-(cd "${PWD}/Library" ;  patch -p1 < ../Library.patch ; cd ..)
 

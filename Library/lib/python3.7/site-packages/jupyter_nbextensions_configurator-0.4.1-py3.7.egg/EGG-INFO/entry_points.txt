@@ -1,0 +1,3 @@
+[console_scripts]
+jupyter-nbextensions_configurator = jupyter_nbextensions_configurator.application:main
+

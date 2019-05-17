@@ -1,0 +1,3 @@
+#!/bin/sh
+
+rm -rf ~/Library/texlive/2017/texmf-var/luatex-cache/generic

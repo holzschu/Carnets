@@ -1,0 +1,6 @@
+[nbconvert.exporters]
+html_with_lenvs = latex_envs.latex_envs:LenvsHTMLExporter
+html_with_toclenvs = latex_envs.latex_envs:LenvsTocHTMLExporter
+latex_with_lenvs = latex_envs.latex_envs:LenvsLatexExporter
+slides_with_lenvs = latex_envs.latex_envs:LenvsSlidesExporter
+

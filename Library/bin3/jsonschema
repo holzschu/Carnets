@@ -1,0 +1,11 @@
+#!/var/mobile/Containers/Data/Application/F91D9482-BCFF-4737-A37F-3A14A808036F/Library/bin/python
+
+# -*- coding: utf-8 -*-
+import re
+import sys
+
+from jsonschema.cli import main
+
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw?|\.exe)?$', '', sys.argv[0])
+    sys.exit(main())

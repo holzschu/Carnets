@@ -1,0 +1,131 @@
+Type: Jupyter Notebook Extension
+Compatibility: 4.x, 5.x
+Name: Highlight selected word
+Main: main.js
+Description: Enables the CodeMirror addon "Match Highlighter"
+Link: README.md
+Parameters:
+
+- name: highlight_selected_word.enable_on_load
+  input_type: checkbox
+  default: true
+  description: |
+    Enable highlighting on loading the notebook interface.
+    The highlighting can also be toggled from the view menu
+
+- name: highlight_selected_word.highlight_across_all_cells
+  input_type: checkbox
+  default: true
+  description: |
+    Highlight matches across all cells. If false, only matches within the
+    currently selected cell will be highlighted.
+
+- name: highlight_selected_word.code_cells_only
+  input_type: checkbox
+  default: false
+  description: |
+    Only apply highlights to editors for Code cells, not, for example, Markdown
+    or Raw cells
+
+- name: highlight_selected_word.highlight_color
+  input_type: color
+  default: '#90EE90'
+  description: Color used to highlight matching words in the focussed cell
+
+- name: highlight_selected_word.highlight_color_blurred
+  input_type: color
+  default: '#BBFFBB'
+  description: Color used to highlight matching words in blurred (non-active) cells
+
+- name: highlight_selected_word.outlines_only
+  input_type: checkbox
+  default: false
+  description: |
+    Highlight words using just an outline, rather than the background color
+
+- name: highlight_selected_word.outline_width
+  input_type: number
+  default: 1
+  min: 0.5
+  step: 0.5
+  description: |
+    Width, in pixels, of the outline used to highlight words when the
+    outline-only setting is selected.
+
+- name: highlight_selected_word.delay
+  input_type: number
+  default: 100
+  min: 0
+  step: 1
+  description: 'Wait time, in milliseconds, before highlighting the matches'
+
+- name: highlight_selected_word.words_only
+  input_type: checkbox
+  default: false
+  description: Only highlight matches if the selected text is a whole word
+
+- name: highlight_selected_word.highlight_only_whole_words
+  input_type: checkbox
+  default: true
+  description: |
+    Only highlight matches when they are surrounded by non-word characters, as
+    determined by the token below (if set), or the default regex '[\w$]'.
+
+- name: highlight_selected_word.show_token
+  input_type: text
+  default: '[\w$]'  # single-quote strings in yaml are like python raw strings
+  description: |
+    Token (regex) to identify word characters, used to determine what to
+    highlight when nothing is selected. If blank, nothing is highlighted when
+    nothing is selected.
+
+- name: highlight_selected_word.min_chars
+  input_type: number
+  default: 2
+  min: 0
+  step: 1
+  description: |
+    Minimum number of characters that must be selected for the highlighting
+    to occur (assuming no token is set for use when nothing is selected)
+
+- name: highlight_selected_word.trim
+  input_type: checkbox
+  default: true
+  description: |
+    Trim whitespace from selection text before checking for minimum length
+
+- name: highlight_selected_word.use_toggle_hotkey
+  input_type: checkbox
+  default: false
+  description: |
+    Bind the highlight_selected_word:toggle action to a hotkey
+
+- name: highlight_selected_word.toggle_hotkey
+  input_type: hotkey
+  default: 'alt-h'
+  description: |
+    Hotkey to bind to the highlight_selected_word:toggle action (if selected
+    for use, above)
+
+- name: highlight_selected_word.only_cells_in_scroll
+  input_type: checkbox
+  default: true
+  description: |
+    Only apply highlights to editors which are visible in the scrolled view.
+    This may offer performance benefits for larger notebooks
+
+- name: highlight_selected_word.scroll_min_delay
+  input_type: number
+  default: 100
+  min: 0
+  step: 10
+  description: |
+    Minimum delay in ms between updating highlights on scrolling the notebook
+    (used only if limiting highlights to those in scrolled view, see above).
+    If set to zero, no update is done on scroll.
+
+- name: highlight_selected_word.hide_selections_in_unfocussed
+  input_type: checkbox
+  default: false
+  description: |
+    Hide any text selection in non-focussed cells (can be confused with match highlights).

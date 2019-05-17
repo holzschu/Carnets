@@ -1,0 +1,92 @@
+{
+    "thm": {
+        "title": "Théorème",
+        "counterName": "theorem"
+    },
+    "lem": {
+        "title": "Lemma",
+        "counterName": "theorem"
+    },
+    "cor": {
+        "title": "Corollary",
+        "counterName": "theorem"
+    },
+    "prop": {
+        "title": "Property",
+        "counterName": "theorem"
+    },
+    "defn": {
+        "title": "Definition",
+        "counterName": "definition"
+    },
+    "rem": {
+        "title": "Remark",
+        "counterName": "remark"
+    },
+    "prob": {
+        "title": "Problem",
+        "counterName": "exercise"
+    },
+    "excs": {
+        "title": "Exercise",
+        "counterName": "exercise"
+    },
+    "examp": {
+        "title": "Example",
+        "counterName": "example"
+    },
+    "property": {
+        "title": "Property",
+        "counterName": "theorem"
+    },
+    "theorem": {
+        "title": "Théorème",
+        "counterName": "theorem"
+    },
+    "lemma": {
+        "title": "Lemma",
+        "counterName": "theorem"
+    },
+    "corollary": {
+        "title": "Corollary",
+        "counterName": "theorem"
+    },
+    "proposition": {
+        "title": "Proposition",
+        "counterName": "theorem"
+    },
+    "definition": {
+        "title": "Definition",
+        "counterName": "definition"
+    },
+    "remark": {
+        "title": "Remark",
+        "counterName": "remark"
+    },
+    "problem": {
+        "title": "Problem",
+        "counterName ": "exercise"
+    },
+    "exercise": {
+        "title": "Exercise",
+        "counterName": "exercise"
+    },
+    "example": {
+        "title": "Example",
+        "counterName": "example"
+    },
+    "myenv": {
+        "title": "MyEnv",
+        "counterName": "example"
+    },    
+    "figure": {
+        "title": "Figure",
+        "counterName": "figure"
+    },
+    "itemize": { "title": "Itemize" },
+    "enumerate": { "title": "Enumerate" },
+    "listing": { "title": " " },
+    "textboxa": { "title": " " },
+    "proof": { "title": "Proof" }
+
+}

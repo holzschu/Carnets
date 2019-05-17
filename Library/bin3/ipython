@@ -1,0 +1,11 @@
+#!/var/mobile/Containers/Data/Application/D59AE282-F8AA-4D9C-B870-8D9DDD92006A/Library/bin/python
+
+# -*- coding: utf-8 -*-
+import re
+import sys
+
+from IPython import start_ipython
+
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw?|\.exe)?$', '', sys.argv[0])
+    sys.exit(start_ipython())

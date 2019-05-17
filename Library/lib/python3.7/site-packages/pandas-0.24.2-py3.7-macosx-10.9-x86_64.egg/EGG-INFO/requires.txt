@@ -1,0 +1,3 @@
+python-dateutil>=2.5.0
+pytz>=2011k
+numpy>=1.12.0

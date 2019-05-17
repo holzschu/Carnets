@@ -1,0 +1,20 @@
+Metadata-Version: 2.0
+Name: jupyter-highlight-selected-word
+Version: 0.2.0
+Summary: Jupyter notebook extension that enables highlighting every instance of the current word in the notebook.
+Home-page: https://github.com/jcb91/jupyter_highlight_selected_word.git
+Author: Joshua Cooke Barnes
+Author-email: joshuacookebarnes@gmail.com
+License: BSD
+Description-Content-Type: UNKNOWN
+Platform: UNKNOWN
+
+
+Jupyter notebook extension that enables highlighting of all instances of the
+currently-selected or cursor-adjecent word in either the current cell's editor,
+or in the whole notebook.
+Based on the  CodeMirror addon
+`Match Highlighter <https://codemirror.net/demo/matchhighlighter.html>`_,
+extended to work across multiple editors.
+
+

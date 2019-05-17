@@ -1,0 +1,16 @@
+Type: IPython Notebook Extension
+Compatibility: 4.x, 5.x
+Name: Comment/Uncomment Hotkey
+Main: main.js
+Description: add new configurable hotkey binding to toggle comments
+Icon: icon.png
+Link: readme.md
+Parameters:
+- name: comment_uncomment_keybinding
+  description: keybinding for toggling comments
+  input_type: hotkey
+  default: alt-c
+- name: comment_uncomment_indent
+  description: indent comment at current indent level instead of at beginning of line
+  default: false
+  input_type: checkbox

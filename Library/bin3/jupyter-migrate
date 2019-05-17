@@ -1,0 +1,11 @@
+#!/var/mobile/Containers/Data/Application/C6A2E426-4369-4FFF-B976-5441A9BBE390/Library/bin/python
+
+# -*- coding: utf-8 -*-
+import re
+import sys
+
+from jupyter_core.migrate import main
+
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw?|\.exe)?$', '', sys.argv[0])
+    sys.exit(main())

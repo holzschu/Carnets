@@ -1,0 +1,6 @@
+#!/home/josh/miniconda3/envs/jup/bin/python
+
+from jupyter_contrib_core.application import main
+
+if __name__ == '__main__':
+    main()
