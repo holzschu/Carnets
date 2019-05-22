@@ -327,6 +327,8 @@
 		2273F825226C612900256401 /* UIDevice+Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2273F823226C612900256401 /* UIDevice+Name.swift */; };
 		2273F826226C612900256401 /* String+C.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2273F824226C612900256401 /* String+C.swift */; };
 		2287075222821D25003FF17A /* Apple Symbols.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2287075122821D1E003FF17A /* Apple Symbols.ttf */; };
+		2299396C2295D91B007C140E /* ViewController+inputAssistantItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2299396B2295D91B007C140E /* ViewController+inputAssistantItem.swift */; };
+		2299396E2295E1A8007C140E /* ViewController+keyCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2299396D2295E1A8007C140E /* ViewController+keyCommands.swift */; };
 		229F12222243BC2E006487FD /* FontAwesome.otf in Resources */ = {isa = PBXBuildFile; fileRef = 229F12212243BAAE006487FD /* FontAwesome.otf */; };
 		22A1C69E21FE4143001B49F0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A1C69D21FE4142001B49F0 /* ViewController.swift */; };
 		22A9B758223BD58700F2D2FF /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C9A7802236CEDD0016B538 /* Document.swift */; };
@@ -1083,6 +1085,8 @@
 		2273F823226C612900256401 /* UIDevice+Name.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIDevice+Name.swift"; path = "Util/UIDevice+Name.swift"; sourceTree = "<group>"; };
 		2273F824226C612900256401 /* String+C.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+C.swift"; path = "Util/String+C.swift"; sourceTree = "<group>"; };
 		2287075122821D1E003FF17A /* Apple Symbols.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Apple Symbols.ttf"; path = "../../../../../System/Library/Fonts/Apple Symbols.ttf"; sourceTree = "<group>"; };
+		2299396B2295D91B007C140E /* ViewController+inputAssistantItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+inputAssistantItem.swift"; sourceTree = "<group>"; };
+		2299396D2295E1A8007C140E /* ViewController+keyCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+keyCommands.swift"; sourceTree = "<group>"; };
 		229BB8D32210DC8F0070FD71 /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
 		229BB8D52210DCA30070FD71 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		229F12212243BAAE006487FD /* FontAwesome.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.otf; path = "Library/lib/python3.7/site-packages/notebook/static/components/font-awesome/fonts/FontAwesome.otf"; sourceTree = "<group>"; };
@@ -1598,6 +1602,8 @@
 				22B750AF21FC671700241F27 /* AppDelegate.swift */,
 				22C9A7AB223804210016B538 /* runningSessions.swift */,
 				22A1C69D21FE4142001B49F0 /* ViewController.swift */,
+				2299396D2295E1A8007C140E /* ViewController+keyCommands.swift */,
+				2299396B2295D91B007C140E /* ViewController+inputAssistantItem.swift */,
 				22F03F72222087AB00EBEA0B /* ListPythonFiles.swift */,
 				22C9A7802236CEDD0016B538 /* Document.swift */,
 				22C9A7812236CEDE0016B538 /* DocumentBrowserViewController.swift */,
@@ -1735,6 +1741,8 @@
 				22C9A7AC223804210016B538 /* runningSessions.swift in Sources */,
 				22A9B758223BD58700F2D2FF /* Document.swift in Sources */,
 				22C9A7842236CEDE0016B538 /* DocumentBrowserViewController.swift in Sources */,
+				2299396E2295E1A8007C140E /* ViewController+keyCommands.swift in Sources */,
+				2299396C2295D91B007C140E /* ViewController+inputAssistantItem.swift in Sources */,
 				2273F825226C612900256401 /* UIDevice+Name.swift in Sources */,
 				22B750B021FC671700241F27 /* AppDelegate.swift in Sources */,
 				2273F826226C612900256401 /* String+C.swift in Sources */,

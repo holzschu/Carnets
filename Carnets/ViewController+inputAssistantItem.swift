@@ -42,7 +42,7 @@ extension ViewController {
     
     var fontSize: CGFloat {
         let minFontSize: CGFloat = screenWidth / 50
-        print("Screen width = \(screenWidth), fontSize = \(minFontSize)")
+        // print("Screen width = \(screenWidth), fontSize = \(minFontSize)")
         if (minFontSize > 18) { return 18.0 }
         else { return minFontSize }
     }

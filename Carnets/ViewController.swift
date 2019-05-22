@@ -457,8 +457,6 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         NotificationCenter.default.addObserver(self, selector: #selector(undoAction), name: .NSUndoManagerWillUndoChange, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(redoAction), name: .NSUndoManagerWillRedoChange, object: nil)
     }
-    
-    
 
 }
 
