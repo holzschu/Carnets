@@ -27,6 +27,7 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
             present(documentViewController, animated: true, completion: nil)
         }
 
+        // let types = [kUTTypeText as String, kUTTypeDirectory as String]
         // Update the style of the UIDocumentBrowserViewController
         // browserUserInterfaceStyle = .dark
         // view.tintColor = .white
@@ -82,8 +83,6 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
     // MARK: Document Presentation
     
     func presentDocument(at documentURL: URL) {
-        // This may be causing issues with non-UTF8 systems.
-        // if (!documentURL.path.hasSuffix(".ipynb")) { return }
         
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let documentViewController = storyBoard.instantiateViewController(withIdentifier: "ViewController") as! ViewController

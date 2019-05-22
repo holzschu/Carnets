@@ -1,7 +1,7 @@
 // This lists the files that will be symbolic-linked to $HOME/Library to create the Python environment.
 // PythonFiles is the list of files that are always included by default. It contains all Python files (*.py)
-// extensionsFiles and widgetsFiles contain images. They are downloaded on demand, copied, then forgotten.
-// Apple requires code signature on the following files: python,
+// extensionsFiles contain images. They are downloaded on demand, copied, then forgotten.
+// Apple requires code signature on the following files: python, some readme.md
 // All the others can be used in On-Demand Resources.
 let PythonFiles = [
 "lib/python3.7/zipfile.py",
@@ -3160,7 +3160,6 @@ let PythonFiles = [
 "lib/python3.7/site-packages/pip/_vendor/progress/__init__.py",
 "lib/python3.7/site-packages/pip/_vendor/progress/bar.py",
 "lib/python3.7/site-packages/pip/_vendor/progress/spinner.py",
-"lib/python3.7/site-packages/pip/_vendor/progress/helpers.py",
 "lib/python3.7/site-packages/pip/_vendor/progress/counter.py",
 "lib/python3.7/site-packages/pip/_vendor/pep517/build.py",
 "lib/python3.7/site-packages/pip/_vendor/pep517/_in_process.py",
