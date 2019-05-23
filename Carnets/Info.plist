@@ -10,16 +10,21 @@
 	<array>
 		<dict>
 			<key>CFBundleTypeIconFiles</key>
-			<array/>
+			<array>
+				<string>document_icon_29.png</string>
+				<string>document_icon_58.png</string>
+				<string>document_icon_64.png</string>
+				<string>document_icon_320.png</string>
+			</array>
 			<key>CFBundleTypeName</key>
 			<string>Jupyter Notebook</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
-			<string>Owner</string>
+			<string>Alternate</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>public.jupyter</string>
+				<string>public.jupyter-notebook</string>
 			</array>
 		</dict>
 		<dict>
@@ -30,7 +35,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
-			<string>Owner</string>
+			<string>Alternate</string>
 			<key>LSItemContentTypes</key>
 			<array>
 				<string>public.directory</string>
@@ -44,7 +49,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
-			<string>Owner</string>
+			<string>Alternate</string>
 			<key>LSItemContentTypes</key>
 			<array>
 				<string>public.folder</string>
@@ -131,14 +136,19 @@
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
-				<string>public.source-code</string>
+				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>Jupyter Notebook</string>
 			<key>UTTypeIconFiles</key>
-			<array/>
+			<array>
+				<string>document_icon_29.png</string>
+				<string>document_icon_58.png</string>
+				<string>document_icon_64.png</string>
+				<string>document_icon_320.png</string>
+			</array>
 			<key>UTTypeIdentifier</key>
-			<string>public.jupyter</string>
+			<string>public.jupyter-notebook</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>

@@ -329,6 +329,11 @@
 		2287075222821D25003FF17A /* Apple Symbols.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2287075122821D1E003FF17A /* Apple Symbols.ttf */; };
 		2299396C2295D91B007C140E /* ViewController+inputAssistantItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2299396B2295D91B007C140E /* ViewController+inputAssistantItem.swift */; };
 		2299396E2295E1A8007C140E /* ViewController+keyCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2299396D2295E1A8007C140E /* ViewController+keyCommands.swift */; };
+		2299397322971989007C140E /* document_icon_320.png in Resources */ = {isa = PBXBuildFile; fileRef = 2299396F22971989007C140E /* document_icon_320.png */; };
+		2299397422971989007C140E /* document_icon_29.png in Resources */ = {isa = PBXBuildFile; fileRef = 2299397022971989007C140E /* document_icon_29.png */; };
+		2299397522971989007C140E /* document_icon_64.png in Resources */ = {isa = PBXBuildFile; fileRef = 2299397122971989007C140E /* document_icon_64.png */; };
+		2299397622971989007C140E /* document_icon_58.png in Resources */ = {isa = PBXBuildFile; fileRef = 2299397222971989007C140E /* document_icon_58.png */; };
+		2299397822973F26007C140E /* URL+isDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2299397722973F26007C140E /* URL+isDirectory.swift */; };
 		229F12222243BC2E006487FD /* FontAwesome.otf in Resources */ = {isa = PBXBuildFile; fileRef = 229F12212243BAAE006487FD /* FontAwesome.otf */; };
 		22A1C69E21FE4143001B49F0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A1C69D21FE4142001B49F0 /* ViewController.swift */; };
 		22A9B758223BD58700F2D2FF /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C9A7802236CEDD0016B538 /* Document.swift */; };
@@ -1087,6 +1092,11 @@
 		2287075122821D1E003FF17A /* Apple Symbols.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Apple Symbols.ttf"; path = "../../../../../System/Library/Fonts/Apple Symbols.ttf"; sourceTree = "<group>"; };
 		2299396B2295D91B007C140E /* ViewController+inputAssistantItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+inputAssistantItem.swift"; sourceTree = "<group>"; };
 		2299396D2295E1A8007C140E /* ViewController+keyCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+keyCommands.swift"; sourceTree = "<group>"; };
+		2299396F22971989007C140E /* document_icon_320.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = document_icon_320.png; path = Icons/document_icon_320.png; sourceTree = "<group>"; };
+		2299397022971989007C140E /* document_icon_29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = document_icon_29.png; path = Icons/document_icon_29.png; sourceTree = "<group>"; };
+		2299397122971989007C140E /* document_icon_64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = document_icon_64.png; path = Icons/document_icon_64.png; sourceTree = "<group>"; };
+		2299397222971989007C140E /* document_icon_58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = document_icon_58.png; path = Icons/document_icon_58.png; sourceTree = "<group>"; };
+		2299397722973F26007C140E /* URL+isDirectory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "URL+isDirectory.swift"; path = "Util/URL+isDirectory.swift"; sourceTree = "<group>"; };
 		229BB8D32210DC8F0070FD71 /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
 		229BB8D52210DCA30070FD71 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		229F12212243BAAE006487FD /* FontAwesome.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.otf; path = "Library/lib/python3.7/site-packages/notebook/static/components/font-awesome/fonts/FontAwesome.otf"; sourceTree = "<group>"; };
@@ -1571,6 +1581,7 @@
 			children = (
 				2273F824226C612900256401 /* String+C.swift */,
 				2273F823226C612900256401 /* UIDevice+Name.swift */,
+				2299397722973F26007C140E /* URL+isDirectory.swift */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -1578,6 +1589,10 @@
 		22B750A321FC671700241F27 = {
 			isa = PBXGroup;
 			children = (
+				2299397022971989007C140E /* document_icon_29.png */,
+				2299397222971989007C140E /* document_icon_58.png */,
+				2299397122971989007C140E /* document_icon_64.png */,
+				2299396F22971989007C140E /* document_icon_320.png */,
 				22B827F82288AC84001E91C3 /* Settings.bundle */,
 				22B750AE21FC671700241F27 /* Carnets */,
 				22B750AD21FC671700241F27 /* Products */,
@@ -1717,6 +1732,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2299397322971989007C140E /* document_icon_320.png in Resources */,
+				2299397422971989007C140E /* document_icon_29.png in Resources */,
+				2299397522971989007C140E /* document_icon_64.png in Resources */,
+				2299397622971989007C140E /* document_icon_58.png in Resources */,
 				22B750BA21FC671900241F27 /* LaunchScreen.storyboard in Resources */,
 				22B750B721FC671900241F27 /* Assets.xcassets in Resources */,
 				22B750B521FC671700241F27 /* Main.storyboard in Resources */,
@@ -1745,6 +1764,7 @@
 				2299396C2295D91B007C140E /* ViewController+inputAssistantItem.swift in Sources */,
 				2273F825226C612900256401 /* UIDevice+Name.swift in Sources */,
 				22B750B021FC671700241F27 /* AppDelegate.swift in Sources */,
+				2299397822973F26007C140E /* URL+isDirectory.swift in Sources */,
 				2273F826226C612900256401 /* String+C.swift in Sources */,
 				22F03F73222087AB00EBEA0B /* ListPythonFiles.swift in Sources */,
 			);

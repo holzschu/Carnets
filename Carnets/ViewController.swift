@@ -9,7 +9,6 @@
 import UIKit
 import WebKit
 import UserNotifications
-import ExternalAccessory
 import ios_system
 
 var serverAddress: URL!
@@ -22,29 +21,12 @@ public var kernelURL: URL?
 // $HOME/Documents
 public var documentsPath: String?
 public var iCloudDocumentsURL: URL?
+var lastModificationDate: Date?
 var appWebView: WKWebView!
 
 var bookmarks: [URL: Data] = [:]  // bookmarks, indexed by URL. So bookmarks[fileUrl] is a bookmark for the file fileUrl.
 var distantFiles: [URL: URL] = [:]  // correspondent between distant file and local file. distantFile = distantFiles[localFile]
 
-
-var screenWidth: CGFloat {
-    if screenOrientation.isPortrait {
-        return UIScreen.main.bounds.size.width
-    } else {
-        return UIScreen.main.bounds.size.height
-    }
-}
-var screenHeight: CGFloat {
-    if screenOrientation.isPortrait {
-        return UIScreen.main.bounds.size.height
-    } else {
-        return UIScreen.main.bounds.size.width
-    }
-}
-var screenOrientation: UIInterfaceOrientation {
-    return UIApplication.shared.statusBarOrientation
-}
 
 // is this file URL inside the App sandbox or not? (do we need to copy it locally?)
 func insideSandbox(fileURL: URL) -> Bool {
@@ -143,17 +125,13 @@ func urlFromFileURL(fileURL: URL) -> URL {
             fileURLToOpen = fileURL
             notebookBookmark = nil  // if we're there, we don't have a bookmark
         }
-        var isDirectory: ObjCBool = ObjCBool.init(false)
-        let fileExists = FileManager().fileExists(atPath: fileURLToOpen!.path, isDirectory: &isDirectory)
         for (localFileUrl, distantFileUrl) in distantFiles {
             if (distantFileUrl == fileURLToOpen) {
                 print("Already opened in distantFiles")
                 destination = localFileUrl
                 break
             }
-            var distantIsDirectory: ObjCBool = ObjCBool.init(false)
-            let distantFileExists = FileManager().fileExists(atPath: distantFileUrl.path, isDirectory: &distantIsDirectory)
-            if (distantIsDirectory.boolValue) {
+            if (distantFileUrl.isDirectory) {
                 // This distant file is a directory. Is the file we want to open part of this directory?
                 // If so, no need to recreate the bookmark.
                 if (fileURLToOpen!.path.hasPrefix(distantFileUrl.path)) {
@@ -169,7 +147,7 @@ func urlFromFileURL(fileURL: URL) -> URL {
             } else {
                 // Have we worked on a file from the same directory before?
                 // If so, we open this file in the same directory. So links between notebooks actually work.
-                if (!isDirectory.boolValue &&
+                if (!fileURLToOpen!.isDirectory &&
                     (distantFileUrl.deletingLastPathComponent() == fileURLToOpen?.deletingLastPathComponent())) {
                     print("Parent directory exists in distantFiles: \( distantFileUrl.deletingLastPathComponent() )")
                     destination = localFileUrl.deletingLastPathComponent().appendingPathComponent(fileURLToOpen!.lastPathComponent)
@@ -185,7 +163,7 @@ func urlFromFileURL(fileURL: URL) -> URL {
                                                             appropriateFor: URL(fileURLWithPath: documentsPath!),
                                                             create: true)
             destination = temporaryDirectory.appendingPathComponent(fileURLToOpen!.lastPathComponent)
-            if (isDirectory.boolValue) {
+            if (fileURLToOpen!.isDirectory) {
                 // We need to make sure directories are stored as such
                 destination = destination!.appendingPathComponent("/")
             }
@@ -233,6 +211,8 @@ func urlFromFileURL(fileURL: URL) -> URL {
     while (serverAddress == nil) {  }
     var fileAddressUrl = serverAddress.appendingPathComponent("notebooks")
     fileAddressUrl = fileAddressUrl.appendingPathComponent(filePath)
+    // Set up the date as the time we loaded the file:
+    lastModificationDate = Date()
     return fileAddressUrl
 }
 
@@ -245,8 +225,44 @@ func urlFromFileURL(fileURL: URL) -> URL {
  ] }
  */
 
+func replaceFileWithBookmark(securedURL: URL?, localFile: URL, localDirectory: URL) {
+    guard (securedURL != nil) else { return }
+    do {
+    // print("We got a bookmark in notebookURL: \(securedURL!)")
+    let temporaryDirectory = try! FileManager().url(for: .itemReplacementDirectory,
+                                                    in: .userDomainMask,
+                                                    appropriateFor: URL(fileURLWithPath: documentsPath!),
+                                                    create: true)
+    var destination = temporaryDirectory
+    destination = destination.appendingPathComponent(localFile.lastPathComponent)
+    // print("destination = \(destination)")
+    try FileManager().copyItem(at: localFile, to: destination)
+    // notebookURL is the *directory* for which we have the writing permission.
+    // we reconstruct the path to the *file*
+    var suffix = localFile.path
+    suffix.removeFirst(localDirectory.path.count) // this is empty if localFile is a file
+    let distantFilePath = securedURL?.appendingPathComponent(suffix)
+    // print("distant file URL = \(distantFilePath!) = \(securedURL!) + \(suffix)")
+    let isSecureURL = securedURL!.startAccessingSecurityScopedResource()
+    // print("startAccessingSecurityScopedResource: \(isSecureURL)")
+    let distantDirectory = distantFilePath?.deletingLastPathComponent()
+    try! FileManager().createDirectory(atPath: (distantDirectory?.path)!, withIntermediateDirectories: true)
+    try FileManager().replaceItemAt(distantFilePath!, withItemAt: destination, backupItemName: nil, options: [])
+    if (isSecureURL) {
+        securedURL!.stopAccessingSecurityScopedResource()
+    }
+    // print("stopAccessingSecurityScopedResource")
+    try FileManager().removeItem(at: temporaryDirectory)
+    // NSLog("Saved distant file \(distantFilePath!)")
+    }
+    catch {
+        print(error)
+        NSLog("Error in replaceFileWithBookmark: distant dir = \(notebookURL!) local file = \(localFile) local dir = \(localDirectory)")
+    }
+}
+
 func saveDistantFile() {
-    print("Entering saveDistantFile: \(kernelURL)")
+    // print("Entering saveDistantFile: \(kernelURL)")
     guard (kernelURL != nil) else { return }
     guard (notebookBookmark != nil) else { return }
     var localFilePath = kernelURL!.path
@@ -267,48 +283,35 @@ func saveDistantFile() {
             distantFile = distantFiles[localDirectory]
         }
     }
-    if (distantFile != nil) {
-        // it's a distant file.
-        do {
-            var stale = false
-            // notebookURL corresponds to the directory that was opened last, or to the file localFileUrl
-            print("Stored bookmark = \(notebookBookmark!)")
-            notebookURL = try URL(resolvingBookmarkData: notebookBookmark!, bookmarkDataIsStale: &stale)
-            if (notebookURL != nil) {
-                print("We got a bookmark in notebookURL: \(notebookURL!)")
-                let temporaryDirectory = try! FileManager().url(for: .itemReplacementDirectory,
-                                                                in: .userDomainMask,
-                                                                appropriateFor: URL(fileURLWithPath: documentsPath!),
-                                                                create: true)
-                var destination = temporaryDirectory
-                destination = destination.appendingPathComponent(localFileUrl.lastPathComponent)
-                print("destination = \(destination)")
-                try FileManager().copyItem(at: localFileUrl, to: destination)
-                // notebookURL is the *directory* for which we have the writing permission.
-                // we reconstruct the path to the *file*
-                var suffix = localFilePath
-                suffix.removeFirst(localDirectory.path.count) // this is empty if localFile is a file
-                let distantFilePath = notebookURL?.appendingPathComponent(suffix)
-                print("distant file URL = \(distantFilePath!) = \(notebookURL!) + \(suffix)")
-                let isSecureURL = notebookURL!.startAccessingSecurityScopedResource()
-                print("startAccessingSecurityScopedResource: \(isSecureURL)")
-                // write our changes. We only write the file we're currently editing here.
-                // Other functions take care of: new files, file renaming, file deletion, file addition.
-                try FileManager().replaceItemAt(distantFilePath!, withItemAt: destination, backupItemName: nil, options: [])
-                if (isSecureURL) {
-                    notebookURL!.stopAccessingSecurityScopedResource()
+    guard (distantFile != nil) else { return }
+    // it's a distant file.
+    do {
+        var stale = false
+        // notebookURL corresponds to the directory that was opened last, or to the file localFileUrl
+        notebookURL = try URL(resolvingBookmarkData: notebookBookmark!, bookmarkDataIsStale: &stale)
+        if (notebookURL != nil) {
+            // save the actual file to its remote directory:
+            replaceFileWithBookmark(securedURL: notebookURL, localFile: localFileUrl, localDirectory: localDirectory)
+            // Scanning for changes in local directory (except current file):
+            let key = [URLResourceKey.contentModificationDateKey]
+            if let dirContents = FileManager.default.enumerator(at: localDirectory.resolvingSymlinksInPath(), includingPropertiesForKeys: key) {
+                // the loop will be empty if it's a file, not a directory.
+                for case let url as URL in dirContents {
+                    if (url == localFileUrl) { continue } // It's the actual file, we did it already.
+                    let value = try? url.resourceValues(forKeys: Set<URLResourceKey>(key))
+                    // Allow 5 seconds for margin of error (checkpoint files are saved within +/- 1 second)
+                    if ((value?.contentModificationDate)! + 5 > lastModificationDate!) {
+                        replaceFileWithBookmark(securedURL: notebookURL, localFile: url, localDirectory: localDirectory)
+                    }
                 }
-                print("stopAccessingSecurityScopedResource")
-                try FileManager().removeItem(at: temporaryDirectory)
-                NSLog("Saved distant file \(notebookURL!)")
             }
+            // Reset the lastModificationDate
+            lastModificationDate = Date()
         }
-        catch {
-            print(error)
-            NSLog("Could not save distant file \(notebookURL!)")
-        }
-    } else {
-        print("It is not a distant file, apparently")
+    }
+    catch {
+        print(error)
+        NSLog("Could not resolve bookmark for \(notebookBookmark!)")
     }
 }
 

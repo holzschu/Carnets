@@ -11,6 +11,24 @@ import Foundation
 import UIKit
 import WebKit
 
+var screenWidth: CGFloat {
+    if screenOrientation.isPortrait {
+        return UIScreen.main.bounds.size.width
+    } else {
+        return UIScreen.main.bounds.size.height
+    }
+}
+var screenHeight: CGFloat {
+    if screenOrientation.isPortrait {
+        return UIScreen.main.bounds.size.height
+    } else {
+        return UIScreen.main.bounds.size.width
+    }
+}
+var screenOrientation: UIInterfaceOrientation {
+    return UIApplication.shared.statusBarOrientation
+}
+
 extension ViewController {
 
     var needTabKey: Bool {
