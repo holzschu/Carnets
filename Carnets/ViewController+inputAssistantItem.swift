@@ -228,9 +228,15 @@ extension ViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(prepareNextKeyboard), name: UIResponder.keyboardDidHideNotification, object: nil)
         
         // in case Jupyter has started before the view is active (unlikely):
-        guard (serverAddress != nil) else { return }
-        guard (notebookURL != nil) else { return }
-        kernelURL = urlFromFileURL(fileURL: notebookURL!)
+        guard (serverAddress != nil) else {
+            NSLog("serverAddress is nil, return from load")
+            return
+        }
+        guard (presentedItemURL != nil) else {
+            NSLog("presentedItemURL is nil, return from load")
+            return
+        }
+        kernelURL = urlFromFileURL(fileURL: presentedItemURL!)
         webView.load(URLRequest(url: kernelURL!))
     }
     
@@ -245,8 +251,8 @@ extension ViewController {
         // TODO: if shift is selected on keyboard, un-indent code (and remove shiftTabAction)
         webView.evaluateJavaScript("var event = new KeyboardEvent('keydown', {which:9, keyCode:9, bubbles:true}); if (!Jupyter.notebook.get_selected_cell().handle_keyevent(Jupyter.notebook.get_selected_cell().code_mirror, event)) { Jupyter.notebook.get_selected_cell().code_mirror.execCommand('defaultSoftTab');} ") { (result, error) in
             if error != nil {
-                print(error)
-                print(result)
+                print(error as! String)
+                print(result as! String)
             }
         }
     }
@@ -256,8 +262,8 @@ extension ViewController {
         // Create a "shift + tab" keydown event. Either print function help or unindent code
         webView.evaluateJavaScript("var event = new KeyboardEvent('keydown', {which:9, keyCode:9, shiftKey:true, bubbles:true}); if (!Jupyter.notebook.get_selected_cell().handle_keyevent(Jupyter.notebook.get_selected_cell().code_mirror, event)) { Jupyter.notebook.get_selected_cell().code_mirror.execCommand('indentLess');} ") { (result, error) in
             if error != nil {
-                print(error)
-                print(result)
+                print(error as! String)
+                print(result as! String)
             }
         }
     }
@@ -266,8 +272,8 @@ extension ViewController {
         // edit mode cut (works)
         webView.evaluateJavaScript("document.execCommand('cut');") { (result, error) in
             if error != nil {
-                print(error)
-                print(result)
+                print(error as! String)
+                print(result as! String)
             }
         }
         // command mode cut (works)
@@ -282,8 +288,8 @@ extension ViewController {
         // edit mode copy (works)
         webView.evaluateJavaScript("document.execCommand('copy');") { (result, error) in
             if error != nil {
-                print(error)
-                print(result)
+                print(error as! String)
+                print(result as! String)
             }
         }
         // command mode copy (works)
@@ -323,8 +329,8 @@ extension ViewController {
     @objc private func addAction(_ sender: UIBarButtonItem) {
         webView.evaluateJavaScript("Jupyter.notebook.insert_cell_below(); Jupyter.notebook.select_next(true); Jupyter.notebook.focus_cell(); Jupyter.notebook.edit_mode();") { (result, error) in
             if error != nil {
-                print(error)
-                print(result)
+                print(error as! String)
+                print(result as! String)
             }
         }
     }
@@ -332,8 +338,8 @@ extension ViewController {
     @objc func runAction(_ sender: UIBarButtonItem) {
         webView.evaluateJavaScript("Jupyter.notebook.execute_cell_and_select_below(); Jupyter.notebook.edit_mode();") { (result, error) in
             if error != nil {
-                print(error)
-                print(result)
+                print(error as! String)
+                print(result as! String)
             }
         }
     }
@@ -341,8 +347,8 @@ extension ViewController {
     @objc private func upAction(_ sender: UIBarButtonItem) {
         webView.evaluateJavaScript("Jupyter.notebook.select_prev(true); Jupyter.notebook.focus_cell(); Jupyter.notebook.edit_mode();") { (result, error) in
             if error != nil {
-                print(error)
-                print(result)
+                print(error as! String)
+                print(result as! String)
             }
         }
     }
@@ -350,8 +356,8 @@ extension ViewController {
     @objc private func downAction(_ sender: UIBarButtonItem) {
         webView.evaluateJavaScript("Jupyter.notebook.select_next(true); Jupyter.notebook.focus_cell(); Jupyter.notebook.edit_mode();") { (result, error) in
             if error != nil {
-                print(error)
-                print(result)
+                print(error as! String)
+                print(result as! String)
             }
         }
     }
@@ -360,8 +366,8 @@ extension ViewController {
         // Does not work. Also, not desireable.
         webView.evaluateJavaScript("Jupyter.notebook.kernel.interrupt();") { (result, error) in
             if error != nil {
-                print(error)
-                print(result)
+                print(error as! String)
+                print(result as! String)
             }
         }
     }
@@ -370,8 +376,8 @@ extension ViewController {
         // works
         webView.evaluateJavaScript("Jupyter.notebook.get_selected_cell().code_mirror.execCommand('undo');") { (result, error) in
             if error != nil {
-                print(error)
-                print(result)
+                print(error as! String)
+                print(result as! String)
             }
         }
     }
@@ -380,8 +386,8 @@ extension ViewController {
         // works
         webView.evaluateJavaScript("Jupyter.notebook.get_selected_cell().code_mirror.execCommand('redo');") { (result, error) in
             if error != nil {
-                print(error)
-                print(result)
+                print(error as! String)
+                print(result as! String)
             }
         }
     }

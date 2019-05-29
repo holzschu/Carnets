@@ -23,7 +23,9 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
         let lastPageVisited = UserDefaults.standard.url(forKey: "lastOpenUrl")
 
         if (lastPageVisited != nil) && (lastPageVisited!.path != "/tree") {
-            notebookURL = lastPageVisited
+            documentViewController.presentedItemURL = lastPageVisited
+            NSFileCoordinator.addFilePresenter(documentViewController)
+            print("presentedItemURL (DocumentBrowserViewController) = \(documentViewController.presentedItemURL)")
             present(documentViewController, animated: true, completion: nil)
         }
 
@@ -86,7 +88,9 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
         
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let documentViewController = storyBoard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
-        notebookURL = documentURL
+        documentViewController.presentedItemURL = documentURL
+        NSFileCoordinator.addFilePresenter(documentViewController)
+        print("presentedItemURL (DocumentBrowserViewController presentDocument) = \(documentViewController.presentedItemURL)")
         UserDefaults.standard.set(documentURL, forKey: "lastOpenUrl")
         present(documentViewController, animated: true, completion: nil)
     }

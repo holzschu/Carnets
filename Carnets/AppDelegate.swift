@@ -41,7 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             iCloudDocumentsURL = FileManager().url(forUbiquityContainerIdentifier: nil)
             if (iCloudDocumentsURL != nil) {
                 // Create a document in the iCloud folder to make it visible.
-                NSLog("iCloudContainer = \(iCloudDocumentsURL)")
+                print("iCloudContainer = \(iCloudDocumentsURL)")
                 let iCloudDirectory = iCloudDocumentsURL?.appendingPathComponent("Documents")
                 let iCloudDirectoryWelcome = iCloudDirectory?.appendingPathComponent("welcome")
                 if (!FileManager().fileExists(atPath: iCloudDirectoryWelcome!.path)) {
@@ -81,14 +81,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func linkedFileExists(directory: URL, fileName: String) -> Bool {
         // Check whether the file linked by fileName in directory actually exists
         // (if fileName does not exist, we also return false)
+        // NSLog("Checking existence of \(fileName)")
         if (!FileManager().fileExists(atPath: directory.appendingPathComponent("lib").path)) {
+            // NSLog("no to fileExists \(directory.appendingPathComponent("lib").path)")
             return false
         }
         let fileLocation = directory.appendingPathComponent(fileName)
         do {
             let fileAttribute = try FileManager().attributesOfItem(atPath: fileLocation.path)
             if (!(fileAttribute[FileAttributeKey.type] as? String == FileAttributeType.typeSymbolicLink.rawValue)) { return false }
+            // NSLog("It's a symbolic link")
             let destination = try FileManager().destinationOfSymbolicLink(atPath: fileLocation.path)
+            // NSLog("Destination = \(destination) exists = \(FileManager().fileExists(atPath: destination))")
             return FileManager().fileExists(atPath: destination)
         }
         catch {
@@ -271,13 +275,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                 create: true)
         // If the files exist, no need to continue:
         // (unless we had to update the Library files too)
-        if (versionUpToDate && linkedFileExists(directory: libraryURL.appendingPathComponent("lib"), fileName: extensionsFiles[0])) {
-            updateExtensionsRunning = false
-            return
+        if (versionUpToDate) {
+            if (FileManager().fileExists(atPath: libraryURL.appendingPathComponent("Jupyter/nbextensions/rubberband/icon.png").path)) {
+                updateExtensionsRunning = false
+                return
+            }
+            if (linkedFileExists(directory: libraryURL, fileName: extensionsFiles[0])) {
+                updateExtensionsRunning = false
+                return
+            }
         }
         // The symbolic links have to be recreated every time we restart the app, but the data does not need to be downloaded.
         // download the resource from the iTunes store:
-        UserDefaults.standard.set(false, forKey: "extensionsEnabled") // tell others that we are busy updating extensions
         let extensionsBundleResource = NSBundleResourceRequest(tags: ["extensions"])
         NSLog("Begin downloading extensions resources")
         extensionsBundleResource.beginAccessingResources(completionHandler: { (error) in
@@ -501,6 +510,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
         NSLog("Carnets: applicationWillResignActive")
+        if (!applicationInBackground) {
+            applicationDidEnterBackground(application)
+        }
         // 3 min to close current process. Don't shutdown until 2 mn 45 s
         guard (serverAddress != nil) else { return }
         let app = UIApplication.shared
@@ -554,20 +566,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         // TODO: terminate running kernels, *except* if they are opened in a different app (see user preferences)
         NSLog("Carnets: applicationDidEnterBackground")
-        applicationInBackground = true
+        if (!applicationInBackground) {
+            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+            let documentViewController = storyBoard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
+            NSFileCoordinator.removeFilePresenter(documentViewController)
+            applicationInBackground = true
+        }
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
         NSLog("Carnets: applicationWillEnterForeground")
-        applicationInBackground = false
-        startNotebookServer()
+        if (applicationInBackground) {  
+            applicationInBackground = false
+            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+            let documentViewController = storyBoard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
+            NSFileCoordinator.addFilePresenter(documentViewController)
+            startNotebookServer()
+        }
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         NSLog("Carnets: applicationDidBecomeActive")
-        applicationInBackground = false
+        if (applicationInBackground) {
+            applicationWillEnterForeground(application)
+        }
         // cancel the alert:
         let notificationCenter = UNUserNotificationCenter.current()
         notificationCenter.removePendingNotificationRequests(withIdentifiers: ["CarnetsShutdownAlert"])
@@ -604,16 +628,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 return
             }
             self.startNotebookServer()
-            NSLog("Received document to open: \(revealedDocumentURL)")
+            // NSLog("Received document to open: \(revealedDocumentURL)")
             // Present the Document View Controller for the revealed URL
-            if (notebookURL == nil) {
-                NSLog("calling documentBrowserViewController")
+            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+            let documentViewController = storyBoard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
+            UserDefaults.standard.set(revealedDocumentURL, forKey: "lastOpenUrl")
+            if (documentViewController.kernelURL == nil) {
+                // The documentBrowserViewController is active, we ask it to display the document:
                 documentBrowserViewController.presentDocument(at: revealedDocumentURL!)
             } else {
-                NSLog("calling appWebView")
-                notebookURL = revealedDocumentURL
-                kernelURL = urlFromFileURL(fileURL: notebookURL!)
-                appWebView.load(URLRequest(url: kernelURL!))
+                // The documentViewController is active, we ask it to display the document:
+                documentViewController.load(url: revealedDocumentURL!)
             }
         }
         return true

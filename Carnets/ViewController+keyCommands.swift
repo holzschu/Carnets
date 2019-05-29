@@ -41,8 +41,8 @@ extension ViewController {
             UIKeyCommand(input: "\r", modifierFlags:.command,  action: #selector(runAction), discoverabilityTitle: "Run cell, select next"),
             // Tab key in edit mode: does not work with external keyboard (but alt-tab works). But it should ("\t")
         ]
-        /* Caps Lock remapped to escape -- only if required */
-        if (UserDefaults.standard.bool(forKey: "escape_preference")) {
+        /* Caps Lock remapped to escape -- only if in a notebook, in insert mode: */
+        if (UserDefaults.standard.bool(forKey: "escape_preference") && notebookCellInsertMode) {
             // If we remapped caps-lock to escape, we need to disable caps-lock, at least with certain keyboards.
             // This loop remaps all lowercase characters without a modifier to themselves, thus disabling caps-lock
             // It doesn't work for characters produced with alt-key, though.
@@ -62,14 +62,14 @@ extension ViewController {
     // Even if Caps-Lock is activated, send lower case letters.
     @objc func insertKey(_ sender: UIKeyCommand) {
         guard (sender.input != nil) else { return }
-        let commandString = "if (Jupyter.notebook.get_selected_cell().mode === 'edit') { Jupyter.notebook.get_selected_cell().code_mirror.replaceSelection('\(sender.input!)'); }"
-        // TODO: also insert for text fields in UI
-        webView.evaluateJavaScript(commandString) { (result, error) in
+        // This function only gets called if we are in a notebook, in edit_mode:
+        // Only remap the keys if we are in a notebook, editing cell:
+        let commandString = "Jupyter.notebook.get_selected_cell().code_mirror.replaceSelection('\(sender.input!)');"
+        self.webView.evaluateJavaScript(commandString) { (result, error) in
             if error != nil {
-                print(error)
-                print(result)
+                print(error as! String)
+                print(result as! String)
             }
         }
     }
-    
 }

@@ -21,7 +21,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
-			<string>Alternate</string>
+			<string>Default</string>
 			<key>LSItemContentTypes</key>
 			<array>
 				<string>public.jupyter-notebook</string>
@@ -69,7 +69,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.3</string>
 	<key>CFBundleVersion</key>
-	<string>37</string>
+	<string>38</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
@@ -93,6 +93,12 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Carnets would like to access your camera</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Carnets would like to access to your photo library to upload images</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Carnets would like to access to your photo library to upload photos</string>
 	<key>NSUbiquitousContainerIsDocumentScopePublic</key>
 	<true/>
 	<key>NSUbiquitousContainers</key>
