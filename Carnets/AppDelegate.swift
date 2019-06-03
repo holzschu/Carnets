@@ -178,7 +178,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                  "lib/python3.7/site-packages/jupyter_contrib_nbextensions-0.5.1-py3.7.egg",
                                  "lib/python3.7/site-packages/jupyter_highlight_selected_word-0.2.0-py3.7.egg",
                                  "lib/python3.7/site-packages/jupyter_latex_envs-1.4.6-py3.7.egg",
-                                 ]
+                                 "lib/python3.7/site-packages/Pillow-6.0.0-py3.7-macosx-10.9-x86_64.egg",
+                                 "lib/python3.7/site-packages/cryptography-2.6.1-py3.7-macosx-10.9-x86_64.egg",
+        ]
         for otherPythonDirectory in pythonDirectories {
             let secondaryPythonUrl = bundleUrl.appendingPathComponent(otherPythonDirectory)
             newPythonPath = newPythonPath.appending(":").appending(secondaryPythonUrl.path)

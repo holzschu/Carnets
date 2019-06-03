@@ -337,40 +337,53 @@
 		229F12222243BC2E006487FD /* FontAwesome.otf in Resources */ = {isa = PBXBuildFile; fileRef = 229F12212243BAAE006487FD /* FontAwesome.otf */; };
 		22A1C69E21FE4143001B49F0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A1C69D21FE4142001B49F0 /* ViewController.swift */; };
 		22AAFD0A22A166C700192CB4 /* python3_ios-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0122A166AC00192CB4 /* python3_ios-cryptography.hazmat.bindings._constant_time.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD0B22A1685E00192CB4 /* python3_ios-cryptography.hazmat.bindings._openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0422A166AC00192CB4 /* python3_ios-cryptography.hazmat.bindings._openssl.framework */; };
 		22AAFD0C22A1685E00192CB4 /* python3_ios-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0422A166AC00192CB4 /* python3_ios-cryptography.hazmat.bindings._openssl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD0D22A1685F00192CB4 /* python3_ios-cryptography.hazmat.bindings._padding.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFE22A166AC00192CB4 /* python3_ios-cryptography.hazmat.bindings._padding.framework */; };
 		22AAFD0E22A1685F00192CB4 /* python3_ios-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFE22A166AC00192CB4 /* python3_ios-cryptography.hazmat.bindings._padding.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD0F22A1686000192CB4 /* pythonA-cryptography.hazmat.bindings._constant_time.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFD22A166AB00192CB4 /* pythonA-cryptography.hazmat.bindings._constant_time.framework */; };
 		22AAFD1022A1686000192CB4 /* pythonA-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFD22A166AB00192CB4 /* pythonA-cryptography.hazmat.bindings._constant_time.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD1122A1686100192CB4 /* pythonA-cryptography.hazmat.bindings._openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0322A166AC00192CB4 /* pythonA-cryptography.hazmat.bindings._openssl.framework */; };
 		22AAFD1222A1686100192CB4 /* pythonA-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0322A166AC00192CB4 /* pythonA-cryptography.hazmat.bindings._openssl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD1322A1686200192CB4 /* pythonA-cryptography.hazmat.bindings._padding.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFF22A166AC00192CB4 /* pythonA-cryptography.hazmat.bindings._padding.framework */; };
 		22AAFD1422A1686200192CB4 /* pythonA-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFF22A166AC00192CB4 /* pythonA-cryptography.hazmat.bindings._padding.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD1522A1686300192CB4 /* pythonB-cryptography.hazmat.bindings._constant_time.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCF822A166AB00192CB4 /* pythonB-cryptography.hazmat.bindings._constant_time.framework */; };
 		22AAFD1622A1686300192CB4 /* pythonB-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCF822A166AB00192CB4 /* pythonB-cryptography.hazmat.bindings._constant_time.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD1722A1686400192CB4 /* pythonB-cryptography.hazmat.bindings._openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCF922A166AB00192CB4 /* pythonB-cryptography.hazmat.bindings._openssl.framework */; };
 		22AAFD1822A1686400192CB4 /* pythonB-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCF922A166AB00192CB4 /* pythonB-cryptography.hazmat.bindings._openssl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD1922A1686500192CB4 /* pythonB-cryptography.hazmat.bindings._padding.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0522A166AC00192CB4 /* pythonB-cryptography.hazmat.bindings._padding.framework */; };
 		22AAFD1A22A1686500192CB4 /* pythonB-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0522A166AC00192CB4 /* pythonB-cryptography.hazmat.bindings._padding.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD1B22A1686600192CB4 /* pythonC-cryptography.hazmat.bindings._constant_time.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0622A166AC00192CB4 /* pythonC-cryptography.hazmat.bindings._constant_time.framework */; };
 		22AAFD1C22A1686600192CB4 /* pythonC-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0622A166AC00192CB4 /* pythonC-cryptography.hazmat.bindings._constant_time.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD1D22A1686700192CB4 /* pythonC-cryptography.hazmat.bindings._openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0022A166AC00192CB4 /* pythonC-cryptography.hazmat.bindings._openssl.framework */; };
 		22AAFD1E22A1686700192CB4 /* pythonC-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0022A166AC00192CB4 /* pythonC-cryptography.hazmat.bindings._openssl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD1F22A1686800192CB4 /* pythonC-cryptography.hazmat.bindings._padding.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFB22A166AB00192CB4 /* pythonC-cryptography.hazmat.bindings._padding.framework */; };
 		22AAFD2022A1686800192CB4 /* pythonC-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFB22A166AB00192CB4 /* pythonC-cryptography.hazmat.bindings._padding.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD2122A1686900192CB4 /* pythonD-cryptography.hazmat.bindings._constant_time.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFC22A166AB00192CB4 /* pythonD-cryptography.hazmat.bindings._constant_time.framework */; };
 		22AAFD2222A1686900192CB4 /* pythonD-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFC22A166AB00192CB4 /* pythonD-cryptography.hazmat.bindings._constant_time.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD2322A1686A00192CB4 /* pythonD-cryptography.hazmat.bindings._openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCF722A166AB00192CB4 /* pythonD-cryptography.hazmat.bindings._openssl.framework */; };
 		22AAFD2422A1686A00192CB4 /* pythonD-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCF722A166AB00192CB4 /* pythonD-cryptography.hazmat.bindings._openssl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD2522A1686B00192CB4 /* pythonD-cryptography.hazmat.bindings._padding.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0222A166AC00192CB4 /* pythonD-cryptography.hazmat.bindings._padding.framework */; };
 		22AAFD2622A1686B00192CB4 /* pythonD-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0222A166AC00192CB4 /* pythonD-cryptography.hazmat.bindings._padding.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD2722A1686C00192CB4 /* pythonE-cryptography.hazmat.bindings._constant_time.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCF622A166AB00192CB4 /* pythonE-cryptography.hazmat.bindings._constant_time.framework */; };
 		22AAFD2822A1686C00192CB4 /* pythonE-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCF622A166AB00192CB4 /* pythonE-cryptography.hazmat.bindings._constant_time.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD2922A1686D00192CB4 /* pythonE-cryptography.hazmat.bindings._openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCF522A166AB00192CB4 /* pythonE-cryptography.hazmat.bindings._openssl.framework */; };
 		22AAFD2A22A1686D00192CB4 /* pythonE-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCF522A166AB00192CB4 /* pythonE-cryptography.hazmat.bindings._openssl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD2B22A1686E00192CB4 /* pythonE-cryptography.hazmat.bindings._padding.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFA22A166AB00192CB4 /* pythonE-cryptography.hazmat.bindings._padding.framework */; };
 		22AAFD2C22A1686E00192CB4 /* pythonE-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFA22A166AB00192CB4 /* pythonE-cryptography.hazmat.bindings._padding.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDA722A52EA000192CB4 /* python3_ios-PIL._imaging.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD3B22A52C3900192CB4 /* python3_ios-PIL._imaging.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDA922A52EA200192CB4 /* python3_ios-PIL._imagingft.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD3122A52C3800192CB4 /* python3_ios-PIL._imagingft.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDAB22A52EA300192CB4 /* python3_ios-PIL._imagingmath.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD4522A52C3B00192CB4 /* python3_ios-PIL._imagingmath.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDAD22A52EA400192CB4 /* python3_ios-PIL._imagingmorph.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD2F22A52C3800192CB4 /* python3_ios-PIL._imagingmorph.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDAF22A52EA600192CB4 /* python3_ios-PIL._imagingtk.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD2E22A52C3800192CB4 /* python3_ios-PIL._imagingtk.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDB122A52EA700192CB4 /* pythonA-PIL._imaging.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD3422A52C3800192CB4 /* pythonA-PIL._imaging.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDB322A52EA800192CB4 /* pythonA-PIL._imagingft.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD3922A52C3900192CB4 /* pythonA-PIL._imagingft.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDB522A52EAA00192CB4 /* pythonA-PIL._imagingmath.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD3322A52C3800192CB4 /* pythonA-PIL._imagingmath.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDB722A52EAB00192CB4 /* pythonA-PIL._imagingmorph.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD4822A52C3C00192CB4 /* pythonA-PIL._imagingmorph.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDB922A52EAD00192CB4 /* pythonA-PIL._imagingtk.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD3C22A52C3A00192CB4 /* pythonA-PIL._imagingtk.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDBB22A52EAF00192CB4 /* pythonB-PIL._imaging.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD3D22A52C3A00192CB4 /* pythonB-PIL._imaging.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDBD22A52EB100192CB4 /* pythonB-PIL._imagingft.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD4022A52C3A00192CB4 /* pythonB-PIL._imagingft.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDBF22A52EB300192CB4 /* pythonB-PIL._imagingmath.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD4722A52C3C00192CB4 /* pythonB-PIL._imagingmath.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDC122A52EB500192CB4 /* pythonB-PIL._imagingmorph.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD4622A52C3B00192CB4 /* pythonB-PIL._imagingmorph.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDC322A52EB700192CB4 /* pythonB-PIL._imagingtk.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD3A22A52C3900192CB4 /* pythonB-PIL._imagingtk.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDC522A52EB900192CB4 /* pythonC-PIL._imaging.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD4922A52C3C00192CB4 /* pythonC-PIL._imaging.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDC722A52EBB00192CB4 /* pythonC-PIL._imagingft.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD4122A52C3B00192CB4 /* pythonC-PIL._imagingft.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDC922A52EBD00192CB4 /* pythonC-PIL._imagingmath.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD3F22A52C3A00192CB4 /* pythonC-PIL._imagingmath.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDCB22A52EBF00192CB4 /* pythonC-PIL._imagingmorph.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD3E22A52C3A00192CB4 /* pythonC-PIL._imagingmorph.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDCD22A52EC100192CB4 /* pythonC-PIL._imagingtk.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD4222A52C3B00192CB4 /* pythonC-PIL._imagingtk.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDCF22A52EC300192CB4 /* pythonD-PIL._imaging.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD4A22A52C3C00192CB4 /* pythonD-PIL._imaging.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDD122A52EC500192CB4 /* pythonD-PIL._imagingft.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD4322A52C3B00192CB4 /* pythonD-PIL._imagingft.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDD322A52EC700192CB4 /* pythonD-PIL._imagingmath.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD3022A52C3800192CB4 /* pythonD-PIL._imagingmath.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDD522A52EC900192CB4 /* pythonD-PIL._imagingmorph.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD3722A52C3900192CB4 /* pythonD-PIL._imagingmorph.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDD722A52ECB00192CB4 /* pythonD-PIL._imagingtk.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD4422A52C3B00192CB4 /* pythonD-PIL._imagingtk.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDD922A52ECD00192CB4 /* pythonE-PIL._imaging.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD3822A52C3900192CB4 /* pythonE-PIL._imaging.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDDB22A52ECF00192CB4 /* pythonE-PIL._imagingft.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD3622A52C3900192CB4 /* pythonE-PIL._imagingft.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDDD22A52ED100192CB4 /* pythonE-PIL._imagingmath.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD4B22A52C3C00192CB4 /* pythonE-PIL._imagingmath.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDDF22A52ED300192CB4 /* pythonE-PIL._imagingmorph.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD3522A52C3900192CB4 /* pythonE-PIL._imagingmorph.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDE122A52ED600192CB4 /* pythonE-PIL._imagingtk.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD3222A52C3800192CB4 /* pythonE-PIL._imagingtk.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22B750B021FC671700241F27 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B750AF21FC671700241F27 /* AppDelegate.swift */; };
 		22B750B521FC671700241F27 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22B750B321FC671700241F27 /* Main.storyboard */; };
 		22B750B721FC671900241F27 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22B750B621FC671900241F27 /* Assets.xcassets */; };
@@ -818,6 +831,36 @@
 				2273F81D2269E95800256401 /* pythonE-pandas.io.msgpack._unpacker.framework in Embed Frameworks */,
 				2273F81E2269E95800256401 /* pythonE-pandas.io.sas._sas.framework in Embed Frameworks */,
 				2273F81F2269E95800256401 /* pythonE-pandas.util._move.framework in Embed Frameworks */,
+				22AAFDA922A52EA200192CB4 /* python3_ios-PIL._imagingft.framework in Embed Frameworks */,
+				22AAFDAD22A52EA400192CB4 /* python3_ios-PIL._imagingmorph.framework in Embed Frameworks */,
+				22AAFDA722A52EA000192CB4 /* python3_ios-PIL._imaging.framework in Embed Frameworks */,
+				22AAFDAB22A52EA300192CB4 /* python3_ios-PIL._imagingmath.framework in Embed Frameworks */,
+				22AAFDAF22A52EA600192CB4 /* python3_ios-PIL._imagingtk.framework in Embed Frameworks */,
+				22AAFDB122A52EA700192CB4 /* pythonA-PIL._imaging.framework in Embed Frameworks */,
+				22AAFDB922A52EAD00192CB4 /* pythonA-PIL._imagingtk.framework in Embed Frameworks */,
+				22AAFDB322A52EA800192CB4 /* pythonA-PIL._imagingft.framework in Embed Frameworks */,
+				22AAFDB522A52EAA00192CB4 /* pythonA-PIL._imagingmath.framework in Embed Frameworks */,
+				22AAFDB722A52EAB00192CB4 /* pythonA-PIL._imagingmorph.framework in Embed Frameworks */,
+				22AAFDBF22A52EB300192CB4 /* pythonB-PIL._imagingmath.framework in Embed Frameworks */,
+				22AAFDC122A52EB500192CB4 /* pythonB-PIL._imagingmorph.framework in Embed Frameworks */,
+				22AAFDBD22A52EB100192CB4 /* pythonB-PIL._imagingft.framework in Embed Frameworks */,
+				22AAFDC322A52EB700192CB4 /* pythonB-PIL._imagingtk.framework in Embed Frameworks */,
+				22AAFDBB22A52EAF00192CB4 /* pythonB-PIL._imaging.framework in Embed Frameworks */,
+				22AAFDCD22A52EC100192CB4 /* pythonC-PIL._imagingtk.framework in Embed Frameworks */,
+				22AAFDCB22A52EBF00192CB4 /* pythonC-PIL._imagingmorph.framework in Embed Frameworks */,
+				22AAFDC722A52EBB00192CB4 /* pythonC-PIL._imagingft.framework in Embed Frameworks */,
+				22AAFDC522A52EB900192CB4 /* pythonC-PIL._imaging.framework in Embed Frameworks */,
+				22AAFDC922A52EBD00192CB4 /* pythonC-PIL._imagingmath.framework in Embed Frameworks */,
+				22AAFDD122A52EC500192CB4 /* pythonD-PIL._imagingft.framework in Embed Frameworks */,
+				22AAFDD322A52EC700192CB4 /* pythonD-PIL._imagingmath.framework in Embed Frameworks */,
+				22AAFDD722A52ECB00192CB4 /* pythonD-PIL._imagingtk.framework in Embed Frameworks */,
+				22AAFDCF22A52EC300192CB4 /* pythonD-PIL._imaging.framework in Embed Frameworks */,
+				22AAFDD522A52EC900192CB4 /* pythonD-PIL._imagingmorph.framework in Embed Frameworks */,
+				22AAFDDF22A52ED300192CB4 /* pythonE-PIL._imagingmorph.framework in Embed Frameworks */,
+				22AAFDD922A52ECD00192CB4 /* pythonE-PIL._imaging.framework in Embed Frameworks */,
+				22AAFDDD22A52ED100192CB4 /* pythonE-PIL._imagingmath.framework in Embed Frameworks */,
+				22AAFDE122A52ED600192CB4 /* pythonE-PIL._imagingtk.framework in Embed Frameworks */,
+				22AAFDDB22A52ECF00192CB4 /* pythonE-PIL._imagingft.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1171,6 +1214,36 @@
 		22AAFD0422A166AC00192CB4 /* python3_ios-cryptography.hazmat.bindings._openssl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-cryptography.hazmat.bindings._openssl.framework"; path = "Frameworks/python3_ios-cryptography.hazmat.bindings._openssl.framework"; sourceTree = "<group>"; };
 		22AAFD0522A166AC00192CB4 /* pythonB-cryptography.hazmat.bindings._padding.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-cryptography.hazmat.bindings._padding.framework"; path = "Frameworks/pythonB-cryptography.hazmat.bindings._padding.framework"; sourceTree = "<group>"; };
 		22AAFD0622A166AC00192CB4 /* pythonC-cryptography.hazmat.bindings._constant_time.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-cryptography.hazmat.bindings._constant_time.framework"; path = "Frameworks/pythonC-cryptography.hazmat.bindings._constant_time.framework"; sourceTree = "<group>"; };
+		22AAFD2E22A52C3800192CB4 /* python3_ios-PIL._imagingtk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-PIL._imagingtk.framework"; path = "Frameworks/python3_ios-PIL._imagingtk.framework"; sourceTree = "<group>"; };
+		22AAFD2F22A52C3800192CB4 /* python3_ios-PIL._imagingmorph.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-PIL._imagingmorph.framework"; path = "Frameworks/python3_ios-PIL._imagingmorph.framework"; sourceTree = "<group>"; };
+		22AAFD3022A52C3800192CB4 /* pythonD-PIL._imagingmath.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-PIL._imagingmath.framework"; path = "Frameworks/pythonD-PIL._imagingmath.framework"; sourceTree = "<group>"; };
+		22AAFD3122A52C3800192CB4 /* python3_ios-PIL._imagingft.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-PIL._imagingft.framework"; path = "Frameworks/python3_ios-PIL._imagingft.framework"; sourceTree = "<group>"; };
+		22AAFD3222A52C3800192CB4 /* pythonE-PIL._imagingtk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-PIL._imagingtk.framework"; path = "Frameworks/pythonE-PIL._imagingtk.framework"; sourceTree = "<group>"; };
+		22AAFD3322A52C3800192CB4 /* pythonA-PIL._imagingmath.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-PIL._imagingmath.framework"; path = "Frameworks/pythonA-PIL._imagingmath.framework"; sourceTree = "<group>"; };
+		22AAFD3422A52C3800192CB4 /* pythonA-PIL._imaging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-PIL._imaging.framework"; path = "Frameworks/pythonA-PIL._imaging.framework"; sourceTree = "<group>"; };
+		22AAFD3522A52C3900192CB4 /* pythonE-PIL._imagingmorph.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-PIL._imagingmorph.framework"; path = "Frameworks/pythonE-PIL._imagingmorph.framework"; sourceTree = "<group>"; };
+		22AAFD3622A52C3900192CB4 /* pythonE-PIL._imagingft.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-PIL._imagingft.framework"; path = "Frameworks/pythonE-PIL._imagingft.framework"; sourceTree = "<group>"; };
+		22AAFD3722A52C3900192CB4 /* pythonD-PIL._imagingmorph.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-PIL._imagingmorph.framework"; path = "Frameworks/pythonD-PIL._imagingmorph.framework"; sourceTree = "<group>"; };
+		22AAFD3822A52C3900192CB4 /* pythonE-PIL._imaging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-PIL._imaging.framework"; path = "Frameworks/pythonE-PIL._imaging.framework"; sourceTree = "<group>"; };
+		22AAFD3922A52C3900192CB4 /* pythonA-PIL._imagingft.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-PIL._imagingft.framework"; path = "Frameworks/pythonA-PIL._imagingft.framework"; sourceTree = "<group>"; };
+		22AAFD3A22A52C3900192CB4 /* pythonB-PIL._imagingtk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-PIL._imagingtk.framework"; path = "Frameworks/pythonB-PIL._imagingtk.framework"; sourceTree = "<group>"; };
+		22AAFD3B22A52C3900192CB4 /* python3_ios-PIL._imaging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-PIL._imaging.framework"; path = "Frameworks/python3_ios-PIL._imaging.framework"; sourceTree = "<group>"; };
+		22AAFD3C22A52C3A00192CB4 /* pythonA-PIL._imagingtk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-PIL._imagingtk.framework"; path = "Frameworks/pythonA-PIL._imagingtk.framework"; sourceTree = "<group>"; };
+		22AAFD3D22A52C3A00192CB4 /* pythonB-PIL._imaging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-PIL._imaging.framework"; path = "Frameworks/pythonB-PIL._imaging.framework"; sourceTree = "<group>"; };
+		22AAFD3E22A52C3A00192CB4 /* pythonC-PIL._imagingmorph.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-PIL._imagingmorph.framework"; path = "Frameworks/pythonC-PIL._imagingmorph.framework"; sourceTree = "<group>"; };
+		22AAFD3F22A52C3A00192CB4 /* pythonC-PIL._imagingmath.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-PIL._imagingmath.framework"; path = "Frameworks/pythonC-PIL._imagingmath.framework"; sourceTree = "<group>"; };
+		22AAFD4022A52C3A00192CB4 /* pythonB-PIL._imagingft.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-PIL._imagingft.framework"; path = "Frameworks/pythonB-PIL._imagingft.framework"; sourceTree = "<group>"; };
+		22AAFD4122A52C3B00192CB4 /* pythonC-PIL._imagingft.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-PIL._imagingft.framework"; path = "Frameworks/pythonC-PIL._imagingft.framework"; sourceTree = "<group>"; };
+		22AAFD4222A52C3B00192CB4 /* pythonC-PIL._imagingtk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-PIL._imagingtk.framework"; path = "Frameworks/pythonC-PIL._imagingtk.framework"; sourceTree = "<group>"; };
+		22AAFD4322A52C3B00192CB4 /* pythonD-PIL._imagingft.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-PIL._imagingft.framework"; path = "Frameworks/pythonD-PIL._imagingft.framework"; sourceTree = "<group>"; };
+		22AAFD4422A52C3B00192CB4 /* pythonD-PIL._imagingtk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-PIL._imagingtk.framework"; path = "Frameworks/pythonD-PIL._imagingtk.framework"; sourceTree = "<group>"; };
+		22AAFD4522A52C3B00192CB4 /* python3_ios-PIL._imagingmath.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-PIL._imagingmath.framework"; path = "Frameworks/python3_ios-PIL._imagingmath.framework"; sourceTree = "<group>"; };
+		22AAFD4622A52C3B00192CB4 /* pythonB-PIL._imagingmorph.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-PIL._imagingmorph.framework"; path = "Frameworks/pythonB-PIL._imagingmorph.framework"; sourceTree = "<group>"; };
+		22AAFD4722A52C3C00192CB4 /* pythonB-PIL._imagingmath.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-PIL._imagingmath.framework"; path = "Frameworks/pythonB-PIL._imagingmath.framework"; sourceTree = "<group>"; };
+		22AAFD4822A52C3C00192CB4 /* pythonA-PIL._imagingmorph.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-PIL._imagingmorph.framework"; path = "Frameworks/pythonA-PIL._imagingmorph.framework"; sourceTree = "<group>"; };
+		22AAFD4922A52C3C00192CB4 /* pythonC-PIL._imaging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-PIL._imaging.framework"; path = "Frameworks/pythonC-PIL._imaging.framework"; sourceTree = "<group>"; };
+		22AAFD4A22A52C3C00192CB4 /* pythonD-PIL._imaging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-PIL._imaging.framework"; path = "Frameworks/pythonD-PIL._imaging.framework"; sourceTree = "<group>"; };
+		22AAFD4B22A52C3C00192CB4 /* pythonE-PIL._imagingmath.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-PIL._imagingmath.framework"; path = "Frameworks/pythonE-PIL._imagingmath.framework"; sourceTree = "<group>"; };
 		22B750AC21FC671700241F27 /* Carnets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Carnets.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22B750AF21FC671700241F27 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		22B750B421FC671700241F27 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -1681,6 +1754,43 @@
 			name = Util;
 			sourceTree = "<group>";
 		};
+		22AAFD2D22A52B0900192CB4 /* Pillow */ = {
+			isa = PBXGroup;
+			children = (
+				22AAFD3B22A52C3900192CB4 /* python3_ios-PIL._imaging.framework */,
+				22AAFD3122A52C3800192CB4 /* python3_ios-PIL._imagingft.framework */,
+				22AAFD4522A52C3B00192CB4 /* python3_ios-PIL._imagingmath.framework */,
+				22AAFD2F22A52C3800192CB4 /* python3_ios-PIL._imagingmorph.framework */,
+				22AAFD2E22A52C3800192CB4 /* python3_ios-PIL._imagingtk.framework */,
+				22AAFD3422A52C3800192CB4 /* pythonA-PIL._imaging.framework */,
+				22AAFD3922A52C3900192CB4 /* pythonA-PIL._imagingft.framework */,
+				22AAFD3322A52C3800192CB4 /* pythonA-PIL._imagingmath.framework */,
+				22AAFD4822A52C3C00192CB4 /* pythonA-PIL._imagingmorph.framework */,
+				22AAFD3C22A52C3A00192CB4 /* pythonA-PIL._imagingtk.framework */,
+				22AAFD3D22A52C3A00192CB4 /* pythonB-PIL._imaging.framework */,
+				22AAFD4022A52C3A00192CB4 /* pythonB-PIL._imagingft.framework */,
+				22AAFD4722A52C3C00192CB4 /* pythonB-PIL._imagingmath.framework */,
+				22AAFD4622A52C3B00192CB4 /* pythonB-PIL._imagingmorph.framework */,
+				22AAFD3A22A52C3900192CB4 /* pythonB-PIL._imagingtk.framework */,
+				22AAFD4922A52C3C00192CB4 /* pythonC-PIL._imaging.framework */,
+				22AAFD4122A52C3B00192CB4 /* pythonC-PIL._imagingft.framework */,
+				22AAFD3F22A52C3A00192CB4 /* pythonC-PIL._imagingmath.framework */,
+				22AAFD3E22A52C3A00192CB4 /* pythonC-PIL._imagingmorph.framework */,
+				22AAFD4222A52C3B00192CB4 /* pythonC-PIL._imagingtk.framework */,
+				22AAFD4A22A52C3C00192CB4 /* pythonD-PIL._imaging.framework */,
+				22AAFD4322A52C3B00192CB4 /* pythonD-PIL._imagingft.framework */,
+				22AAFD3022A52C3800192CB4 /* pythonD-PIL._imagingmath.framework */,
+				22AAFD3722A52C3900192CB4 /* pythonD-PIL._imagingmorph.framework */,
+				22AAFD4422A52C3B00192CB4 /* pythonD-PIL._imagingtk.framework */,
+				22AAFD3822A52C3900192CB4 /* pythonE-PIL._imaging.framework */,
+				22AAFD3622A52C3900192CB4 /* pythonE-PIL._imagingft.framework */,
+				22AAFD4B22A52C3C00192CB4 /* pythonE-PIL._imagingmath.framework */,
+				22AAFD3522A52C3900192CB4 /* pythonE-PIL._imagingmorph.framework */,
+				22AAFD3222A52C3800192CB4 /* pythonE-PIL._imagingtk.framework */,
+			);
+			name = Pillow;
+			sourceTree = "<group>";
+		};
 		22B750A321FC671700241F27 = {
 			isa = PBXGroup;
 			children = (
@@ -1729,6 +1839,7 @@
 		22B750C121FC8F2C00241F27 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				22AAFD2D22A52B0900192CB4 /* Pillow */,
 				226CD0ED22A1639D004133E7 /* cryptography */,
 				2273F6332269E37600256401 /* pandas */,
 				2273F6322269E35C00256401 /* kiwisolver */,
