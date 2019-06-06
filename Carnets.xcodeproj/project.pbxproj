@@ -336,24 +336,6 @@
 		2299397822973F26007C140E /* URL+isDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2299397722973F26007C140E /* URL+isDirectory.swift */; };
 		229F12222243BC2E006487FD /* FontAwesome.otf in Resources */ = {isa = PBXBuildFile; fileRef = 229F12212243BAAE006487FD /* FontAwesome.otf */; };
 		22A1C69E21FE4143001B49F0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A1C69D21FE4142001B49F0 /* ViewController.swift */; };
-		22AAFD0A22A166C700192CB4 /* python3_ios-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0122A166AC00192CB4 /* python3_ios-cryptography.hazmat.bindings._constant_time.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD0C22A1685E00192CB4 /* python3_ios-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0422A166AC00192CB4 /* python3_ios-cryptography.hazmat.bindings._openssl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD0E22A1685F00192CB4 /* python3_ios-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFE22A166AC00192CB4 /* python3_ios-cryptography.hazmat.bindings._padding.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD1022A1686000192CB4 /* pythonA-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFD22A166AB00192CB4 /* pythonA-cryptography.hazmat.bindings._constant_time.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD1222A1686100192CB4 /* pythonA-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0322A166AC00192CB4 /* pythonA-cryptography.hazmat.bindings._openssl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD1422A1686200192CB4 /* pythonA-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFF22A166AC00192CB4 /* pythonA-cryptography.hazmat.bindings._padding.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD1622A1686300192CB4 /* pythonB-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCF822A166AB00192CB4 /* pythonB-cryptography.hazmat.bindings._constant_time.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD1822A1686400192CB4 /* pythonB-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCF922A166AB00192CB4 /* pythonB-cryptography.hazmat.bindings._openssl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD1A22A1686500192CB4 /* pythonB-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0522A166AC00192CB4 /* pythonB-cryptography.hazmat.bindings._padding.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD1C22A1686600192CB4 /* pythonC-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0622A166AC00192CB4 /* pythonC-cryptography.hazmat.bindings._constant_time.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD1E22A1686700192CB4 /* pythonC-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0022A166AC00192CB4 /* pythonC-cryptography.hazmat.bindings._openssl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD2022A1686800192CB4 /* pythonC-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFB22A166AB00192CB4 /* pythonC-cryptography.hazmat.bindings._padding.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD2222A1686900192CB4 /* pythonD-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFC22A166AB00192CB4 /* pythonD-cryptography.hazmat.bindings._constant_time.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD2422A1686A00192CB4 /* pythonD-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCF722A166AB00192CB4 /* pythonD-cryptography.hazmat.bindings._openssl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD2622A1686B00192CB4 /* pythonD-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0222A166AC00192CB4 /* pythonD-cryptography.hazmat.bindings._padding.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD2822A1686C00192CB4 /* pythonE-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCF622A166AB00192CB4 /* pythonE-cryptography.hazmat.bindings._constant_time.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD2A22A1686D00192CB4 /* pythonE-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCF522A166AB00192CB4 /* pythonE-cryptography.hazmat.bindings._openssl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22AAFD2C22A1686E00192CB4 /* pythonE-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFA22A166AB00192CB4 /* pythonE-cryptography.hazmat.bindings._padding.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22AAFDA722A52EA000192CB4 /* python3_ios-PIL._imaging.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD3B22A52C3900192CB4 /* python3_ios-PIL._imaging.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22AAFDA922A52EA200192CB4 /* python3_ios-PIL._imagingft.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD3122A52C3800192CB4 /* python3_ios-PIL._imagingft.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22AAFDAB22A52EA300192CB4 /* python3_ios-PIL._imagingmath.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD4522A52C3B00192CB4 /* python3_ios-PIL._imagingmath.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -384,6 +366,24 @@
 		22AAFDDD22A52ED100192CB4 /* pythonE-PIL._imagingmath.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD4B22A52C3C00192CB4 /* pythonE-PIL._imagingmath.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22AAFDDF22A52ED300192CB4 /* pythonE-PIL._imagingmorph.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD3522A52C3900192CB4 /* pythonE-PIL._imagingmorph.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22AAFDE122A52ED600192CB4 /* pythonE-PIL._imagingtk.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD3222A52C3800192CB4 /* pythonE-PIL._imagingtk.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDF422A5C1C800192CB4 /* python3_ios-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0122A166AC00192CB4 /* python3_ios-cryptography.hazmat.bindings._constant_time.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDF522A5C1C800192CB4 /* python3_ios-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0422A166AC00192CB4 /* python3_ios-cryptography.hazmat.bindings._openssl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDF622A5C1C800192CB4 /* python3_ios-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFE22A166AC00192CB4 /* python3_ios-cryptography.hazmat.bindings._padding.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDF722A5C1C800192CB4 /* pythonA-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFD22A166AB00192CB4 /* pythonA-cryptography.hazmat.bindings._constant_time.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDF822A5C1C800192CB4 /* pythonA-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0322A166AC00192CB4 /* pythonA-cryptography.hazmat.bindings._openssl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDF922A5C1C800192CB4 /* pythonA-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFF22A166AC00192CB4 /* pythonA-cryptography.hazmat.bindings._padding.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDFA22A5C1C800192CB4 /* pythonB-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCF822A166AB00192CB4 /* pythonB-cryptography.hazmat.bindings._constant_time.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDFB22A5C1C800192CB4 /* pythonB-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCF922A166AB00192CB4 /* pythonB-cryptography.hazmat.bindings._openssl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDFC22A5C1C800192CB4 /* pythonB-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0522A166AC00192CB4 /* pythonB-cryptography.hazmat.bindings._padding.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDFD22A5C1C800192CB4 /* pythonC-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0622A166AC00192CB4 /* pythonC-cryptography.hazmat.bindings._constant_time.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDFE22A5C1C800192CB4 /* pythonC-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0022A166AC00192CB4 /* pythonC-cryptography.hazmat.bindings._openssl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFDFF22A5C1C800192CB4 /* pythonC-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFB22A166AB00192CB4 /* pythonC-cryptography.hazmat.bindings._padding.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFE0022A5C1C800192CB4 /* pythonD-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFC22A166AB00192CB4 /* pythonD-cryptography.hazmat.bindings._constant_time.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFE0122A5C1C800192CB4 /* pythonD-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCF722A166AB00192CB4 /* pythonD-cryptography.hazmat.bindings._openssl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFE0222A5C1C800192CB4 /* pythonD-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFD0222A166AC00192CB4 /* pythonD-cryptography.hazmat.bindings._padding.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFE0322A5C1C800192CB4 /* pythonE-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCF622A166AB00192CB4 /* pythonE-cryptography.hazmat.bindings._constant_time.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFE0422A5C1C800192CB4 /* pythonE-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCF522A166AB00192CB4 /* pythonE-cryptography.hazmat.bindings._openssl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22AAFE0522A5C1C800192CB4 /* pythonE-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFA22A166AB00192CB4 /* pythonE-cryptography.hazmat.bindings._padding.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22B750B021FC671700241F27 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B750AF21FC671700241F27 /* AppDelegate.swift */; };
 		22B750B521FC671700241F27 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22B750B321FC671700241F27 /* Main.storyboard */; };
 		22B750B721FC671900241F27 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22B750B621FC671900241F27 /* Assets.xcassets */; };
@@ -544,24 +544,6 @@
 				221BB17322625AB3000AF355 /* pythonD-matplotlib._contour.framework in Embed Frameworks */,
 				221BB17422625AB3000AF355 /* pythonD-matplotlib._image.framework in Embed Frameworks */,
 				221BB17522625AB3000AF355 /* pythonD-matplotlib._path.framework in Embed Frameworks */,
-				22AAFD0A22A166C700192CB4 /* python3_ios-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */,
-				22AAFD0E22A1685F00192CB4 /* python3_ios-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */,
-				22AAFD0C22A1685E00192CB4 /* python3_ios-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */,
-				22AAFD1222A1686100192CB4 /* pythonA-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */,
-				22AAFD1422A1686200192CB4 /* pythonA-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */,
-				22AAFD1022A1686000192CB4 /* pythonA-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */,
-				22AAFD1622A1686300192CB4 /* pythonB-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */,
-				22AAFD1822A1686400192CB4 /* pythonB-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */,
-				22AAFD1A22A1686500192CB4 /* pythonB-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */,
-				22AAFD1C22A1686600192CB4 /* pythonC-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */,
-				22AAFD2022A1686800192CB4 /* pythonC-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */,
-				22AAFD1E22A1686700192CB4 /* pythonC-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */,
-				22AAFD2422A1686A00192CB4 /* pythonD-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */,
-				22AAFD2622A1686B00192CB4 /* pythonD-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */,
-				22AAFD2222A1686900192CB4 /* pythonD-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */,
-				22AAFD2A22A1686D00192CB4 /* pythonE-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */,
-				22AAFD2C22A1686E00192CB4 /* pythonE-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */,
-				22AAFD2822A1686C00192CB4 /* pythonE-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */,
 				221BB17622625AB3000AF355 /* pythonD-matplotlib._png.framework in Embed Frameworks */,
 				221BB17722625AB3000AF355 /* pythonD-matplotlib._qhull.framework in Embed Frameworks */,
 				221BB17822625AB3000AF355 /* pythonD-matplotlib._tri.framework in Embed Frameworks */,
@@ -861,6 +843,24 @@
 				22AAFDDD22A52ED100192CB4 /* pythonE-PIL._imagingmath.framework in Embed Frameworks */,
 				22AAFDE122A52ED600192CB4 /* pythonE-PIL._imagingtk.framework in Embed Frameworks */,
 				22AAFDDB22A52ECF00192CB4 /* pythonE-PIL._imagingft.framework in Embed Frameworks */,
+				22AAFDF422A5C1C800192CB4 /* python3_ios-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */,
+				22AAFDF522A5C1C800192CB4 /* python3_ios-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */,
+				22AAFDF622A5C1C800192CB4 /* python3_ios-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */,
+				22AAFDF722A5C1C800192CB4 /* pythonA-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */,
+				22AAFDF822A5C1C800192CB4 /* pythonA-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */,
+				22AAFDF922A5C1C800192CB4 /* pythonA-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */,
+				22AAFDFA22A5C1C800192CB4 /* pythonB-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */,
+				22AAFDFB22A5C1C800192CB4 /* pythonB-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */,
+				22AAFDFC22A5C1C800192CB4 /* pythonB-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */,
+				22AAFDFD22A5C1C800192CB4 /* pythonC-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */,
+				22AAFDFE22A5C1C800192CB4 /* pythonC-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */,
+				22AAFDFF22A5C1C800192CB4 /* pythonC-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */,
+				22AAFE0022A5C1C800192CB4 /* pythonD-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */,
+				22AAFE0122A5C1C800192CB4 /* pythonD-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */,
+				22AAFE0222A5C1C800192CB4 /* pythonD-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */,
+				22AAFE0322A5C1C800192CB4 /* pythonE-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */,
+				22AAFE0422A5C1C800192CB4 /* pythonE-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */,
+				22AAFE0522A5C1C800192CB4 /* pythonE-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
