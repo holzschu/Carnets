@@ -199,7 +199,10 @@ extension ViewController {
         // Must be identical to code in keyboardDidShow()
         // This will only apply to the first keyboard. We have to register a callback for
         // the other keyboards.
-        // undo, redo, save, add, cut, copy, paste //  done, up, down, run, escape.
+        // Notebooks:
+        // escape, tab, shift tab, undo, redo, save, add, cut, copy, paste //  up, down, run.
+        // Other views (including edit):
+        // undo, redo, save // cut, copy, paste.
         var leadingButtons: [UIBarButtonItem] =  [doneButton]
         if (needTabKey) {
             leadingButtons.append(tabButton)
@@ -221,8 +224,7 @@ extension ViewController {
             [upButton, downButton,
              UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
              runButton, // stopButton,
-            ],
-            representativeItem: nil)]
+            ], representativeItem: nil)]
         // Don't prepare the keyboard until this one has disappeared, otherwise the buttons
         // on the first keyboard disappear.
         NotificationCenter.default.addObserver(self, selector: #selector(prepareNextKeyboard), name: UIResponder.keyboardDidHideNotification, object: nil)
@@ -249,21 +251,30 @@ extension ViewController {
         // edit mode autocomplete
         // Create a "tab" keydown event. Either autocomplete or indent code
         // TODO: if shift is selected on keyboard, un-indent code (and remove shiftTabAction)
-        webView.evaluateJavaScript("var event = new KeyboardEvent('keydown', {which:9, keyCode:9, bubbles:true}); if (!Jupyter.notebook.get_selected_cell().handle_keyevent(Jupyter.notebook.get_selected_cell().code_mirror, event)) { Jupyter.notebook.get_selected_cell().code_mirror.execCommand('defaultSoftTab');} ") { (result, error) in
-            if error != nil {
-                print(error as! String)
-                print(result as! String)
+        if (notebookCellInsertMode) {
+            webView.evaluateJavaScript("var event = new KeyboardEvent('keydown', {which:9, keyCode:9, bubbles:true}); if (!Jupyter.notebook.get_selected_cell().handle_keyevent(Jupyter.notebook.get_selected_cell().code_mirror, event)) { Jupyter.notebook.get_selected_cell().code_mirror.execCommand('defaultSoftTab');} ") { (result, error) in
+                if error != nil {
+                    print(error! as Error)
+                }
+                if (result != nil) {
+                    print(result as! String)
+                }
             }
         }
     }
     
+    // shift-tab in Edit mode = crash
     @objc private func shiftTabAction(_ sender: UIBarButtonItem) {
         // edit mode autocomplete
         // Create a "shift + tab" keydown event. Either print function help or unindent code
-        webView.evaluateJavaScript("var event = new KeyboardEvent('keydown', {which:9, keyCode:9, shiftKey:true, bubbles:true}); if (!Jupyter.notebook.get_selected_cell().handle_keyevent(Jupyter.notebook.get_selected_cell().code_mirror, event)) { Jupyter.notebook.get_selected_cell().code_mirror.execCommand('indentLess');} ") { (result, error) in
-            if error != nil {
-                print(error as! String)
-                print(result as! String)
+        if (notebookCellInsertMode) {
+            webView.evaluateJavaScript("var event = new KeyboardEvent('keydown', {which:9, keyCode:9, shiftKey:true, bubbles:true}); if (!Jupyter.notebook.get_selected_cell().handle_keyevent(Jupyter.notebook.get_selected_cell().code_mirror, event)) { Jupyter.notebook.get_selected_cell().code_mirror.execCommand('indentLess');} ") { (result, error) in
+                if error != nil {
+                    print(error! as Error)
+                }
+                if (result != nil) {
+                    print(result as! String)
+                }
             }
         }
     }
@@ -272,7 +283,9 @@ extension ViewController {
         // edit mode cut (works)
         webView.evaluateJavaScript("document.execCommand('cut');") { (result, error) in
             if error != nil {
-                print(error as! String)
+                print(error! as Error)
+            }
+            if (result != nil) {
                 print(result as! String)
             }
         }
@@ -288,7 +301,9 @@ extension ViewController {
         // edit mode copy (works)
         webView.evaluateJavaScript("document.execCommand('copy');") { (result, error) in
             if error != nil {
-                print(error as! String)
+                print(error! as Error)
+            }
+            if (result != nil) {
                 print(result as! String)
             }
         }
@@ -317,105 +332,176 @@ extension ViewController {
     }
     
     @objc func saveAction(_ sender: UIBarButtonItem) {
-        webView.evaluateJavaScript("Jupyter.notebook.save_notebook();") { (result, error) in
-            if error != nil {
-                // print(error)
-                // print(result)
+        guard (kernelURL != nil) else { return }
+        if (kernelURL!.path.hasPrefix("/notebooks")) {
+            webView.evaluateJavaScript("Jupyter.notebook.save_notebook();") { (result, error) in
+                if error != nil {
+                    print(error! as Error)
+                }
+                if (result != nil) {
+                    print(result as! String)
+                }
+            }
+        } else {
+            webView.evaluateJavaScript("Jupyter.editor.save();") { (result, error) in
+                if error != nil {
+                    print(error! as Error)
+                }
+                if (result != nil) {
+                    print(result as! String)
+                }
             }
         }
     }
     
     // For add cell and run cell: we keep the notebook in edit mode, otherwise the keyboard will disappear
     @objc private func addAction(_ sender: UIBarButtonItem) {
-        webView.evaluateJavaScript("Jupyter.notebook.insert_cell_below(); Jupyter.notebook.select_next(true); Jupyter.notebook.focus_cell(); Jupyter.notebook.edit_mode();") { (result, error) in
-            if error != nil {
-                print(error as! String)
-                print(result as! String)
+        if (notebookCellInsertMode) {
+            webView.evaluateJavaScript("Jupyter.notebook.insert_cell_below(); Jupyter.notebook.select_next(true); Jupyter.notebook.focus_cell(); Jupyter.notebook.edit_mode();") { (result, error) in
+                if error != nil {
+                    print(error! as Error)
+                }
+                if (result != nil) {
+                    print(result as! String)
+                }
             }
         }
     }
     
     @objc func runAction(_ sender: UIBarButtonItem) {
-        webView.evaluateJavaScript("Jupyter.notebook.execute_cell_and_select_below(); Jupyter.notebook.edit_mode();") { (result, error) in
-            if error != nil {
-                print(error as! String)
-                print(result as! String)
+        if (notebookCellInsertMode) {
+            webView.evaluateJavaScript("Jupyter.notebook.execute_cell_and_select_below(); Jupyter.notebook.edit_mode();") { (result, error) in
+                if error != nil {
+                    print(error! as Error)
+                }
+                if (result != nil) {
+                    print(result as! String)
+                }
             }
         }
     }
     
     @objc private func upAction(_ sender: UIBarButtonItem) {
-        webView.evaluateJavaScript("Jupyter.notebook.select_prev(true); Jupyter.notebook.focus_cell(); Jupyter.notebook.edit_mode();") { (result, error) in
-            if error != nil {
-                print(error as! String)
-                print(result as! String)
+        if (notebookCellInsertMode) {
+            webView.evaluateJavaScript("Jupyter.notebook.select_prev(true); Jupyter.notebook.focus_cell(); Jupyter.notebook.edit_mode();") { (result, error) in
+                if error != nil {
+                    print(error! as Error)
+                }
+                if (result != nil) {
+                    print(result as! String)
+                }
             }
         }
     }
     
     @objc private func downAction(_ sender: UIBarButtonItem) {
-        webView.evaluateJavaScript("Jupyter.notebook.select_next(true); Jupyter.notebook.focus_cell(); Jupyter.notebook.edit_mode();") { (result, error) in
-            if error != nil {
-                print(error as! String)
-                print(result as! String)
+        if (notebookCellInsertMode) {
+            webView.evaluateJavaScript("Jupyter.notebook.select_next(true); Jupyter.notebook.focus_cell(); Jupyter.notebook.edit_mode();") { (result, error) in
+                if error != nil {
+                    print(error! as Error)
+                }
+                if (result != nil) {
+                    print(result as! String)
+                }
             }
         }
     }
     
     @objc private func stopAction(_ sender: UIBarButtonItem) {
         // Does not work. Also, not desireable.
-        webView.evaluateJavaScript("Jupyter.notebook.kernel.interrupt();") { (result, error) in
-            if error != nil {
-                print(error as! String)
-                print(result as! String)
+        if (notebookCellInsertMode) {
+            webView.evaluateJavaScript("Jupyter.notebook.kernel.interrupt();") { (result, error) in
+                if error != nil {
+                    print(error! as Error)
+                }
+                if (result != nil) {
+                    print(result as! String)
+                }
             }
         }
     }
     
     @objc func undoAction(_ sender: UIBarButtonItem) {
         // works
-        webView.evaluateJavaScript("Jupyter.notebook.get_selected_cell().code_mirror.execCommand('undo');") { (result, error) in
-            if error != nil {
-                print(error as! String)
-                print(result as! String)
+        if (notebookCellInsertMode) {
+            webView.evaluateJavaScript("Jupyter.notebook.get_selected_cell().code_mirror.execCommand('undo');") { (result, error) in
+                if error != nil {
+                    print(error! as Error)
+                }
+                if (result != nil) {
+                    print(result as! String)
+                }
+            }
+        } else {
+            webView.evaluateJavaScript("Jupyter.editor.codemirror.execCommand('undo');") { (result, error) in
+                if error != nil {
+                    print(error! as Error)
+                }
+                if (result != nil) {
+                    print(result as! String)
+                }
             }
         }
     }
     
     @objc func redoAction(_ sender: UIBarButtonItem) {
         // works
-        webView.evaluateJavaScript("Jupyter.notebook.get_selected_cell().code_mirror.execCommand('redo');") { (result, error) in
-            if error != nil {
-                print(error as! String)
-                print(result as! String)
+        if (notebookCellInsertMode) {
+            webView.evaluateJavaScript("Jupyter.notebook.get_selected_cell().code_mirror.execCommand('redo');") { (result, error) in
+                if error != nil {
+                    print(error! as Error)
+                }
+                if (result != nil) {
+                    print(result as! String)
+                }
+            }
+        } else {
+            webView.evaluateJavaScript("Jupyter.editor.codemirror.execCommand('redo');") { (result, error) in
+                if error != nil {
+                    print(error! as Error)
+                }
+                if (result != nil) {
+                    print(result as! String)
+                }
             }
         }
     }
     
     @objc private func keyboardDidShow() {
-        var leadingButtons: [UIBarButtonItem] =  [doneButton]
-        if (needTabKey) {
-            leadingButtons.append(tabButton)
+        // Notebooks:
+        // escape, tab, shift tab, undo, redo, save, add, cut, copy, paste //  up, down, run.
+        // Other views (including edit):
+        // undo, redo, save // cut, copy, paste.
+        // If it's a notebook, a file being edited, a tree, remove /prefix:
+        guard(kernelURL != nil) else { return }
+        if (kernelURL!.path.hasPrefix("/notebooks")) {
+            var leadingButtons: [UIBarButtonItem] =  [doneButton]
+            if (needTabKey) {
+                leadingButtons.append(tabButton)
+            }
+            leadingButtons.append(shiftTabButton)
+            leadingButtons.append(undoButton)
+            leadingButtons.append(redoButton)
+            leadingButtons.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
+            leadingButtons.append(saveButton)
+            leadingButtons.append(addButton)
+            leadingButtons.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
+            leadingButtons.append(cutButton)
+            leadingButtons.append(copyButton)
+            leadingButtons.append(pasteButton)
+            
+            contentView?.inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                leadingButtons, representativeItem: nil)]
+            contentView?.inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                [upButton, downButton,
+                 UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                 runButton, // stopButton,
+                ], representativeItem: nil)]
+        } else {
+            contentView?.inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                [undoButton, redoButton, saveButton], representativeItem: nil)]
+            contentView?.inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                [cutButton, copyButton, pasteButton], representativeItem: nil)]
         }
-        leadingButtons.append(shiftTabButton)
-        leadingButtons.append(undoButton)
-        leadingButtons.append(redoButton)
-        leadingButtons.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
-        leadingButtons.append(saveButton)
-        leadingButtons.append(addButton)
-        leadingButtons.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
-        leadingButtons.append(cutButton)
-        leadingButtons.append(copyButton)
-        leadingButtons.append(pasteButton)
-        
-        contentView?.inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
-            leadingButtons, representativeItem: nil)]
-        contentView?.inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
-            [upButton, downButton,
-             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-             runButton, // stopButton!,
-            ],
-            representativeItem: nil)]
     }
-
 }

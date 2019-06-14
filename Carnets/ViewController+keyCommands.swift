@@ -17,8 +17,10 @@ extension ViewController {
     @objc func escapeKey(_ sender: UIBarButtonItem) {
         webView.evaluateJavaScript("Jupyter.notebook.command_mode();") { (result, error) in
             if error != nil {
-                print(error)
-                print(result)
+                print(error! as Error)
+            }
+            if (result != nil) {
+                print(result as! String)
             }
         }
     }
@@ -67,7 +69,7 @@ extension ViewController {
         let commandString = "Jupyter.notebook.get_selected_cell().code_mirror.replaceSelection('\(sender.input!)');"
         self.webView.evaluateJavaScript(commandString) { (result, error) in
             if error != nil {
-                print(error as! String)
+                print(error)
                 print(result as! String)
             }
         }
