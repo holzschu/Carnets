@@ -190,45 +190,75 @@ extension ViewController {
         return nil
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Add cell buttons at the bottom of the screen for iPad.
-        // From https://stackoverflow.com/questions/48978134/modifying-keyboard-toolbar-accessory-view-with-wkwebview
-        webView.allowsBackForwardNavigationGestures = true
-        webView.loadHTMLString("<html><body><div contenteditable='true'></div></body></html>", baseURL: nil)
-        // Must be identical to code in keyboardDidShow()
+    @objc func prepareFirstKeyboard() {
+        // Must be identical to code in keyboardDidChange()
         // This will only apply to the first keyboard. We have to register a callback for
         // the other keyboards.
         // Notebooks:
         // escape, tab, shift tab, undo, redo, save, add, cut, copy, paste //  up, down, run.
         // Other views (including edit):
         // undo, redo, save // cut, copy, paste.
-        var leadingButtons: [UIBarButtonItem] =  [doneButton]
-        if (needTabKey) {
-            leadingButtons.append(tabButton)
+        
+        let filePath = presentedItemURL?.path
+        if (filePath?.hasSuffix(".ipynb") ?? false) {
+            if ((externalKeyboardPresent ?? false) || !(multiCharLanguageWithSuggestions ?? false)) {
+
+                var leadingButtons: [UIBarButtonItem] =  [doneButton]
+                if (needTabKey && !(externalKeyboardPresent ?? false)) {
+                    // no need for a tab key if there is an external keyboard
+                    leadingButtons.append(tabButton)
+                }
+                leadingButtons.append(shiftTabButton)
+                leadingButtons.append(undoButton)
+                leadingButtons.append(redoButton)
+                leadingButtons.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
+                leadingButtons.append(saveButton)
+                leadingButtons.append(addButton)
+                leadingButtons.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
+                leadingButtons.append(cutButton)
+                leadingButtons.append(copyButton)
+                leadingButtons.append(pasteButton)
+                
+                // We need "representativeItem: nil" otherwise iOS compress the buttons into the representative item
+                contentView?.inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                    leadingButtons, representativeItem: nil)]
+                contentView?.inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                    [upButton, downButton,
+                     UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                     runButton, // stopButton,
+                    ], representativeItem: nil)]
+            } else {
+                // We writing in Hindi, Chinese or Japanese. The keyboard uses a large place in the center for suggestions.
+                // We can only put 3 buttons on each side:
+                inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                    [undoButton, redoButton, runButton], representativeItem: nil)]
+                inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                    [cutButton, copyButton, pasteButton], representativeItem: nil)]
+            }
+        } else {
+            // Directory or edit text files. Only these buttons make sense
+            inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                [undoButton, redoButton, saveButton], representativeItem: nil)]
+            inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                [cutButton, copyButton, pasteButton], representativeItem: nil)]
         }
-        leadingButtons.append(shiftTabButton)
-        leadingButtons.append(undoButton)
-        leadingButtons.append(redoButton)
-        leadingButtons.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
-        leadingButtons.append(saveButton)
-        leadingButtons.append(addButton)
-        leadingButtons.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
-        leadingButtons.append(cutButton)
-        leadingButtons.append(copyButton)
-        leadingButtons.append(pasteButton)
+
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Add cell buttons at the bottom of the screen for iPad.
+        // From https://stackoverflow.com/questions/48978134/modifying-keyboard-toolbar-accessory-view-with-wkwebview
+        webView.allowsBackForwardNavigationGestures = true
+        webView.loadHTMLString("<html><body><div contenteditable='true'></div></body></html>", baseURL: nil)
         
-        inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
-            leadingButtons, representativeItem: nil)]
-        inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
-            [upButton, downButton,
-             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-             runButton, // stopButton,
-            ], representativeItem: nil)]
-        // Don't prepare the keyboard until this one has disappeared, otherwise the buttons
-        // on the first keyboard disappear.
-        NotificationCenter.default.addObserver(self, selector: #selector(prepareNextKeyboard), name: UIResponder.keyboardDidHideNotification, object: nil)
+        prepareFirstKeyboard()
         
+        // Add a callback to change the buttons every time the user changes the input method:
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidChange), name: UITextInputMode.currentInputModeDidChangeNotification, object: nil)
+        // And another to be called each time the keyboard is resized (including when an external KB is connected):
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidChange), name: UIResponder.keyboardDidChangeFrameNotification, object: nil)
+
         // in case Jupyter has started before the view is active (unlikely):
         guard (serverAddress != nil) else {
             NSLog("serverAddress is nil, return from load")
@@ -242,11 +272,6 @@ extension ViewController {
         webView.load(URLRequest(url: kernelURL!))
     }
     
-    // As soon as the first keyboard has been released, prepare a callback for the next one:
-    @objc private func prepareNextKeyboard() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: UIResponder.keyboardDidShowNotification, object: nil)
-    }
-    
     @objc private func autocompleteAction(_ sender: UIBarButtonItem) {
         // edit mode autocomplete
         // Create a "tab" keydown event. Either autocomplete or indent code
@@ -254,10 +279,10 @@ extension ViewController {
         if (notebookCellInsertMode) {
             webView.evaluateJavaScript("var event = new KeyboardEvent('keydown', {which:9, keyCode:9, bubbles:true}); if (!Jupyter.notebook.get_selected_cell().handle_keyevent(Jupyter.notebook.get_selected_cell().code_mirror, event)) { Jupyter.notebook.get_selected_cell().code_mirror.execCommand('defaultSoftTab');} ") { (result, error) in
                 if error != nil {
-                    print(error! as Error)
+                    print(error)
                 }
                 if (result != nil) {
-                    print(result as! String)
+                    print(result)
                 }
             }
         }
@@ -270,10 +295,10 @@ extension ViewController {
         if (notebookCellInsertMode) {
             webView.evaluateJavaScript("var event = new KeyboardEvent('keydown', {which:9, keyCode:9, shiftKey:true, bubbles:true}); if (!Jupyter.notebook.get_selected_cell().handle_keyevent(Jupyter.notebook.get_selected_cell().code_mirror, event)) { Jupyter.notebook.get_selected_cell().code_mirror.execCommand('indentLess');} ") { (result, error) in
                 if error != nil {
-                    print(error! as Error)
+                    print(error)
                 }
                 if (result != nil) {
-                    print(result as! String)
+                    print(result)
                 }
             }
         }
@@ -283,10 +308,10 @@ extension ViewController {
         // edit mode cut (works)
         webView.evaluateJavaScript("document.execCommand('cut');") { (result, error) in
             if error != nil {
-                print(error! as Error)
+                print(error)
             }
             if (result != nil) {
-                print(result as! String)
+                print(result)
             }
         }
         // command mode cut (works)
@@ -301,10 +326,10 @@ extension ViewController {
         // edit mode copy (works)
         webView.evaluateJavaScript("document.execCommand('copy');") { (result, error) in
             if error != nil {
-                print(error! as Error)
+                print(error)
             }
             if (result != nil) {
-                print(result as! String)
+                print(result)
             }
         }
         // command mode copy (works)
@@ -336,19 +361,19 @@ extension ViewController {
         if (kernelURL!.path.hasPrefix("/notebooks")) {
             webView.evaluateJavaScript("Jupyter.notebook.save_notebook();") { (result, error) in
                 if error != nil {
-                    print(error! as Error)
+                    print(error)
                 }
                 if (result != nil) {
-                    print(result as! String)
+                    print(result)
                 }
             }
         } else {
             webView.evaluateJavaScript("Jupyter.editor.save();") { (result, error) in
                 if error != nil {
-                    print(error! as Error)
+                    print(error)
                 }
                 if (result != nil) {
-                    print(result as! String)
+                    print(result)
                 }
             }
         }
@@ -359,10 +384,10 @@ extension ViewController {
         if (notebookCellInsertMode) {
             webView.evaluateJavaScript("Jupyter.notebook.insert_cell_below(); Jupyter.notebook.select_next(true); Jupyter.notebook.focus_cell(); Jupyter.notebook.edit_mode();") { (result, error) in
                 if error != nil {
-                    print(error! as Error)
+                    print(error)
                 }
                 if (result != nil) {
-                    print(result as! String)
+                    print(result)
                 }
             }
         }
@@ -372,10 +397,10 @@ extension ViewController {
         if (notebookCellInsertMode) {
             webView.evaluateJavaScript("Jupyter.notebook.execute_cell_and_select_below(); Jupyter.notebook.edit_mode();") { (result, error) in
                 if error != nil {
-                    print(error! as Error)
+                    print(error)
                 }
                 if (result != nil) {
-                    print(result as! String)
+                    print(result)
                 }
             }
         }
@@ -385,10 +410,10 @@ extension ViewController {
         if (notebookCellInsertMode) {
             webView.evaluateJavaScript("Jupyter.notebook.select_prev(true); Jupyter.notebook.focus_cell(); Jupyter.notebook.edit_mode();") { (result, error) in
                 if error != nil {
-                    print(error! as Error)
+                    print(error)
                 }
                 if (result != nil) {
-                    print(result as! String)
+                    print(result)
                 }
             }
         }
@@ -398,10 +423,10 @@ extension ViewController {
         if (notebookCellInsertMode) {
             webView.evaluateJavaScript("Jupyter.notebook.select_next(true); Jupyter.notebook.focus_cell(); Jupyter.notebook.edit_mode();") { (result, error) in
                 if error != nil {
-                    print(error! as Error)
+                    print(error)
                 }
                 if (result != nil) {
-                    print(result as! String)
+                    print(result)
                 }
             }
         }
@@ -412,10 +437,10 @@ extension ViewController {
         if (notebookCellInsertMode) {
             webView.evaluateJavaScript("Jupyter.notebook.kernel.interrupt();") { (result, error) in
                 if error != nil {
-                    print(error! as Error)
+                    print(error)
                 }
                 if (result != nil) {
-                    print(result as! String)
+                    print(result)
                 }
             }
         }
@@ -426,19 +451,19 @@ extension ViewController {
         if (notebookCellInsertMode) {
             webView.evaluateJavaScript("Jupyter.notebook.get_selected_cell().code_mirror.execCommand('undo');") { (result, error) in
                 if error != nil {
-                    print(error! as Error)
+                    print(error)
                 }
                 if (result != nil) {
-                    print(result as! String)
+                    print(result)
                 }
             }
         } else {
             webView.evaluateJavaScript("Jupyter.editor.codemirror.execCommand('undo');") { (result, error) in
                 if error != nil {
-                    print(error! as Error)
+                    print(error)
                 }
                 if (result != nil) {
-                    print(result as! String)
+                    print(result)
                 }
             }
         }
@@ -449,55 +474,95 @@ extension ViewController {
         if (notebookCellInsertMode) {
             webView.evaluateJavaScript("Jupyter.notebook.get_selected_cell().code_mirror.execCommand('redo');") { (result, error) in
                 if error != nil {
-                    print(error! as Error)
+                    print(error)
                 }
                 if (result != nil) {
-                    print(result as! String)
+                    print(result)
                 }
             }
         } else {
             webView.evaluateJavaScript("Jupyter.editor.codemirror.execCommand('redo');") { (result, error) in
                 if error != nil {
-                    print(error! as Error)
+                    print(error)
                 }
                 if (result != nil) {
-                    print(result as! String)
+                    print(result)
                 }
             }
         }
     }
-    
-    @objc private func keyboardDidShow() {
+
+    @objc private func keyboardDidChange(notification: NSNotification) {
         // Notebooks:
         // escape, tab, shift tab, undo, redo, save, add, cut, copy, paste //  up, down, run.
         // Other views (including edit):
         // undo, redo, save // cut, copy, paste.
         // If it's a notebook, a file being edited, a tree, remove /prefix:
-        guard(kernelURL != nil) else { return }
-        if (kernelURL!.path.hasPrefix("/notebooks")) {
-            var leadingButtons: [UIBarButtonItem] =  [doneButton]
-            if (needTabKey) {
-                leadingButtons.append(tabButton)
+        // Only use "representativeItem" if keyboard has suggestion bar. Otherwise use "nil".
+        // First update multiCharLanguageWithSuggestions:
+        let keyboardLanguage = contentView?.textInputMode?.primaryLanguage
+        if (keyboardLanguage != nil) {
+            // TODO: currently, we have no way to distinguish between Hindi and Hindi-Transliteration.
+            // We treat them the same until we have a way to separate.
+            // Is the keyboard language one of the multi-input language? Chinese, Japanese and Hindi-Transliteration
+            // keyboardLanguage = "hi" -- not enough
+            // keyboardLanguage = "zh-": all of them
+            // keyboardLanguage = "jp-": all of them
+            if (keyboardLanguage!.hasPrefix("hi") || keyboardLanguage!.hasPrefix("zh") || keyboardLanguage!.hasPrefix("ja")) {
+                multiCharLanguageWithSuggestions = true
+            } else {
+                // otherwise return false:
+                multiCharLanguageWithSuggestions = false
             }
-            leadingButtons.append(shiftTabButton)
-            leadingButtons.append(undoButton)
-            leadingButtons.append(redoButton)
-            leadingButtons.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
-            leadingButtons.append(saveButton)
-            leadingButtons.append(addButton)
-            leadingButtons.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
-            leadingButtons.append(cutButton)
-            leadingButtons.append(copyButton)
-            leadingButtons.append(pasteButton)
-            
-            contentView?.inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
-                leadingButtons, representativeItem: nil)]
-            contentView?.inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
-                [upButton, downButton,
-                 UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-                 runButton, // stopButton,
-                ], representativeItem: nil)]
+        }
+        
+        guard(kernelURL != nil) else { return }
+        // Is there an external keyboard connected?
+        let info = notification.userInfo
+        if (info != nil) {
+            // "keyboardFrameEnd" is a CGRect corresponding to the size of the keyboard plus the button bar.
+            // It's 55 when there is an external keyboard connected, 300+ without.
+            // Actual values may vary depending on device, but 60 seems a good threshold.
+            let keyboardFrame: CGRect = (info![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+            externalKeyboardPresent = keyboardFrame.size.height < 60
+        }
+        
+        if (kernelURL!.path.hasPrefix("/notebooks")) {
+            if ((externalKeyboardPresent ?? false) || !(multiCharLanguageWithSuggestions ?? false)) {
+                var leadingButtons: [UIBarButtonItem] =  [doneButton]
+                if (needTabKey && !(externalKeyboardPresent ?? false)) {
+                    // no need for a tab key if there is an external keyboard
+                    leadingButtons.append(tabButton)
+                }
+                leadingButtons.append(shiftTabButton)
+                leadingButtons.append(undoButton)
+                leadingButtons.append(redoButton)
+                leadingButtons.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
+                leadingButtons.append(saveButton)
+                leadingButtons.append(addButton)
+                leadingButtons.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
+                leadingButtons.append(cutButton)
+                leadingButtons.append(copyButton)
+                leadingButtons.append(pasteButton)
+             
+                // We need "representativeItem: nil" otherwise iOS compress the buttons into the representative item
+                contentView?.inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                    leadingButtons, representativeItem: nil)]
+                contentView?.inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                    [upButton, downButton,
+                     UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                     runButton, // stopButton,
+                    ], representativeItem: nil)]
+            } else {
+                // We writing in Hindi, Chinese or Japanese. The keyboard uses a large place in the center for suggestions.
+                // We can only put 3 buttons on each side:
+                contentView?.inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                    [undoButton, redoButton, runButton], representativeItem: nil)]
+                contentView?.inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                    [cutButton, copyButton, pasteButton], representativeItem: nil)]
+            }
         } else {
+            // Edit text files. Only these buttons make sense
             contentView?.inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
                 [undoButton, redoButton, saveButton], representativeItem: nil)]
             contentView?.inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:

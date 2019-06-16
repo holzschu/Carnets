@@ -17,10 +17,10 @@ extension ViewController {
     @objc func escapeKey(_ sender: UIBarButtonItem) {
         webView.evaluateJavaScript("Jupyter.notebook.command_mode();") { (result, error) in
             if error != nil {
-                print(error! as Error)
+                print(error)
             }
             if (result != nil) {
-                print(result as! String)
+                print(result)
             }
         }
     }
@@ -70,7 +70,7 @@ extension ViewController {
         self.webView.evaluateJavaScript(commandString) { (result, error) in
             if error != nil {
                 print(error)
-                print(result as! String)
+                print(result)
             }
         }
     }

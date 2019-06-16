@@ -22,6 +22,8 @@ var controller: ViewController? // for openURL_internal, bridging between C func
 var bookmarks: [URL: Data] = [:]  // bookmarks, indexed by URL. So bookmarks[fileUrl] is a bookmark for the file fileUrl.
 var distantFiles: [URL: URL] = [:]  // correspondent between distant file and local file. distantFile = distantFiles[localFile]
 
+var externalKeyboardPresent: Bool?
+var multiCharLanguageWithSuggestions: Bool?
 
 // is this file URL inside the App sandbox or not? (do we need to copy it locally?)
 func insideSandbox(fileURL: URL) -> Bool {
@@ -201,7 +203,9 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             let oldFileURL = URL(fileURLWithPath: oldName)
             let newFileURL = URL(fileURLWithPath: newName)
             let localDirectory = localDirectoryFrom(localFile: newFileURL)
-            moveDistantFiles(securedURL: presentedItemURL, localFile: oldFileURL, movedTo: newFileURL, localDirectory: localDirectory)
+            if (localDirectory.isDirectory) {
+                moveDistantFiles(securedURL: presentedItemURL, localFile: oldFileURL, movedTo: newFileURL, localDirectory: localDirectory)
+            }
         } else if (cmd.hasPrefix("create:")) {
             var newFileName = cmd
             newFileName.removeFirst("create:".count)
@@ -234,14 +238,18 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             let oldFileURL = URL(fileURLWithPath: oldName!)
             let newFileURL = URL(fileURLWithPath: newName!)
             let localDirectory = localDirectoryFrom(localFile: newFileURL)
-            moveDistantFiles(securedURL: presentedItemURL, localFile: oldFileURL, movedTo: newFileURL, localDirectory: localDirectory)
+            if (localDirectory.isDirectory) {
+                moveDistantFiles(securedURL: presentedItemURL, localFile: oldFileURL, movedTo: newFileURL, localDirectory: localDirectory)
+            }
         } else if (cmd.hasPrefix("delete:")) {
             var fileToDelete = cmd
             print(cmd)
             fileToDelete.removeFirst("delete:".count)
             let fileToDeleteURL = URL(fileURLWithPath: fileToDelete)
             let localDirectory = localDirectoryFrom(localFile: fileToDeleteURL)
-            removeDistantFile(securedURL: presentedItemURL, localFile: fileToDeleteURL, localDirectory: localDirectory)
+            if (localDirectory.isDirectory) {
+                removeDistantFile(securedURL: presentedItemURL, localFile: fileToDeleteURL, localDirectory: localDirectory)
+            }
         } else if (cmd.hasPrefix("loadingSession:")) {
             NSLog(cmd)
             addRunningSession(session: cmd, url: self.webView!.url!)
@@ -436,7 +444,8 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         }
         // change directory to folder enclosing destination:
         var directoryURL = URL(fileURLWithPath: filePath)
-        if (!directoryURL.isDirectory) {
+        let destinationIsDirectory = directoryURL.isDirectory
+        if (!destinationIsDirectory) {
             directoryURL = directoryURL.deletingLastPathComponent()
         }
         print("Changing directory to \(directoryURL.path)")
@@ -444,7 +453,15 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         // local files.
         if (filePath.hasPrefix("/")) { filePath = String(filePath.dropFirst()) }
         while (serverAddress == nil) {  }
-        var fileAddressUrl = serverAddress.appendingPathComponent("notebooks")
+        var fileAddressUrl = serverAddress!
+        if (filePath.hasSuffix(".ipynb")) {
+            fileAddressUrl = fileAddressUrl.appendingPathComponent("notebooks")
+        } else if (destinationIsDirectory) {
+            fileAddressUrl = fileAddressUrl.appendingPathComponent("tree")
+        } else {
+            fileAddressUrl = fileAddressUrl.appendingPathComponent("edit")
+        }
+        // var fileAddressUrl = serverAddress.appendingPathComponent("notebooks")
         fileAddressUrl = fileAddressUrl.appendingPathComponent(filePath)
         // Set up the date as the time we loaded the file:
         lastModificationDate = Date()
