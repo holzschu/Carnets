@@ -65,6 +65,7 @@
 		222975B82286E7B5009D93ED /* welcome in Resources */ = {isa = PBXBuildFile; fileRef = 22FFDCF22263D78F003E97CF /* welcome */; settings = {ASSET_TAGS = (welcome, ); }; };
 		222975BA2288349C009D93ED /* ODR_extensions in Resources */ = {isa = PBXBuildFile; fileRef = 222975B92288349C009D93ED /* ODR_extensions */; settings = {ASSET_TAGS = (extensions, ); }; };
 		2239A8DB2212106A005C73D0 /* openblas.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22288E222212098C0081D86C /* openblas.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22557AA422B9474700FFBB49 /* WkWebViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22557AA322B9474700FFBB49 /* WkWebViewExtension.swift */; };
 		22623B3D225B6B0E0002DB71 /* python3_ios.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B3B225B6B090002DB71 /* python3_ios.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22623B3F225B6B0E0002DB71 /* pythonA.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B38225B6B090002DB71 /* pythonA.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22623B41225B6B0E0002DB71 /* pythonB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B39225B6B090002DB71 /* pythonB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -924,6 +925,7 @@
 		221BB1BA22625B0B000AF355 /* python3_ios-matplotlib.ft2font.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-matplotlib.ft2font.framework"; path = "Frameworks/python3_ios-matplotlib.ft2font.framework"; sourceTree = "<group>"; };
 		22288E222212098C0081D86C /* openblas.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = openblas.framework; path = Frameworks/openblas.framework; sourceTree = "<group>"; };
 		222975B92288349C009D93ED /* ODR_extensions */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ODR_extensions; sourceTree = "<group>"; };
+		22557AA322B9474700FFBB49 /* WkWebViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WkWebViewExtension.swift; sourceTree = "<group>"; };
 		22623B36225B6B090002DB71 /* pythonE.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pythonE.framework; path = Frameworks/pythonE.framework; sourceTree = "<group>"; };
 		22623B37225B6B090002DB71 /* pythonC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pythonC.framework; path = Frameworks/pythonC.framework; sourceTree = "<group>"; };
 		22623B38225B6B090002DB71 /* pythonA.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pythonA.framework; path = Frameworks/pythonA.framework; sourceTree = "<group>"; };
@@ -1832,6 +1834,7 @@
 				22B750B621FC671900241F27 /* Assets.xcassets */,
 				22B750B821FC671900241F27 /* LaunchScreen.storyboard */,
 				22B750BB21FC671900241F27 /* Info.plist */,
+				22557AA322B9474700FFBB49 /* WkWebViewExtension.swift */,
 			);
 			path = Carnets;
 			sourceTree = "<group>";
@@ -1970,6 +1973,7 @@
 				2299396C2295D91B007C140E /* ViewController+inputAssistantItem.swift in Sources */,
 				2273F825226C612900256401 /* UIDevice+Name.swift in Sources */,
 				22B750B021FC671700241F27 /* AppDelegate.swift in Sources */,
+				22557AA422B9474700FFBB49 /* WkWebViewExtension.swift in Sources */,
 				2299397822973F26007C140E /* URL+isDirectory.swift in Sources */,
 				2273F826226C612900256401 /* String+C.swift in Sources */,
 				22F03F73222087AB00EBEA0B /* ListPythonFiles.swift in Sources */,
