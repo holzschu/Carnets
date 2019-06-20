@@ -214,8 +214,20 @@ extension ViewController {
     // on iPhone, user selected pop-up menu:
     @objc func pickerDoneAction(_ sender: UIBarButtonItem) {
         // We need to signal that the user has selected the right field.
-        // This can only be done with endEditing()
-        contentView?.endEditing(false)
+        if (notebookCellInsertMode) {
+            // this is the easy way:
+            webView.evaluateJavaScript("var event = new KeyboardEvent('keydown', {which:13, keyCode:13, bubbles:true});  Jupyter.notebook.get_selected_cell().completer.keydown(event);") { (result, error) in
+                if error != nil {
+                    print(error)
+                }
+                if (result != nil) {
+                    print(result)
+                }
+            }
+        } else {
+            // This is the hard way, but sometime we can't avoid it
+            contentView?.endEditing(false)
+        }
     }
     
     @objc func prepareFirstKeyboard() {

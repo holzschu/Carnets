@@ -149,11 +149,30 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         } else if (cmd == "selector active") {
             selectorActive = true
             if (!UIDevice.current.modelName.hasPrefix("iPad")) {
+                // System can call "selector active" after the keyboardDidChange event (when the selector is Markdown/Code)
+                // We set up the toolbar here.
                 self.editorToolbar.items = [UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
                                             pickerDoneButton]
             }
         } else if (cmd == "selector inactive") {
             selectorActive = false
+            if (!UIDevice.current.modelName.hasPrefix("iPad")) {
+                // System can call "selector inactive" without triggering a keyboardDidChange Event (by hitting return, for example)
+                // We restore the toolbar here.
+                if (kernelURL!.path.hasPrefix("/notebooks")) {
+                    self.editorToolbar.items = [undoButton, redoButton,
+                                                UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                                                tabButton, shiftTabButton,
+                                                UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                                                cutButton, copyButton, pasteButton,
+                                                UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                                                upButton, downButton, runButton]
+                } else {
+                    self.editorToolbar.items = [undoButton, redoButton, saveButton,
+                                                UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                                                cutButton, copyButton, pasteButton]
+                }
+            }
         } else if (cmd == "back") {
             // avoid infinite loops in back history.
             // Same approach not required for forward history
