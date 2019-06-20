@@ -30,7 +30,7 @@ var screenOrientation: UIInterfaceOrientation {
 }
 
 extension ViewController {
-
+    
     var needTabKey: Bool {
         // Is a tab key already present? If yes, don't show one.
         // connectedAccessories is empty even if there is a connected keyboard.
@@ -59,10 +59,18 @@ extension ViewController {
     }
     
     var fontSize: CGFloat {
-        let minFontSize: CGFloat = screenWidth / 50
-        // print("Screen width = \(screenWidth), fontSize = \(minFontSize)")
-        if (minFontSize > 18) { return 18.0 }
-        else { return minFontSize }
+        let deviceModel = UIDevice.current.modelName
+        if (deviceModel.hasPrefix("iPad")) {
+            let minFontSize: CGFloat = screenWidth / 50
+            // print("Screen width = \(screenWidth), fontSize = \(minFontSize)")
+            if (minFontSize > 18) { return 18.0 }
+            else { return minFontSize }
+        } else {
+            let minFontSize: CGFloat = screenWidth / 23
+            // print("Screen width = \(screenWidth), fontSize = \(minFontSize)")
+            if (minFontSize > 15) { return 15.0 }
+            else { return minFontSize }
+        }
     }
     
     // buttons
@@ -163,6 +171,15 @@ extension ViewController {
         return doneButton
     }
     
+    var pickerDoneButton: UIBarButtonItem {
+        // "done" button, localized
+        let pickerDoneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.done, target: nil, action: #selector(pickerDoneAction(_:)))
+        pickerDoneButton.setTitleTextAttributes(
+            [NSAttributedString.Key.font : UIFont(name: "Apple Symbols", size: 1.8*fontSize)!,
+             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+        return pickerDoneButton
+    }
+    
     var tabButton: UIBarButtonItem {
         // "tab" button, using UTF-8
         let tabButton = UIBarButtonItem(title: "⇥", style: .plain, target: self, action: #selector(autocompleteAction(_:)))
@@ -186,8 +203,19 @@ extension ViewController {
             if subview.classForCoder.description() == "WKContentView" {
                 return subview
             }
+            // on iPhones, adding the toolbar has changed the name of the view:
+            if subview.classForCoder.description() == "WKApplicationStateTrackingView_CustomInputAccessoryView" {
+                return subview
+            }
         }
         return nil
+    }
+    
+    // on iPhone, user selected pop-up menu:
+    @objc func pickerDoneAction(_ sender: UIBarButtonItem) {
+        // We need to signal that the user has selected the right field.
+        // This can only be done with endEditing()
+        contentView?.endEditing(false)
     }
     
     @objc func prepareFirstKeyboard() {
@@ -252,12 +280,19 @@ extension ViewController {
         webView.allowsBackForwardNavigationGestures = true
         webView.loadHTMLString("<html><body><div contenteditable='true'></div></body></html>", baseURL: nil)
         
-        prepareFirstKeyboard()
-        
-        // Add a callback to change the buttons every time the user changes the input method:
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidChange), name: UITextInputMode.currentInputModeDidChangeNotification, object: nil)
-        // And another to be called each time the keyboard is resized (including when an external KB is connected):
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidChange), name: UIResponder.keyboardDidChangeFrameNotification, object: nil)
+        if (UIDevice.current.modelName.hasPrefix("iPad")) {
+            prepareFirstKeyboard()
+            
+            // Add a callback to change the buttons every time the user changes the input method:
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidChange), name: UITextInputMode.currentInputModeDidChangeNotification, object: nil)
+            // And another to be called each time the keyboard is resized (including when an external KB is connected):
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidChange), name: UIResponder.keyboardDidChangeFrameNotification, object: nil)
+        } else {
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidChange), name: UITextInputMode.currentInputModeDidChangeNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidChange), name: UIResponder.keyboardDidChangeFrameNotification, object: nil)
+            // NotificationCenter.default.addObserver(self, selector: #selector(iPhoneKeyboardDidShow), name: UIResponder.keyboardDidShowNotification, object: nil)
+            // NotificationCenter.default.addObserver(self, selector: #selector(iPhoneKeyboardDidHide), name: UIResponder.keyboardDidHideNotification, object: nil)
+        }
 
         // in case Jupyter has started before the view is active (unlikely):
         guard (serverAddress != nil) else {
@@ -492,6 +527,7 @@ extension ViewController {
         }
     }
 
+    
     @objc private func keyboardDidChange(notification: NSNotification) {
         // Notebooks:
         // escape, tab, shift tab, undo, redo, save, add, cut, copy, paste //  up, down, run.
@@ -499,6 +535,7 @@ extension ViewController {
         // undo, redo, save // cut, copy, paste.
         // If it's a notebook, a file being edited, a tree, remove /prefix:
         // Only use "representativeItem" if keyboard has suggestion bar. Otherwise use "nil".
+        // First update multiCharLanguageWithSuggestions:
         // First update multiCharLanguageWithSuggestions:
         let keyboardLanguage = contentView?.textInputMode?.primaryLanguage
         if (keyboardLanguage != nil) {
@@ -510,15 +547,66 @@ extension ViewController {
             // keyboardLanguage = "jp-": all of them
             if (keyboardLanguage!.hasPrefix("hi") || keyboardLanguage!.hasPrefix("zh") || keyboardLanguage!.hasPrefix("ja")) {
                 multiCharLanguageWithSuggestions = true
+                if (UIDevice.current.systemVersionMajor < 13) {
+                    // fix a Javascript issue in iOS versions before 13.
+                    webView.evaluateJavaScript("iOS_multiCharLanguage = true;") { (result, error) in
+                        if error != nil {
+                            print(error)
+                        }
+                    }
+                }
             } else {
                 // otherwise return false:
                 multiCharLanguageWithSuggestions = false
+                if (UIDevice.current.systemVersionMajor < 13) {
+                    webView.evaluateJavaScript("iOS_multiCharLanguage = false;") { (result, error) in
+                        if error != nil {
+                            print(error)
+                        }
+                    }
+                }
             }
         }
-        
+
         guard(kernelURL != nil) else { return }
-        // Is there an external keyboard connected?
         let info = notification.userInfo
+
+        if (!UIDevice.current.modelName.hasPrefix("iPad")) {
+            // iPhones and iPod touch (3)
+            if (info != nil) {
+                let keyboardFrame: CGRect = (info![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+                // iPhones or iPads: there is a toolbar at the bottom:
+                if (keyboardFrame.size.height <= toolbarHeight) {
+                    // Only the toolbar is left, hide it:
+                    self.editorToolbar.isHidden = true
+                    self.editorToolbar.isUserInteractionEnabled = false
+                } else {
+                    self.editorToolbar.isHidden = false
+                    self.editorToolbar.isUserInteractionEnabled = true
+                }
+            }
+            if (selectorActive) {
+                // a picker is active: display only one button, with "Done". Only needed on iPhones
+                self.editorToolbar.items = [UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                                            pickerDoneButton]
+            } else if (kernelURL!.path.hasPrefix("/notebooks")) {
+                self.editorToolbar.items = [undoButton, redoButton,
+                                            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                                            tabButton, shiftTabButton,
+                                            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                                            cutButton, copyButton, pasteButton,
+                                            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                                            upButton, downButton, runButton]
+            } else {
+                self.editorToolbar.items = [undoButton, redoButton, saveButton,
+                                            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                                            cutButton, copyButton, pasteButton]
+            }
+            return
+        }
+
+        // iPads:
+        // Is there an external keyboard connected?
         if (info != nil) {
             // "keyboardFrameEnd" is a CGRect corresponding to the size of the keyboard plus the button bar.
             // It's 55 when there is an external keyboard connected, 300+ without.

@@ -24,7 +24,7 @@ extension ViewController {
             }
         }
     }
-    
+
     override var keyCommands: [UIKeyCommand]? {
         var basicKeyCommands = [
             UIKeyCommand(input: UIKeyCommand.inputEscape, modifierFlags: [], action: #selector(escapeKey), discoverabilityTitle: "Escape Key"),

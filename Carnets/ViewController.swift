@@ -24,6 +24,7 @@ var distantFiles: [URL: URL] = [:]  // correspondent between distant file and lo
 
 var externalKeyboardPresent: Bool?
 var multiCharLanguageWithSuggestions: Bool?
+let toolbarHeight: CGFloat = 35
 
 // is this file URL inside the App sandbox or not? (do we need to copy it locally?)
 func insideSandbox(fileURL: URL) -> Bool {
@@ -115,6 +116,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     // The URL for the notebook: http://localhost:8888/notebooks/private/var/mobile/Containers/Data/Application/B12A5C8D-DA05-4FE5-ABD6-DB12523ABAB7/tmp/(A%20Document%20Being%20Saved%20By%20Carnets)/Exploring%20Graphs%202.ipynb
     var kernelURL: URL?
     var notebookCellInsertMode = false // are we editing a notebook, in insert mode?
+    var selectorActive = false // if we are inside a picker (roll-up  menu), change the toolbar
 
     var presentedItemOperationQueue = OperationQueue()
     
@@ -144,6 +146,14 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             notebookCellInsertMode = false
         } else if (cmd == "editMode") {
             notebookCellInsertMode = true
+        } else if (cmd == "selector active") {
+            selectorActive = true
+            if (!UIDevice.current.modelName.hasPrefix("iPad")) {
+                self.editorToolbar.items = [UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                                            pickerDoneButton]
+            }
+        } else if (cmd == "selector inactive") {
+            selectorActive = false
         } else if (cmd == "back") {
             // avoid infinite loops in back history.
             // Same approach not required for forward history
@@ -274,6 +284,23 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     var webView: WKWebView!
     
     var lastPageVisited: String!
+    
+    public lazy var editorToolbar: UIToolbar = {
+        var toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: self.webView.bounds.width, height: toolbarHeight))
+        toolbar.items = [undoButton, redoButton,
+                         UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                         tabButton, shiftTabButton,
+                         UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                         cutButton, copyButton, pasteButton,
+                         UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                         upButton, downButton, runButton]
+        /* toolbar.items = [doneButton, undoButton, redoButton,
+                         UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                         tabButton, shiftTabButton,
+                         UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                         upButton, downButton, runButton] */
+        return toolbar
+    }()
 
     override func loadView() {
         let contentController = WKUserContentController();
@@ -291,6 +318,11 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         webView.uiDelegate = self
         view = webView
         appWebView = webView
+        if (!UIDevice.current.modelName.hasPrefix("iPad")) {
+            // toolbar for iPhones and iPod touch
+            webView.addInputAccessoryView(toolbar: self.editorToolbar)
+        }
+        
         
         NotificationCenter.default.addObserver(self, selector: #selector(undoAction), name: .NSUndoManagerWillUndoChange, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(redoAction), name: .NSUndoManagerWillRedoChange, object: nil)
@@ -911,4 +943,85 @@ extension ViewController: WKUIDelegate {
             setSessionAccessTime(url: webView.url!)
         }
     }
+    
+    // Javascript alert dialog boxes:
+    func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo,
+                 completionHandler: @escaping () -> Void) {
+        
+        let arguments = message.components(separatedBy: "\n")
+
+        let alertController = UIAlertController(title: arguments[0], message: arguments[1], preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+            completionHandler()
+        }))
+        
+        if let presenter = alertController.popoverPresentationController {
+            presenter.sourceView = self.view
+        }
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    
+    func webView(_ webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo,
+                 completionHandler: @escaping (Bool) -> Void) {
+        
+        let arguments = message.components(separatedBy: "\n")
+        
+        let alertController = UIAlertController(title: arguments[0], message: arguments[1], preferredStyle: .alert)
+        
+        alertController.addAction(UIAlertAction(title: arguments[2], style: .cancel, handler: { (action) in
+            completionHandler(false)
+        }))
+        
+        if (arguments[3].hasPrefix("btn-danger")) {
+            var newLabel = arguments[3]
+            newLabel.removeFirst("btn-danger".count)
+            alertController.addAction(UIAlertAction(title: newLabel, style: .destructive, handler: { (action) in
+                completionHandler(true)
+            }))
+        } else {
+            alertController.addAction(UIAlertAction(title: arguments[3], style: .default, handler: { (action) in
+                completionHandler(true)
+            }))
+        }
+        
+        if let presenter = alertController.popoverPresentationController {
+            presenter.sourceView = self.view
+        }
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    
+    func webView(_ webView: WKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?, initiatedByFrame frame: WKFrameInfo,
+                 completionHandler: @escaping (String?) -> Void) {
+        
+        let arguments = prompt.components(separatedBy: "\n")
+        let alertController = UIAlertController(title: arguments[0], message: arguments[1], preferredStyle: .alert)
+        
+        alertController.addTextField { (textField) in
+            textField.text = defaultText
+        }
+
+        alertController.addAction(UIAlertAction(title: arguments[2], style: .default, handler: { (action) in
+            completionHandler(nil)
+        }))
+        
+        alertController.addAction(UIAlertAction(title: arguments[3], style: .default, handler: { (action) in
+            if let text = alertController.textFields?.first?.text {
+                completionHandler(text)
+            } else {
+                completionHandler(defaultText)
+            }
+        }))
+        
+        if let presenter = alertController.popoverPresentationController {
+            presenter.sourceView = self.view
+        }
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
+
+    
 }
