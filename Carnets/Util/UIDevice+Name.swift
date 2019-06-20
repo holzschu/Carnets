@@ -21,4 +21,16 @@ extension UIDevice {
 		}
 		return identifier
 	}
+    
+    public var systemVersionMajor: Int {
+        let string = systemVersion
+        let numbers = string.components(separatedBy: ".")
+        return Int(numbers[0]) ?? 11
+    }
+    
+    public var systemVersionMinor: Int {
+        let string = systemVersion
+        let numbers = string.components(separatedBy: ".")
+        return Int(numbers[1]) ?? 0
+    }
 }
