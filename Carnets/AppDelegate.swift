@@ -10,8 +10,6 @@ import UIKit
 import ios_system
 import UserNotifications
 
-let notificationQuitRequested = "AsheKube.Carnets.quit"
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
@@ -31,6 +29,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var versionUpToDate = true
     var libraryFilesUpToDate = true
     var updateExtensionsRunning = false
+    // Which version of the app are we running? Carnets, Carnets mini, Carnets scipy, Carnets Julia...?
+
+    var appVersion: String? {
+        // Bundle.main.infoDictionary?["CFBundleDisplayName"] = Carnets
+        // Bundle.main.infoDictionary?["CFBundleIdentifier"] = AsheKube.Carnets
+        // Bundle.main.infoDictionary?["CFBundleName"] = Carnets
+        return Bundle.main.infoDictionary?["CFBundleName"] as? String
+    }
     
     func copyWelcomeFileToiCloud() {
         // Create a "welcome" document in the iCloud folder.
@@ -163,13 +169,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let originalPythonpath = getenv("PYTHONPATH")
         let mainPythonUrl = bundleUrl.appendingPathComponent("lib/python3.7")
         var newPythonPath = mainPythonUrl.path
-        let pythonDirectories = ["lib/python3.7/site-packages",
+        var pythonDirectories = ["lib/python3.7/site-packages",
                                  "lib/python3.7/site-packages/cffi-1.11.5-py3.7-macosx-12.1-iPad6,7.egg",
                                  "lib/python3.7/site-packages/cycler-0.10.0-py3.7.egg",
                                  "lib/python3.7/site-packages/kiwisolver-1.0.1-py3.7-macosx-10.9-x86_64.egg",
                                  "lib/python3.7/site-packages/matplotlib-3.0.3-py3.7-macosx-10.9-x86_64.egg",
                                  "lib/python3.7/site-packages/numpy-1.16.0-py3.7-macosx-10.9-x86_64.egg",
-                                 "lib/python3.7/site-packages/pandas-0.24.2-py3.7-macosx-10.9-x86_64.egg",
                                  "lib/python3.7/site-packages/pyparsing-2.3.1-py3.7.egg",
                                  "lib/python3.7/site-packages/setuptools-40.8.0-py3.7.egg",
                                  "lib/python3.7/site-packages/tornado-6.0.1-py3.7-macosx-12.1-iPad6,7.egg",
@@ -181,6 +186,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                  "lib/python3.7/site-packages/Pillow-6.0.0-py3.7-macosx-10.9-x86_64.egg",
                                  "lib/python3.7/site-packages/cryptography-2.7-py3.7-macosx-10.9-x86_64.egg",
         ]
+
+        if (appVersion != "Carnets mini") {
+            pythonDirectories.append("lib/python3.7/site-packages/pandas-0.24.2-py3.7-macosx-10.9-x86_64.egg")
+        }
+        
         for otherPythonDirectory in pythonDirectories {
             let secondaryPythonUrl = bundleUrl.appendingPathComponent(otherPythonDirectory)
             newPythonPath = newPythonPath.appending(":").appending(secondaryPythonUrl.path)
@@ -195,7 +205,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                   appropriateFor: nil,
                                                   create: true)
         let homeUrl = documentsUrl.deletingLastPathComponent().appendingPathComponent("Library")
-        for fileName in PythonFiles {
+        var fileList = PythonFiles
+        if (appVersion != "Carnets mini") {
+            fileList.append(contentsOf: PythonPandasFiles)
+        }
+        for fileName in fileList {
             let bundleFile = bundleUrl.appendingPathComponent(fileName)
             if (!FileManager().fileExists(atPath: bundleFile.path)) {
                 NSLog("queueUpdatingPythonFiles: requested file \(bundleFile.path) does not exist")
@@ -406,8 +420,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         { (granted, error) in
             // Enable or disable features based on authorization.
         }
-        // Setup a way for the webview to tell us the user has requested to quit
-        NotificationCenter.default.addObserver(self, selector: #selector(self.shutdownRequested), name: NSNotification.Name(rawValue: notificationQuitRequested), object: nil)
         // Detect changes in user defaults:
         NotificationCenter.default.addObserver(self, selector: #selector(self.settingsChanged), name: UserDefaults.didChangeNotification, object: nil)
         // add our own function "openurl"

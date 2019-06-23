@@ -119,7 +119,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     var selectorActive = false // if we are inside a picker (roll-up  menu), change the toolbar
 
     var presentedItemOperationQueue = OperationQueue()
-    
+
     func load(url: URL?) {
         if ((url != nil) && (url != presentedItemURL)) {
             NSFileCoordinator.removeFilePresenter(self)
@@ -134,11 +134,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         let cmd:String = message.body as! String
-        if (cmd == "quit") {
-            // Warn the main app that the user has pressed the "quit" button
-            clearAllRunningSessions()
-            NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: notificationQuitRequested)))
-        } else if (cmd == "save") {
+        if (cmd == "save") {
             // if the file open is from another App, we copy the newly saved file too
             print("We received a command to save the file")
             saveDistantFile()
