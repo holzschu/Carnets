@@ -20,6 +20,7 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
         allowsPickingMultipleItems = true
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let documentViewController = storyBoard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
+        documentViewController.modalPresentationStyle = UIModalPresentationStyle.fullScreen;
         let lastPageVisited = UserDefaults.standard.url(forKey: "lastOpenUrl")
 
         if (lastPageVisited != nil) && (lastPageVisited!.path != "/tree") {
@@ -50,7 +51,40 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
                                                            create: true)
         var temporaryFileURL = temporaryDirectoryURL
         temporaryFileURL.appendPathComponent("Untitled.ipynb")
-        let newFileContent = "{\n\"cells\": [\n{\n\"cell_type\": \"code\",\n\"execution_count\": null,\n\"metadata\": {},\n\"outputs\": [],\n\"source\": []\n}\n],\n\"metadata\": {\n\"kernelspec\": {\n\"display_name\": \"Python 3\",\n\"language\": \"python\",\n\"name\": \"python3\"\n},\n\"language_info\": {\n\"codemirror_mode\": {\n\"name\": \"ipython\",\n\"version\": 3\n},\n\"file_extension\": \".py\",\n\"mimetype\": \"text/x-python\",\n\"name\": \"python\",\n\"nbconvert_exporter\": \"python\",\n\"pygments_lexer\": \"ipython3\",\n\"version\": \"3.7.1\"\n}\n},\n\"nbformat\": 4,\n\"nbformat_minor\": 2\n}"
+        let newFileContent = """
+{
+  "cells": [
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {},
+      "outputs": [],
+      "source": []
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.7.1"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 2
+}
+"""
         let newFileData: Data = newFileContent.data(using: String.Encoding.utf8)!
         // Create an empty document here:
         if (!FileManager().createFile(atPath: temporaryFileURL.path, contents: newFileData, attributes: nil)) {
@@ -88,6 +122,7 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
         
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let documentViewController = storyBoard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
+        documentViewController.modalPresentationStyle = UIModalPresentationStyle.fullScreen;
         documentViewController.presentedItemURL = documentURL
         NSFileCoordinator.addFilePresenter(documentViewController)
         // print("presentedItemURL (DocumentBrowserViewController presentDocument) = \(documentViewController.presentedItemURL)")

@@ -136,7 +136,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         let cmd:String = message.body as! String
         if (cmd == "save") {
             // if the file open is from another App, we copy the newly saved file too
-            print("We received a command to save the file")
+            // print("We received a command to save the file")
             saveDistantFile()
         } else if (cmd == "commandMode") {
             notebookCellInsertMode = false
@@ -190,10 +190,10 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             treeAddress = treeAddress?.appendingPathComponent("tree")
             self.webView.load(URLRequest(url: treeAddress!))
         } else if (cmd.hasPrefix("rename:")) {
-            print(cmd)
+            // print(cmd)
             var newName = cmd
             newName.removeFirst("rename:".count)
-            print("NewName is \(newName)")
+            // print("NewName is \(newName)")
             var oldName = self.webView!.url!.path
             let isNotebook = oldName.hasPrefix("/notebooks/")
             let isEdit = oldName.hasPrefix("/edit/")
@@ -236,9 +236,9 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             newFileName.removeFirst("create:".count)
             let newFileURL = URL(fileURLWithPath: newFileName)
             let localDirectory = localDirectoryFrom(localFile: newFileURL)
-            print("localDirectory found: \(localDirectory)")
+            // print("localDirectory found: \(localDirectory)")
             let distantFile = distantFiles[localDirectory]
-            print("distantFile = \(distantFile)")
+            // print("distantFile = \(distantFile)")
             if (distantFile != nil) {
                 var stale = false
                 // presentedItemURL corresponds to the directory that was opened last, or to the file localFileUrl
@@ -254,12 +254,12 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             }
         } else if (cmd.hasPrefix("renameFile:")) {
             var renameCommand = cmd
-            print(cmd)
+            // print(cmd)
             renameCommand.removeFirst("renameFile:".count)
             let fileNames = renameCommand.split(separator: " ")
             let oldName = String(fileNames[0]).removingPercentEncoding
             let newName = String(fileNames[1]).removingPercentEncoding
-            print("Received command: mv \(oldName) \(newName)")
+            // print("Received command: mv \(oldName) \(newName)")
             let oldFileURL = URL(fileURLWithPath: oldName!)
             let newFileURL = URL(fileURLWithPath: newName!)
             let localDirectory = localDirectoryFrom(localFile: newFileURL)
@@ -268,7 +268,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             }
         } else if (cmd.hasPrefix("delete:")) {
             var fileToDelete = cmd
-            print(cmd)
+            // print(cmd)
             fileToDelete.removeFirst("delete:".count)
             let fileToDeleteURL = URL(fileURLWithPath: fileToDelete)
             let localDirectory = localDirectoryFrom(localFile: fileToDeleteURL)
@@ -302,6 +302,9 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     
     public lazy var editorToolbar: UIToolbar = {
         var toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: self.webView.bounds.width, height: toolbarHeight))
+        if #available(iOS 13, *) {
+            toolbar.backgroundColor = UIColor.systemBackground.resolvedColor(with: self.traitCollection);
+        }
         toolbar.items = [undoButton, redoButton,
                          UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
                          tabButton, shiftTabButton,
@@ -328,7 +331,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         config.preferences.setValue(true, forKey: "shouldAllowUserInstalledFonts")
         
         webView = WKWebView(frame: .zero, configuration: config)
-        
+
         webView.navigationDelegate = self
         webView.uiDelegate = self
         view = webView
@@ -359,7 +362,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         if (!insideSandbox(fileURL: fileURL)) {
             // Non-local file. Copy into ~/tmp/ and open
             // first, is that the last file we opened?
-            print("non-local file.")
+            // print("non-local file.")
             var fileURLToOpen:URL?
             var destination:URL?
             if (notebookBookmark == nil) {
@@ -384,7 +387,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                 // Not the bookmark stored in UserDefaults, maybe in the dictionary?
                 if (bookmarks[fileURL] != nil) {
                     // We've met this one before
-                    print("bookmarked before in bookmarks[fileURL]")
+                    // print("bookmarked before in bookmarks[fileURL]")
                     var stale = false
                     do {
                         let previousURL = try URL(resolvingBookmarkData: bookmarks[fileURL]!, bookmarkDataIsStale: &stale)
@@ -406,7 +409,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             }
             for (localFileUrlStored, distantFileUrl) in distantFiles {
                 if (distantFileUrl == fileURLToOpen) {
-                    print("Already opened in distantFiles")
+                    // print("Already opened in distantFiles")
                     destination = localFileUrlStored
                     break
                 }
@@ -414,13 +417,13 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                     // This distant file is a directory. Is the file we want to open part of this directory?
                     // If so, no need to recreate the bookmark.
                     if (fileURLToOpen!.path.hasPrefix(distantFileUrl.path)) {
-                        print("We found a directory above the file: \(distantFileUrl) for \(fileURLToOpen!)")
+                        // print("We found a directory above the file: \(distantFileUrl) for \(fileURLToOpen!)")
                         notebookBookmark = bookmarks[distantFileUrl]
                         var suffix = fileURLToOpen!.path
                         suffix.removeFirst(distantFileUrl.path.count)
                         var newPath = localFileUrlStored.path
                         newPath.append(suffix)
-                        print("Going to write at \(newPath)")
+                        // print("Going to write at \(newPath)")
                         destination = URL(fileURLWithPath: newPath)
                     }
                 } else {
@@ -428,7 +431,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                     // If so, we open this file in the same directory. So links between notebooks actually work.
                     if (!fileURLToOpen!.isDirectory &&
                         (distantFileUrl.deletingLastPathComponent() == fileURLToOpen?.deletingLastPathComponent())) {
-                        print("Parent directory exists in distantFiles: \( distantFileUrl.deletingLastPathComponent() )")
+                        // print("Parent directory exists in distantFiles: \( distantFileUrl.deletingLastPathComponent() )")
                         destination = localFileUrlStored.deletingLastPathComponent().appendingPathComponent(fileURLToOpen!.lastPathComponent)
                         break
                     }
@@ -436,7 +439,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             }
             if (destination == nil) {
                 // do we have a local file storage:
-                print("So far, no existing location")
+                // print("So far, no existing location")
                 let temporaryDirectory = try! FileManager().url(for: .itemReplacementDirectory,
                                                                 in: .userDomainMask,
                                                                 appropriateFor: URL(fileURLWithPath: documentsPath!),
@@ -452,12 +455,12 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                 distantFiles.updateValue(fileURLToOpen!, forKey: destination!)
             }
             let isSecuredURL = fileURLToOpen!.startAccessingSecurityScopedResource() == true
-            print("startAccessingSecurityScopedResource")
+            // print("startAccessingSecurityScopedResource")
             if (!downloadRemoteFile(fileURL: fileURL)) {
                 if (isSecuredURL) {
                     fileURLToOpen!.stopAccessingSecurityScopedResource()
                 }
-                print("stopAccessingSecurityScopedResource")
+                // print("stopAccessingSecurityScopedResource")
                 return returnURL!
             }
             do {
@@ -471,20 +474,20 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                 if (FileManager().fileExists(atPath: destination!.path)) {
                     try FileManager().removeItem(atPath: destination!.path)
                 }
-                print("Copy file:")
+                // print("Copy file:")
                 try FileManager().copyItem(at: fileURLToOpen!, to: destination!)
             }
             catch {
                 NSLog("Failure opening file:")
                 print(error)
                 if (isSecuredURL) {
-                    print("stopAccessingSecurityScopedResource")
+                    // print("stopAccessingSecurityScopedResource")
                     fileURLToOpen!.stopAccessingSecurityScopedResource()
                 }
                 return returnURL!
             }
             if (isSecuredURL) {
-                print("stopAccessingSecurityScopedResource")
+                // print("stopAccessingSecurityScopedResource")
                 fileURLToOpen!.stopAccessingSecurityScopedResource()
             }
             filePath = destination!.path
@@ -495,7 +498,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         if (!destinationIsDirectory) {
             directoryURL = directoryURL.deletingLastPathComponent()
         }
-        print("Changing directory to \(directoryURL.path)")
+        // print("Changing directory to \(directoryURL.path)")
         FileManager().changeCurrentDirectoryPath(directoryURL.path)
         // local files.
         if (filePath.hasPrefix("/")) { filePath = String(filePath.dropFirst()) }
@@ -518,7 +521,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     func localDirectoryFrom(localFile: URL) -> URL {
         // Extract local directory corresponding to localFile
         // Could also be cached (?)
-        print("Entering localDirectoryFrom, localFile = \(localFile)")
+        // print("Entering localDirectoryFrom, localFile = \(localFile)")
         var localDirectory = localFile
         var distantFile = distantFiles[localFile]
         if (distantFile == nil) {
@@ -527,7 +530,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             while ((distantFile == nil) && (localDirectory.pathComponents.count > 7)) {
                 // "7" corresponds to: /private/var/mobile/Containers/Data/Application/4AA730AE-A7CF-4A6F-BA65-BD2ADA01F8B4/tmp/
                 // plus or minus "/private"
-                print("Trying with \(localDirectory)")
+                // print("Trying with \(localDirectory)")
                 localDirectory = localDirectory.deletingLastPathComponent()
                 distantFile = distantFiles[localDirectory]
             }
@@ -555,22 +558,22 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     func saveDistantFile() {
         // This function saves the current notebook and all the files that were modified recently in the directory being accessed.
         // This is the best way to ensure that all files created by the notebook are saved.
-        print("Entering saveDistantFile: \(kernelURL)")
+        // print("Entering saveDistantFile: \(kernelURL)")
         guard (kernelURL != nil) else { return }
         guard (notebookBookmark != nil) else { return }
         if (kernelURL!.path.hasPrefix("/tree")) { return } // If we're displaying a directory, disable this function.
         // To know whether it's a remote file, scan list of remote files:
         let localDirectory = localDirectoryFrom(localFile: localFileUrl)
-        print("localDirectory found: \(localDirectory)")
+        // print("localDirectory found: \(localDirectory)")
         let distantFile = distantFiles[localDirectory]
-        print("distantFile = \(distantFile)")
+        // print("distantFile = \(distantFile)")
         guard (distantFile != nil) else { return } // if it's a local file, return
         // it's a distant file.
         do {
             var stale = false
             // presentedItemURL corresponds to the directory that was opened last, or to the file localFileUrl
             presentedItemURL = try URL(resolvingBookmarkData: notebookBookmark!, bookmarkDataIsStale: &stale)
-            print("presentedItemURL (saveDistantFile) = \(presentedItemURL)")
+            // print("presentedItemURL (saveDistantFile) = \(presentedItemURL)")
             if (presentedItemURL != nil) {
                 // save the actual file to its remote directory:
                 replaceFileWithBookmark(securedURL: presentedItemURL, localFile: localFileUrl, localDirectory: localDirectory)
@@ -612,9 +615,9 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             }
             var suffix = localFile.path
             suffix.removeFirst(prefixLength)
-            print("removed file = \(suffix)")
+            // print("removed file = \(suffix)")
             let distantFile = distantDirectory!.appendingPathComponent(suffix)
-            print("removing distant file = \(distantFile)")
+            // print("removing distant file = \(distantFile)")
             let isSecureURL = securedURL!.startAccessingSecurityScopedResource()
             try FileManager().removeItem(at: distantFile)
             if (isSecureURL) {
@@ -643,9 +646,9 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             }
             var suffix = localFile.path
             suffix.removeFirst(prefixLength)
-            print("file 1 = \(suffix)")
+            // print("file 1 = \(suffix)")
             let distantFile = distantDirectory!.appendingPathComponent(suffix)
-            print("distant file 1 = \(distantFile)")
+            // print("distant file 1 = \(distantFile)")
             prefixLength = localDirectory.path.count
             // It would be nice if the fileManager could be consistent with /var/mobile vs. /private/var/mobile...
             if (!movedTo.path.hasPrefix("/private") && (localDirectory.path.hasPrefix("/private"))) {
@@ -656,9 +659,9 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             }
             suffix = movedTo.path
             suffix.removeFirst(prefixLength)
-            print("file 2 = \(suffix)")
+            // print("file 2 = \(suffix)")
             let movedToDistant = distantDirectory!.appendingPathComponent(suffix)
-            print("distant file 2 = \(movedToDistant)")
+            // print("distant file 2 = \(movedToDistant)")
             let isSecureURL = securedURL!.startAccessingSecurityScopedResource()
                 try FileManager().moveItem(at: distantFile, to: movedToDistant)
             if (isSecureURL) {
@@ -677,21 +680,21 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     func replaceFileWithBookmark(securedURL: URL?, localFile: URL, localDirectory: URL) {
         guard (securedURL != nil) else { return }
         do {
-            print("We got a bookmark in presentedItemURL: \(securedURL!)")
+            // print("We got a bookmark in presentedItemURL: \(securedURL!)")
             let temporaryDirectory = try! FileManager().url(for: .itemReplacementDirectory,
                                                             in: .userDomainMask,
                                                             appropriateFor: URL(fileURLWithPath: documentsPath!),
                                                             create: true)
             var destination = temporaryDirectory
             destination = destination.appendingPathComponent(localFile.lastPathComponent)
-            print("destination = \(destination)")
+            // print("destination = \(destination)")
             try FileManager().copyItem(at: localFile, to: destination)
             // securedURL is the *directory* for which we have the writing permission.
             // we reconstruct the path to the *file*
             var suffix = localFile.path
             suffix.removeFirst(localDirectory.path.count) // this is empty if localFile is a file
             let distantFilePath = securedURL?.appendingPathComponent(suffix)
-            print("distant file URL = \(distantFilePath!) = \(securedURL!) + \(suffix)")
+            // print("distant file URL = \(distantFilePath!) = \(securedURL!) + \(suffix)")
             let isSecureURL = securedURL!.startAccessingSecurityScopedResource()
             // print("startAccessingSecurityScopedResource: \(isSecureURL)")
             let distantDirectory = distantFilePath?.deletingLastPathComponent()
@@ -734,15 +737,15 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             }
             var suffix = distantFile.path
             suffix.removeFirst(prefixLength)
-            print("File = \(suffix)")
+            // print("File = \(suffix)")
             let localFile = localDirectory.appendingPathComponent(suffix)
-            print("local file = \(localFile)")
+            // print("local file = \(localFile)")
             // it seems a bad idea to change the document we are currently editing:
             if (localFile == localFileUrl) { return }
             // Check if local file is more recent than distant file:
             if (FileManager().fileExists(atPath: localFile.path)) {
                 if (!FileManager().fileExists(atPath: distantFile.path)) {
-                    print("distant File does not exist. Probably deleted")
+                    // print("distant File does not exist. Probably deleted")
                     try FileManager().removeItem(at: localFile)
                     return
                 } else {
@@ -751,7 +754,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                 }
             } else {
                 if (!FileManager().fileExists(atPath: distantFile.path)) {
-                    print("both files don't exist. we give up")
+                    // print("both files don't exist. we give up")
                     return
                 }
             }
@@ -781,13 +784,13 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     // File Presenter stuff:
     // This function is called when a file changes in the remote directory.
     func presentedSubitemDidChange(at url: URL) {
-        print("We received notification of a change at file \(url)") // it works!
+        // print("We received notification of a change at file \(url)") // it works!
         guard (kernelURL != nil) else { return }
         guard (notebookBookmark != nil) else { return }
         var stale = false
         do {
             presentedItemURL = try URL(resolvingBookmarkData: notebookBookmark!, bookmarkDataIsStale: &stale)
-            print("presentedItemURL (presentedSubitemDidChange) = \(presentedItemURL)")
+            // print("presentedItemURL (presentedSubitemDidChange) = \(presentedItemURL)")
             replaceLocalFileWithBookmark(securedURL: presentedItemURL, distantFile: url, localDirectory: localDirectoryFrom(localFile: localFileUrl))
         }
         catch {
@@ -800,13 +803,13 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     
     // This function is supposed to be called when a file is created. In practice, presentedSubitemDidChange is called.
     func presentedSubitemDidAppear(at url: URL) {
-        print("We received notification of a file appearing at \(url)") // it works!
+        // print("We received notification of a file appearing at \(url)") // it works!
         guard (kernelURL != nil) else { return }
         guard (notebookBookmark != nil) else { return }
         var stale = false
         do {
             presentedItemURL = try URL(resolvingBookmarkData: notebookBookmark!, bookmarkDataIsStale: &stale)
-            print("presentedItemURL (presentedSubitemDidAppear) = \(presentedItemURL)")
+            // print("presentedItemURL (presentedSubitemDidAppear) = \(presentedItemURL)")
             replaceLocalFileWithBookmark(securedURL: presentedItemURL, distantFile: url, localDirectory: localDirectoryFrom(localFile: localFileUrl))
         }
         catch {
@@ -817,14 +820,14 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     }
     
     func accommodatePresentedSubitemDeletion(at url: URL, completionHandler: @escaping (Error?) -> Void) {
-        print("We received notification of a file deletion: \(url)")
+        // print("We received notification of a file deletion: \(url)")
         guard (kernelURL != nil) else { return }
         guard (notebookBookmark != nil) else { return }
         var stale = false
         let localDirectory = localDirectoryFrom(localFile: localFileUrl)
         do {
             presentedItemURL = try URL(resolvingBookmarkData: notebookBookmark!, bookmarkDataIsStale: &stale)
-            print("presentedItemURL (accommodatePresentedSubitemDeletion) = \(presentedItemURL)")
+            // print("presentedItemURL (accommodatePresentedSubitemDeletion) = \(presentedItemURL)")
             var prefixLength = presentedItemURL!.path.count
             // It would be nice if the fileManager could be consistent with /var/mobile vs. /private/var/mobile...
             if (!url.path.hasPrefix("/private") && (presentedItemURL!.path.hasPrefix("/private"))) {
@@ -835,12 +838,12 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             }
             var suffix = url.path
             suffix.removeFirst(prefixLength)
-            print("deleting file = \(suffix)")
+            // print("deleting file = \(suffix)")
             let localFile = localDirectory.appendingPathComponent(suffix)
             // it seems a bad idea to change the document we are currently editing:
             if (localFile == localFileUrl) { return }
             try FileManager().removeItem(at: localFile)
-            print("deleted \(localFile)")
+            // print("deleted \(localFile)")
             completionHandler(nil)
         }
         catch {
@@ -852,14 +855,14 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     
     // Tells the delegate that an item in the presented directory moved to a new location.
     func presentedSubitem(at url: URL, didMoveTo didMoveToURL: URL) {
-        print("We received notification of a file url = \(url) moving to = \(didMoveToURL)")
+        // print("We received notification of a file url = \(url) moving to = \(didMoveToURL)")
         guard (kernelURL != nil) else { return }
         guard (notebookBookmark != nil) else { return }
         var stale = false
         let localDirectory = localDirectoryFrom(localFile: localFileUrl)
         do {
             presentedItemURL = try URL(resolvingBookmarkData: notebookBookmark!, bookmarkDataIsStale: &stale)
-            print("presentedItemURL (presentedSubitem) = \(presentedItemURL)")
+            // print("presentedItemURL (presentedSubitem) = \(presentedItemURL)")
             var prefixLength = presentedItemURL!.path.count
             // It would be nice if the fileManager could be consistent with /var/mobile vs. /private/var/mobile...
             if (!url.path.hasPrefix("/private") && (presentedItemURL!.path.hasPrefix("/private"))) {
@@ -878,12 +881,12 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             // In that case, we delete the local copy. If the distant copy moves out of .Trash,
             // it will appear as a creation.
             let commonPrefix = url.path.commonPrefix(with: didMoveToURL.path)
-            print("Common prefix: \(url.path.commonPrefix(with: didMoveToURL.path))")
+            // print("Common prefix: \(url.path.commonPrefix(with: didMoveToURL.path))")
             var movingToTrash = didMoveToURL.path
             movingToTrash.removeFirst(commonPrefix.count)
             if (movingToTrash.hasPrefix(".Trash")) {
-                print("we're moving to Trash: \(movingToTrash)")
-                print("removing file = \(localFileStart)")
+                // print("we're moving to Trash: \(movingToTrash)")
+                // print("removing file = \(localFileStart)")
                 if (FileManager().fileExists(atPath: localFileStart.path)) {
                     try FileManager().removeItem(at: localFileStart)
                 }
@@ -902,7 +905,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             suffix.removeFirst(prefixLength)
             let localFileEnd = localDirectory.appendingPathComponent(suffix)
             if (localFileEnd == localFileUrl) { return }
-            print("moving file = \(localFileStart) to \(localFileEnd)")
+            // print("moving file = \(localFileStart) to \(localFileEnd)")
             try FileManager().moveItem(at: localFileStart, to: localFileEnd)
         }
         catch {
@@ -1038,5 +1041,4 @@ extension ViewController: WKUIDelegate {
         self.present(alertController, animated: true, completion: nil)
     }
 
-    
 }

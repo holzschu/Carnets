@@ -61,10 +61,17 @@ extension ViewController {
     var fontSize: CGFloat {
         let deviceModel = UIDevice.current.modelName
         if (deviceModel.hasPrefix("iPad")) {
-            let minFontSize: CGFloat = screenWidth / 50
-            // print("Screen width = \(screenWidth), fontSize = \(minFontSize)")
-            if (minFontSize > 18) { return 18.0 }
-            else { return minFontSize }
+            if #available(iOS 13.0, *) {
+                let minFontSize: CGFloat = screenWidth / 70
+                // print("Screen width = \(screenWidth), fontSize = \(minFontSize)")
+                if (minFontSize > 15) { return 15.0 }
+                else { return minFontSize }
+            } else {
+                let minFontSize: CGFloat = screenWidth / 50
+                // print("Screen width = \(screenWidth), fontSize = \(minFontSize)")
+                if (minFontSize > 18) { return 18.0 }
+                else { return minFontSize }
+            }
         } else {
             let minFontSize: CGFloat = screenWidth / 23
             // print("Screen width = \(screenWidth), fontSize = \(minFontSize)")
@@ -73,102 +80,215 @@ extension ViewController {
         }
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if #available(iOS 13.0, *) {
+            guard (kernelURL != nil) else { return } // too soon
+            // redraw toolbar
+            if (UIDevice.current.modelName.hasPrefix("iPad")) {
+                if (kernelURL!.path.hasPrefix("/notebooks")) {
+                    if ((externalKeyboardPresent ?? false) || !(multiCharLanguageWithSuggestions ?? false)) {
+                        var leadingButtons: [UIBarButtonItem] =  [doneButton]
+                        if (needTabKey && !(externalKeyboardPresent ?? false)) {
+                            // no need for a tab key if there is an external keyboard
+                            leadingButtons.append(tabButton)
+                        }
+                        leadingButtons.append(shiftTabButton)
+                        leadingButtons.append(undoButton)
+                        leadingButtons.append(redoButton)
+                        leadingButtons.append(saveButton)
+                        leadingButtons.append(addButton)
+                        // leadingButtons.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
+
+                        // We need "representativeItem: nil" otherwise iOS compress the buttons into the representative item
+                        contentView?.inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                            leadingButtons, representativeItem: nil)]
+                        contentView?.inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                            [cutButton, copyButton, pasteButton, upButton, downButton, runButton], representativeItem: nil)]
+                    } else {
+                        // We writing in Hindi, Chinese or Japanese. The keyboard uses a large place in the center for suggestions.
+                        // We can only put 3 buttons on each side:
+                        contentView?.inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                            [undoButton, redoButton, runButton], representativeItem: nil)]
+                        contentView?.inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                            [cutButton, copyButton, pasteButton], representativeItem: nil)]
+                    }
+                } else {
+                    // Edit text files. Only these buttons make sense
+                    contentView?.inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                        [undoButton, redoButton, saveButton], representativeItem: nil)]
+                    contentView?.inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                        [cutButton, copyButton, pasteButton], representativeItem: nil)]
+                }
+            }
+        }
+    }
+    
+    var tintColor: UIColor {
+        // This works, but does not update while the app is running
+        if #available(iOS 13, *) {
+            return UIColor.placeholderText.resolvedColor(with: self.traitCollection).nonTransparent();
+        } else {
+            return UIColor.black
+        }
+    }
+    
     // buttons
     var undoButton: UIBarButtonItem {
+        if #available(iOS 13.0, *) {
+            let configuration = UIImage.SymbolConfiguration(pointSize: fontSize, weight: .regular)
+            return UIBarButtonItem(image: UIImage(systemName: "arrow.uturn.left")!.withConfiguration(configuration), style: .plain, target: self, action: #selector(undoAction(_:)))
+        } else {
         let undoButton = UIBarButtonItem(title: "\u{f0e2}", style: .plain, target: self, action: #selector(undoAction(_:)))
         undoButton.setTitleTextAttributes(
             [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
-             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+             NSAttributedString.Key.foregroundColor : tintColor,], for: .normal)
         return undoButton
+        }
     }
     
     var redoButton: UIBarButtonItem {
+        if #available(iOS 13.0, *) {
+            let configuration = UIImage.SymbolConfiguration(pointSize: fontSize, weight: .regular)
+            return UIBarButtonItem(image: UIImage(systemName: "arrow.uturn.right")!.withConfiguration(configuration), style: .plain, target: self, action: #selector(redoAction(_:)))
+        } else {
         let redoButton = UIBarButtonItem(title: "\u{f01e}", style: .plain, target: self, action: #selector(redoAction(_:)))
         redoButton.setTitleTextAttributes(
             [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
-             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+             NSAttributedString.Key.foregroundColor : tintColor,], for: .normal)
         return redoButton
+        }
     }
     
     var saveButton: UIBarButtonItem {
+        var saveSize = fontSize
+        if #available(iOS 13.0, *) {
+            saveSize *= 7.0/5.0
+            if (saveSize > 18.0) {
+                saveSize = 18.0
+            }
+        }
         let saveButton = UIBarButtonItem(title: "\u{f0c7}", style: .plain, target: self, action: #selector(saveAction(_:)))
         saveButton.setTitleTextAttributes(
-            [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
-             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+            [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: saveSize)!,
+             NSAttributedString.Key.foregroundColor : tintColor,], for: .normal)
         return saveButton
     }
     
     var addButton: UIBarButtonItem {
-        let addButton = UIBarButtonItem(title: "\u{f067}", style: .plain, target: self, action: #selector(addAction(_:)))
-        addButton.setTitleTextAttributes(
-            [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
-             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
-        return addButton
+        if #available(iOS 13.0, *) {
+            let configuration = UIImage.SymbolConfiguration(pointSize: fontSize, weight: .regular)
+            return UIBarButtonItem(image: UIImage(systemName: "plus")!.withConfiguration(configuration), style: .plain, target: self, action: #selector(addAction(_:)))
+        } else {
+            let addButton = UIBarButtonItem(title: "\u{f067}", style: .plain, target: self, action: #selector(addAction(_:)))
+            addButton.setTitleTextAttributes(
+                [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
+                 NSAttributedString.Key.foregroundColor : tintColor,], for: .normal)
+            return addButton
+        }
     }
     
     var cutButton: UIBarButtonItem {
+        if #available(iOS 13.0, *) {
+            let configuration = UIImage.SymbolConfiguration(pointSize: fontSize, weight: .regular)
+            return UIBarButtonItem(image: UIImage(systemName: "scissors")!.withConfiguration(configuration), style: .plain, target: self, action: #selector(cutAction(_:)))
+        } else {
         let cutButton = UIBarButtonItem(title: "\u{f0c4}", style: .plain, target: self, action: #selector(cutAction(_:)))
         cutButton.setTitleTextAttributes(
             [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
-             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+             NSAttributedString.Key.foregroundColor : tintColor,], for: .normal)
         return cutButton
+        }
     }
     
     var copyButton: UIBarButtonItem {
-        let copyButton = UIBarButtonItem(title: "\u{f0c5}", style: .plain, target: self, action: #selector(copyAction(_:)))
-        copyButton.setTitleTextAttributes(
-            [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
-             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
-        return copyButton
+        if #available(iOS 13.0, *) {
+            let configuration = UIImage.SymbolConfiguration(pointSize: fontSize, weight: .regular)
+            return UIBarButtonItem(image: UIImage(systemName: "doc.on.doc")!.withConfiguration(configuration), style: .plain, target: self, action: #selector(copyAction(_:)))
+        } else {
+            let copyButton = UIBarButtonItem(title: "\u{f0c5}", style: .plain, target: self, action: #selector(copyAction(_:)))
+            copyButton.setTitleTextAttributes(
+                [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
+                 NSAttributedString.Key.foregroundColor : tintColor,], for: .normal)
+            return copyButton
+        }
     }
     
     var pasteButton: UIBarButtonItem {
-        let pasteButton = UIBarButtonItem(title: "\u{f0ea}", style: .plain, target: self, action: #selector(pasteAction(_:)))
-        pasteButton.setTitleTextAttributes(
-            [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
-             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
-        return pasteButton
+        if #available(iOS 13.0, *) {
+            let configuration = UIImage.SymbolConfiguration(pointSize: fontSize, weight: .regular)
+            return UIBarButtonItem(image: UIImage(systemName: "doc.on.clipboard")!.withConfiguration(configuration), style: .plain, target: self, action: #selector(pasteAction(_:)))
+        } else {
+            let pasteButton = UIBarButtonItem(title: "\u{f0ea}", style: .plain, target: self, action: #selector(pasteAction(_:)))
+            pasteButton.setTitleTextAttributes(
+                [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
+                 NSAttributedString.Key.foregroundColor : tintColor,], for: .normal)
+            return pasteButton
+        }
     }
     
     var upButton: UIBarButtonItem {
+        if #available(iOS 13.0, *) {
+            let configuration = UIImage.SymbolConfiguration(pointSize: fontSize, weight: .regular)
+            return UIBarButtonItem(image: UIImage(systemName: "arrow.up")!.withConfiguration(configuration), style: .plain, target: self, action: #selector(upAction(_:)))
+        } else {
         let upButton = UIBarButtonItem(title: "\u{f062}", style: .plain, target: self, action: #selector(upAction(_:)))
         upButton.setTitleTextAttributes(
             [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
-             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+             NSAttributedString.Key.foregroundColor : tintColor,], for: .normal)
         return upButton
+        }
     }
     
     var downButton: UIBarButtonItem {
+        if #available(iOS 13.0, *) {
+            let configuration = UIImage.SymbolConfiguration(pointSize: fontSize, weight: .regular)
+            return UIBarButtonItem(image: UIImage(systemName: "arrow.down")!.withConfiguration(configuration), style: .plain, target: self, action: #selector(downAction(_:)))
+        } else {
         let downButton = UIBarButtonItem(title: "\u{f063}", style: .plain, target: self, action: #selector(downAction(_:)))
         downButton.setTitleTextAttributes(
             [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
-             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+             NSAttributedString.Key.foregroundColor : tintColor,], for: .normal)
         return downButton
+        }
     }
     
     var runButton: UIBarButtonItem {
+        if #available(iOS 13.0, *) {
+            let configuration = UIImage.SymbolConfiguration(pointSize: fontSize, weight: .regular)
+            return UIBarButtonItem(image: UIImage(systemName: "forward.end")!.withConfiguration(configuration), style: .plain, target: self, action: #selector(runAction(_:)))
+        } else {
         let runButton = UIBarButtonItem(title: "\u{f051}", style: .plain, target: self, action: #selector(runAction(_:)))
         runButton.setTitleTextAttributes(
             [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
-             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+             NSAttributedString.Key.foregroundColor : tintColor,], for: .normal)
         return runButton
+        }
     }
     
+    // deprecated
     var stopButton: UIBarButtonItem {
         let stopButton = UIBarButtonItem(title: "\u{f04d}", style: .plain, target: self, action: #selector(stopAction(_:)))
         stopButton.setTitleTextAttributes(
             [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
-             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+             NSAttributedString.Key.foregroundColor : tintColor,], for: .normal)
         return stopButton
     }
     
     var doneButton: UIBarButtonItem {
-        // "escape" button, using UTF-8
-        let doneButton = UIBarButtonItem(title: "␛", style: .plain, target: self, action: #selector(escapeKey(_:)))
-        doneButton.setTitleTextAttributes(
-            [NSAttributedString.Key.font : UIFont(name: "Apple Symbols", size: 1.8*fontSize)!,
-             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
-        return doneButton
+        // Escape button:
+        if #available(iOS 13.0, *) {
+            let configuration = UIImage.SymbolConfiguration(pointSize: fontSize, weight: .regular)
+            return UIBarButtonItem(image: UIImage(systemName: "escape")!.withConfiguration(configuration), style: .plain, target: self, action: #selector(escapeKey(_:)))
+        } else {
+            // "escape" button, using UTF-8
+            let doneButton = UIBarButtonItem(title: "␛", style: .plain, target: self, action: #selector(escapeKey(_:)))
+            doneButton.setTitleTextAttributes(
+                [NSAttributedString.Key.font : UIFont(name: "Apple Symbols", size: 1.8*fontSize)!,
+                 NSAttributedString.Key.foregroundColor : tintColor,], for: .normal)
+            return doneButton
+        }
     }
     
     var pickerDoneButton: UIBarButtonItem {
@@ -176,26 +296,36 @@ extension ViewController {
         let pickerDoneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.done, target: nil, action: #selector(pickerDoneAction(_:)))
         pickerDoneButton.setTitleTextAttributes(
             [NSAttributedString.Key.font : UIFont(name: "Apple Symbols", size: 1.8*fontSize)!,
-             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+             NSAttributedString.Key.foregroundColor : tintColor,], for: .normal)
         return pickerDoneButton
     }
     
     var tabButton: UIBarButtonItem {
+        if #available(iOS 13.0, *) {
+            let configuration = UIImage.SymbolConfiguration(pointSize: fontSize, weight: .regular)
+            return UIBarButtonItem(image: UIImage(systemName: "arrow.right.to.line.alt")!.withConfiguration(configuration), style: .plain, target: self, action: #selector(autocompleteAction(_:)))
+        } else {
         // "tab" button, using UTF-8
         let tabButton = UIBarButtonItem(title: "⇥", style: .plain, target: self, action: #selector(autocompleteAction(_:)))
         // UIFont.systemFont(ofSize: 1.5*fontSize),
         tabButton.setTitleTextAttributes(
             [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 1.8*fontSize),
-             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+             NSAttributedString.Key.foregroundColor : tintColor,], for: .normal)
         return tabButton
+        }
     }
     var shiftTabButton: UIBarButtonItem {
+        if #available(iOS 13.0, *) {
+            let configuration = UIImage.SymbolConfiguration(pointSize: fontSize, weight: .regular)
+            return UIBarButtonItem(image: UIImage(systemName: "arrow.left.to.line.alt")!.withConfiguration(configuration), style: .plain, target: self, action: #selector(shiftTabAction(_:)))
+        } else {
         // "shift-tab" button, using UTF-8
         let shiftTabButton = UIBarButtonItem(title: "⇤", style: .plain, target: self, action: #selector(shiftTabAction(_:)))
         shiftTabButton.setTitleTextAttributes(
             [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 1.8*fontSize),
-             NSAttributedString.Key.foregroundColor : UIColor.black,], for: .normal)
+             NSAttributedString.Key.foregroundColor : tintColor,], for: .normal)
         return shiftTabButton
+        }
     }
     
     private var contentView: UIView? {
@@ -251,35 +381,31 @@ extension ViewController {
                 leadingButtons.append(shiftTabButton)
                 leadingButtons.append(undoButton)
                 leadingButtons.append(redoButton)
-                leadingButtons.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
+                if #available(iOS 13.0, *) { } else {
+                    leadingButtons.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
+                }
                 leadingButtons.append(saveButton)
                 leadingButtons.append(addButton)
-                leadingButtons.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
-                leadingButtons.append(cutButton)
-                leadingButtons.append(copyButton)
-                leadingButtons.append(pasteButton)
                 
                 // We need "representativeItem: nil" otherwise iOS compress the buttons into the representative item
                 contentView?.inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
                     leadingButtons, representativeItem: nil)]
                 contentView?.inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
-                    [upButton, downButton,
-                     UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-                     runButton, // stopButton,
-                    ], representativeItem: nil)]
+                    [cutButton, copyButton, pasteButton, upButton, downButton, runButton], representativeItem: nil)]
             } else {
                 // We writing in Hindi, Chinese or Japanese. The keyboard uses a large place in the center for suggestions.
                 // We can only put 3 buttons on each side:
-                inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                // TODO: could we keep the full set of buttons on large iPads (11 inch and more)
+                contentView?.inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
                     [undoButton, redoButton, runButton], representativeItem: nil)]
-                inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+                contentView?.inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
                     [cutButton, copyButton, pasteButton], representativeItem: nil)]
             }
         } else {
             // Directory or edit text files. Only these buttons make sense
-            inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+            contentView?.inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
                 [undoButton, redoButton, saveButton], representativeItem: nil)]
-            inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
+            contentView?.inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
                 [cutButton, copyButton, pasteButton], representativeItem: nil)]
         }
 
@@ -637,22 +763,17 @@ extension ViewController {
                 leadingButtons.append(shiftTabButton)
                 leadingButtons.append(undoButton)
                 leadingButtons.append(redoButton)
-                leadingButtons.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
+                if #available(iOS 13.0, *) { } else {
+                    leadingButtons.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
+                }
                 leadingButtons.append(saveButton)
                 leadingButtons.append(addButton)
-                leadingButtons.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
-                leadingButtons.append(cutButton)
-                leadingButtons.append(copyButton)
-                leadingButtons.append(pasteButton)
              
                 // We need "representativeItem: nil" otherwise iOS compress the buttons into the representative item
                 contentView?.inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
                     leadingButtons, representativeItem: nil)]
                 contentView?.inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
-                    [upButton, downButton,
-                     UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-                     runButton, // stopButton,
-                    ], representativeItem: nil)]
+                    [cutButton, copyButton, pasteButton, upButton, downButton, runButton], representativeItem: nil)]
             } else {
                 // We writing in Hindi, Chinese or Japanese. The keyboard uses a large place in the center for suggestions.
                 // We can only put 3 buttons on each side:

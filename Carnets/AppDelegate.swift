@@ -49,36 +49,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 // Create a document in the iCloud folder to make it visible.
                 print("iCloudContainer = \(iCloudDocumentsURL)")
                 let iCloudDirectory = iCloudDocumentsURL?.appendingPathComponent("Documents")
-                let iCloudDirectoryWelcome = iCloudDirectory?.appendingPathComponent("welcome")
-                if (!FileManager().fileExists(atPath: iCloudDirectoryWelcome!.path)) {
+                guard let iCloudDirectoryWelcome = iCloudDirectory?.appendingPathComponent("welcome") else { return }
+                if (!FileManager().fileExists(atPath: iCloudDirectoryWelcome.path)) {
                     NSLog("Creating iCloud welcome directory")
-                    try! FileManager().createDirectory(atPath: iCloudDirectoryWelcome!.path, withIntermediateDirectories: true)
-                    // download the resource from the iTunes store:
-                    let welcomeBundleResource = NSBundleResourceRequest(tags: ["welcome"])
-                    NSLog("Begin downloading welcome resources")
-                    welcomeBundleResource.beginAccessingResources(completionHandler: { (error) in
-                        if let error = error {
-                            var message = "Error in downloading welcome resource: "
-                            message.append(error.localizedDescription)
-                            NSLog(message)
-                        } else {
-                            NSLog("Welcome resource succesfully downloaded")
-                            let welcomeFiles=["welcome/Welcome to Carnets.ipynb",
-                                              "welcome/top.png",
-                                              "welcome/bottom.png"]
-                            for fileName in welcomeFiles {
-                                let welcomeFileLocation = welcomeBundleResource.bundle.path(forResource: fileName, ofType: nil)
-                                if ((welcomeFileLocation) != nil) {
-                                    let iCloudFile = iCloudDirectory?.appendingPathComponent(fileName)
-                                    if (!FileManager().fileExists(atPath: iCloudFile!.path) && FileManager().fileExists(atPath: welcomeFileLocation!)) {
+                    do {
+                        try FileManager().createDirectory(atPath: iCloudDirectoryWelcome.path, withIntermediateDirectories: true)
+                        // download the resource from the iTunes store:
+                        let welcomeBundleResource = NSBundleResourceRequest(tags: ["welcome"])
+                        NSLog("Begin downloading welcome resources")
+                        welcomeBundleResource.beginAccessingResources(completionHandler: { (error) in
+                            if let error = error {
+                                var message = "Error in downloading welcome resource: "
+                                message.append(error.localizedDescription)
+                                NSLog(message)
+                            } else {
+                                NSLog("Welcome resource succesfully downloaded")
+                                let welcomeFiles=["welcome/Welcome to Carnets.ipynb",
+                                                  "welcome/top.png",
+                                                  "welcome/bottom.png"]
+                                for fileName in welcomeFiles {
+                                    guard let welcomeFileLocation = welcomeBundleResource.bundle.path(forResource: fileName, ofType: nil) else { continue }
+                                    guard let iCloudFile = iCloudDirectory?.appendingPathComponent(fileName) else { continue }
+                                    if (!FileManager().fileExists(atPath: iCloudFile.path) && FileManager().fileExists(atPath: welcomeFileLocation)) {
                                         // print("Copying item from \(welcomeFileLocation) to \(iCloudFile)")
-                                        try! FileManager().copyItem(atPath: welcomeFileLocation!, toPath: iCloudFile!.path)
+                                        do {
+                                            try FileManager().copyItem(atPath: welcomeFileLocation, toPath: iCloudFile.path)
+                                        } catch {
+                                            NSLog("There was an error copying file \(welcomeFileLocation) to iCloud path \(iCloudFile.path)")
+                                        }
                                     }
                                 }
                             }
-                        }
-                        welcomeBundleResource.endAccessingResources()
-                    })
+                            welcomeBundleResource.endAccessingResources()
+                        })
+                    } catch {
+                        NSLog("There was an error creating the iCloud/welcome directory")
+                    }
                 }
             }
         })
@@ -595,6 +601,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             applicationInBackground = false
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
             let documentViewController = storyBoard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
+            documentViewController.modalPresentationStyle = UIModalPresentationStyle.fullScreen;
             NSFileCoordinator.addFilePresenter(documentViewController)
             startNotebookServer()
         }
@@ -646,6 +653,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // Present the Document View Controller for the revealed URL
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
             let documentViewController = storyBoard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
+            documentViewController.modalPresentationStyle = UIModalPresentationStyle.fullScreen;
             UserDefaults.standard.set(revealedDocumentURL, forKey: "lastOpenUrl")
             if (documentViewController.kernelURL == nil) {
                 // The documentBrowserViewController is active, we ask it to display the document:

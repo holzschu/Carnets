@@ -55,7 +55,7 @@ extension ViewController {
                     basicKeyCommands.append(UIKeyCommand(input: "\(K)", modifierFlags: [],  action: #selector(insertKey)))
                 }
             }
-            // no discoverabilityTitle
+            // This one remaps capslock to escape, no discoverabilityTitle
             basicKeyCommands.append(UIKeyCommand(input: "", modifierFlags:.alphaShift,  action: #selector(escapeKey)))
         }
         return basicKeyCommands
