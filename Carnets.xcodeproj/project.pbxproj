@@ -328,6 +328,7 @@
 		2273F825226C612900256401 /* UIDevice+Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2273F823226C612900256401 /* UIDevice+Name.swift */; };
 		2273F826226C612900256401 /* String+C.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2273F824226C612900256401 /* String+C.swift */; };
 		2287075222821D25003FF17A /* Apple Symbols.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2287075122821D1E003FF17A /* Apple Symbols.ttf */; };
+		22935014232A36C400645E69 /* UIColor+inverse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22935013232A36C400645E69 /* UIColor+inverse.swift */; };
 		2299396C2295D91B007C140E /* ViewController+inputAssistantItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2299396B2295D91B007C140E /* ViewController+inputAssistantItem.swift */; };
 		2299396E2295E1A8007C140E /* ViewController+keyCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2299396D2295E1A8007C140E /* ViewController+keyCommands.swift */; };
 		2299397322971989007C140E /* document_icon_320.png in Resources */ = {isa = PBXBuildFile; fileRef = 2299396F22971989007C140E /* document_icon_320.png */; };
@@ -1187,6 +1188,7 @@
 		2273F823226C612900256401 /* UIDevice+Name.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIDevice+Name.swift"; path = "Util/UIDevice+Name.swift"; sourceTree = "<group>"; };
 		2273F824226C612900256401 /* String+C.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+C.swift"; path = "Util/String+C.swift"; sourceTree = "<group>"; };
 		2287075122821D1E003FF17A /* Apple Symbols.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Apple Symbols.ttf"; path = "../../../../../System/Library/Fonts/Apple Symbols.ttf"; sourceTree = "<group>"; };
+		22935013232A36C400645E69 /* UIColor+inverse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+inverse.swift"; sourceTree = "<group>"; };
 		2299396B2295D91B007C140E /* ViewController+inputAssistantItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+inputAssistantItem.swift"; sourceTree = "<group>"; };
 		2299396D2295E1A8007C140E /* ViewController+keyCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+keyCommands.swift"; sourceTree = "<group>"; };
 		2299396F22971989007C140E /* document_icon_320.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = document_icon_320.png; path = Icons/document_icon_320.png; sourceTree = "<group>"; };
@@ -1752,6 +1754,7 @@
 				2273F824226C612900256401 /* String+C.swift */,
 				2273F823226C612900256401 /* UIDevice+Name.swift */,
 				2299397722973F26007C140E /* URL+isDirectory.swift */,
+				22935013232A36C400645E69 /* UIColor+inverse.swift */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -1973,6 +1976,7 @@
 				22C9A7AC223804210016B538 /* runningSessions.swift in Sources */,
 				22C9A7842236CEDE0016B538 /* DocumentBrowserViewController.swift in Sources */,
 				2299396E2295E1A8007C140E /* ViewController+keyCommands.swift in Sources */,
+				22935014232A36C400645E69 /* UIColor+inverse.swift in Sources */,
 				2299396C2295D91B007C140E /* ViewController+inputAssistantItem.swift in Sources */,
 				2273F825226C612900256401 /* UIDevice+Name.swift in Sources */,
 				22B750B021FC671700241F27 /* AppDelegate.swift in Sources */,
@@ -2127,6 +2131,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Carnets/Carnets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 59;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = VG8Z23C8YL;
 				ENABLE_BITCODE = NO;
@@ -2144,6 +2149,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
 				);
+				MARKETING_VERSION = 1.3.7;
 				PRODUCT_BUNDLE_IDENTIFIER = AsheKube.Carnets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -2160,6 +2166,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Carnets/Carnets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 59;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = VG8Z23C8YL;
 				ENABLE_BITCODE = NO;
@@ -2177,6 +2184,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
 				);
+				MARKETING_VERSION = 1.3.7;
 				PRODUCT_BUNDLE_IDENTIFIER = AsheKube.Carnets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
