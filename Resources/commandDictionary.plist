@@ -60,8 +60,8 @@
 	</array>
 	<key>curl</key>
 	<array>
-		<string>MAIN</string>
-		<string>curl_static_main</string>
+		<string>curl_ios.framework/curl_ios</string>
+		<string>curl_main</string>
 		<string>2346aAbBcCdDeEfgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwxXYyz#</string>
 		<string>file</string>
 	</array>
@@ -361,8 +361,8 @@
 	</array>
 	<key>scp</key>
 	<array>
-		<string>MAIN</string>
-		<string>curl_static_main</string>
+		<string>curl_ios.framework/curl_ios</string>
+		<string>curl_main</string>
 		<string>q</string>
 		<string>file</string>
 	</array>
@@ -382,9 +382,16 @@
 	</array>
 	<key>sftp</key>
 	<array>
-		<string>MAIN</string>
-		<string>curl_static_main</string>
+		<string>curl_ios.framework/curl_ios</string>
+		<string>curl_main</string>
 		<string>q</string>
+		<string>file</string>
+	</array>
+	<key>sh</key>
+	<array>
+		<string>SELF</string>
+		<string>sh_main</string>
+		<string>c:h:</string>
 		<string>file</string>
 	</array>
 	<key>ssh</key>
@@ -392,7 +399,7 @@
 		<string>ssh_cmd.framework/ssh_cmd</string>
 		<string>ssh_main</string>
 		<string>q</string>
-		<string></string>
+		<string>no</string>
 	</array>
 	<key>ssh-keygen</key>
 	<array>

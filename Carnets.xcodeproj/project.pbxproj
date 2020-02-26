@@ -405,6 +405,48 @@
 		22B827F92288AC84001E91C3 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 22B827F82288AC84001E91C3 /* Settings.bundle */; };
 		22C9A7842236CEDE0016B538 /* DocumentBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C9A7812236CEDE0016B538 /* DocumentBrowserViewController.swift */; };
 		22C9A7AC223804210016B538 /* runningSessions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C9A7AB223804210016B538 /* runningSessions.swift */; };
+		22D2975C23C2486F0069FE4F /* python3_ios-lxml._elementpath.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2974E23C248470069FE4F /* python3_ios-lxml._elementpath.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2975D23C2486F0069FE4F /* python3_ios-lxml.builder.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2975423C248470069FE4F /* python3_ios-lxml.builder.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2975E23C2486F0069FE4F /* python3_ios-lxml.etree.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2975A23C248480069FE4F /* python3_ios-lxml.etree.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2975F23C2486F0069FE4F /* python3_ios-lxml.html.clean.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2975823C248470069FE4F /* python3_ios-lxml.html.clean.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2976023C2486F0069FE4F /* python3_ios-lxml.html.diff.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2974323C248460069FE4F /* python3_ios-lxml.html.diff.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2976123C2486F0069FE4F /* python3_ios-lxml.objectify.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2975B23C248480069FE4F /* python3_ios-lxml.objectify.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2976223C2486F0069FE4F /* python3_ios-lxml.sax.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2973223C248440069FE4F /* python3_ios-lxml.sax.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2976323C2486F0069FE4F /* pythonA-lxml._elementpath.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2973423C248440069FE4F /* pythonA-lxml._elementpath.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2976423C2486F0069FE4F /* pythonA-lxml.builder.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2975923C248480069FE4F /* pythonA-lxml.builder.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2976523C2486F0069FE4F /* pythonA-lxml.etree.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2974223C248460069FE4F /* pythonA-lxml.etree.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2976623C2486F0069FE4F /* pythonA-lxml.html.clean.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2975723C248470069FE4F /* pythonA-lxml.html.clean.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2976723C2486F0069FE4F /* pythonA-lxml.html.diff.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2974F23C248470069FE4F /* pythonA-lxml.html.diff.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2976823C2486F0069FE4F /* pythonA-lxml.objectify.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2975523C248470069FE4F /* pythonA-lxml.objectify.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2976923C2486F0069FE4F /* pythonA-lxml.sax.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2974923C248460069FE4F /* pythonA-lxml.sax.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2976A23C2486F0069FE4F /* pythonB-lxml._elementpath.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2973523C248440069FE4F /* pythonB-lxml._elementpath.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2976B23C2486F0069FE4F /* pythonB-lxml.builder.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2973823C248440069FE4F /* pythonB-lxml.builder.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2976C23C2486F0069FE4F /* pythonB-lxml.etree.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2973E23C248450069FE4F /* pythonB-lxml.etree.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2976D23C2486F0069FE4F /* pythonB-lxml.html.clean.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2974A23C248460069FE4F /* pythonB-lxml.html.clean.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2976E23C2486F0069FE4F /* pythonB-lxml.html.diff.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2974423C248460069FE4F /* pythonB-lxml.html.diff.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2976F23C2486F0069FE4F /* pythonB-lxml.objectify.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2974823C248460069FE4F /* pythonB-lxml.objectify.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2977023C2486F0069FE4F /* pythonB-lxml.sax.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2973C23C248450069FE4F /* pythonB-lxml.sax.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2977123C2486F0069FE4F /* pythonC-lxml._elementpath.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2973323C248440069FE4F /* pythonC-lxml._elementpath.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2977223C2486F0069FE4F /* pythonC-lxml.builder.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2975223C248470069FE4F /* pythonC-lxml.builder.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2977323C2486F0069FE4F /* pythonC-lxml.etree.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2975123C248470069FE4F /* pythonC-lxml.etree.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2977423C2486F0069FE4F /* pythonC-lxml.html.clean.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2973F23C248450069FE4F /* pythonC-lxml.html.clean.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2977523C2486F0069FE4F /* pythonC-lxml.html.diff.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2975323C248470069FE4F /* pythonC-lxml.html.diff.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2977623C2486F0069FE4F /* pythonC-lxml.objectify.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2974023C248450069FE4F /* pythonC-lxml.objectify.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2977723C2486F0069FE4F /* pythonC-lxml.sax.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2974623C248460069FE4F /* pythonC-lxml.sax.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2977823C2486F0069FE4F /* pythonD-lxml._elementpath.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2974123C248450069FE4F /* pythonD-lxml._elementpath.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2977923C2486F0069FE4F /* pythonD-lxml.builder.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2973B23C248450069FE4F /* pythonD-lxml.builder.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2977A23C2486F0069FE4F /* pythonD-lxml.etree.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2973D23C248450069FE4F /* pythonD-lxml.etree.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2977B23C2486F0069FE4F /* pythonD-lxml.html.clean.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2973623C248440069FE4F /* pythonD-lxml.html.clean.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2977C23C2486F0069FE4F /* pythonD-lxml.html.diff.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2973723C248440069FE4F /* pythonD-lxml.html.diff.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2977D23C2486F0069FE4F /* pythonD-lxml.objectify.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2974523C248460069FE4F /* pythonD-lxml.objectify.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2977E23C2486F0069FE4F /* pythonD-lxml.sax.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2975623C248470069FE4F /* pythonD-lxml.sax.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2977F23C2486F0069FE4F /* pythonE-lxml._elementpath.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2974723C248460069FE4F /* pythonE-lxml._elementpath.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2978023C2486F0069FE4F /* pythonE-lxml.builder.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2973923C248450069FE4F /* pythonE-lxml.builder.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2978123C2486F0069FE4F /* pythonE-lxml.etree.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2973A23C248450069FE4F /* pythonE-lxml.etree.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2978223C2486F0069FE4F /* pythonE-lxml.html.clean.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2974B23C248460069FE4F /* pythonE-lxml.html.clean.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2978323C2486F0069FE4F /* pythonE-lxml.html.diff.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2974C23C248460069FE4F /* pythonE-lxml.html.diff.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2978423C2486F0069FE4F /* pythonE-lxml.objectify.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2974D23C248470069FE4F /* pythonE-lxml.objectify.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22D2978523C2486F0069FE4F /* pythonE-lxml.sax.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22D2975023C248470069FE4F /* pythonE-lxml.sax.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22EF1E48225BE1C40058BEAA /* pythonA-numpy.core._dummy.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E46225BE1BA0058BEAA /* pythonA-numpy.core._dummy.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22EF1E4A225BE1C40058BEAA /* pythonA-numpy.core._multiarray_umath.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E45225BE1BA0058BEAA /* pythonA-numpy.core._multiarray_umath.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22EF1E4C225BE1C40058BEAA /* pythonA-numpy.fft.fftpack_lite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E41225BE1BA0058BEAA /* pythonA-numpy.fft.fftpack_lite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -863,6 +905,48 @@
 				22AAFE0322A5C1C800192CB4 /* pythonE-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */,
 				22AAFE0422A5C1C800192CB4 /* pythonE-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */,
 				22AAFE0522A5C1C800192CB4 /* pythonE-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */,
+				22D2975C23C2486F0069FE4F /* python3_ios-lxml._elementpath.framework in Embed Frameworks */,
+				22D2975D23C2486F0069FE4F /* python3_ios-lxml.builder.framework in Embed Frameworks */,
+				22D2975E23C2486F0069FE4F /* python3_ios-lxml.etree.framework in Embed Frameworks */,
+				22D2975F23C2486F0069FE4F /* python3_ios-lxml.html.clean.framework in Embed Frameworks */,
+				22D2976023C2486F0069FE4F /* python3_ios-lxml.html.diff.framework in Embed Frameworks */,
+				22D2976123C2486F0069FE4F /* python3_ios-lxml.objectify.framework in Embed Frameworks */,
+				22D2976223C2486F0069FE4F /* python3_ios-lxml.sax.framework in Embed Frameworks */,
+				22D2976323C2486F0069FE4F /* pythonA-lxml._elementpath.framework in Embed Frameworks */,
+				22D2976423C2486F0069FE4F /* pythonA-lxml.builder.framework in Embed Frameworks */,
+				22D2976523C2486F0069FE4F /* pythonA-lxml.etree.framework in Embed Frameworks */,
+				22D2976623C2486F0069FE4F /* pythonA-lxml.html.clean.framework in Embed Frameworks */,
+				22D2976723C2486F0069FE4F /* pythonA-lxml.html.diff.framework in Embed Frameworks */,
+				22D2976823C2486F0069FE4F /* pythonA-lxml.objectify.framework in Embed Frameworks */,
+				22D2976923C2486F0069FE4F /* pythonA-lxml.sax.framework in Embed Frameworks */,
+				22D2976A23C2486F0069FE4F /* pythonB-lxml._elementpath.framework in Embed Frameworks */,
+				22D2976B23C2486F0069FE4F /* pythonB-lxml.builder.framework in Embed Frameworks */,
+				22D2976C23C2486F0069FE4F /* pythonB-lxml.etree.framework in Embed Frameworks */,
+				22D2976D23C2486F0069FE4F /* pythonB-lxml.html.clean.framework in Embed Frameworks */,
+				22D2976E23C2486F0069FE4F /* pythonB-lxml.html.diff.framework in Embed Frameworks */,
+				22D2976F23C2486F0069FE4F /* pythonB-lxml.objectify.framework in Embed Frameworks */,
+				22D2977023C2486F0069FE4F /* pythonB-lxml.sax.framework in Embed Frameworks */,
+				22D2977123C2486F0069FE4F /* pythonC-lxml._elementpath.framework in Embed Frameworks */,
+				22D2977223C2486F0069FE4F /* pythonC-lxml.builder.framework in Embed Frameworks */,
+				22D2977323C2486F0069FE4F /* pythonC-lxml.etree.framework in Embed Frameworks */,
+				22D2977423C2486F0069FE4F /* pythonC-lxml.html.clean.framework in Embed Frameworks */,
+				22D2977523C2486F0069FE4F /* pythonC-lxml.html.diff.framework in Embed Frameworks */,
+				22D2977623C2486F0069FE4F /* pythonC-lxml.objectify.framework in Embed Frameworks */,
+				22D2977723C2486F0069FE4F /* pythonC-lxml.sax.framework in Embed Frameworks */,
+				22D2977823C2486F0069FE4F /* pythonD-lxml._elementpath.framework in Embed Frameworks */,
+				22D2977923C2486F0069FE4F /* pythonD-lxml.builder.framework in Embed Frameworks */,
+				22D2977A23C2486F0069FE4F /* pythonD-lxml.etree.framework in Embed Frameworks */,
+				22D2977B23C2486F0069FE4F /* pythonD-lxml.html.clean.framework in Embed Frameworks */,
+				22D2977C23C2486F0069FE4F /* pythonD-lxml.html.diff.framework in Embed Frameworks */,
+				22D2977D23C2486F0069FE4F /* pythonD-lxml.objectify.framework in Embed Frameworks */,
+				22D2977E23C2486F0069FE4F /* pythonD-lxml.sax.framework in Embed Frameworks */,
+				22D2977F23C2486F0069FE4F /* pythonE-lxml._elementpath.framework in Embed Frameworks */,
+				22D2978023C2486F0069FE4F /* pythonE-lxml.builder.framework in Embed Frameworks */,
+				22D2978123C2486F0069FE4F /* pythonE-lxml.etree.framework in Embed Frameworks */,
+				22D2978223C2486F0069FE4F /* pythonE-lxml.html.clean.framework in Embed Frameworks */,
+				22D2978323C2486F0069FE4F /* pythonE-lxml.html.diff.framework in Embed Frameworks */,
+				22D2978423C2486F0069FE4F /* pythonE-lxml.objectify.framework in Embed Frameworks */,
+				22D2978523C2486F0069FE4F /* pythonE-lxml.sax.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1187,6 +1271,7 @@
 		2273F7292269E92C00256401 /* pythonC-pandas._libs.indexing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-pandas._libs.indexing.framework"; path = "Frameworks/pythonC-pandas._libs.indexing.framework"; sourceTree = "<group>"; };
 		2273F823226C612900256401 /* UIDevice+Name.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIDevice+Name.swift"; path = "Util/UIDevice+Name.swift"; sourceTree = "<group>"; };
 		2273F824226C612900256401 /* String+C.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+C.swift"; path = "Util/String+C.swift"; sourceTree = "<group>"; };
+		2278F92223E713A200E86D81 /* ODR_bokeh */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ODR_bokeh; sourceTree = "<group>"; };
 		2287075122821D1E003FF17A /* Apple Symbols.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Apple Symbols.ttf"; path = "../../../../../System/Library/Fonts/Apple Symbols.ttf"; sourceTree = "<group>"; };
 		22935013232A36C400645E69 /* UIColor+inverse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+inverse.swift"; sourceTree = "<group>"; };
 		2299396B2295D91B007C140E /* ViewController+inputAssistantItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+inputAssistantItem.swift"; sourceTree = "<group>"; };
@@ -1273,6 +1358,48 @@
 		22C9A7812236CEDE0016B538 /* DocumentBrowserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentBrowserViewController.swift; sourceTree = "<group>"; };
 		22C9A7822236CEDE0016B538 /* DocumentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentViewController.swift; sourceTree = "<group>"; };
 		22C9A7AB223804210016B538 /* runningSessions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = runningSessions.swift; sourceTree = "<group>"; };
+		22D2973223C248440069FE4F /* python3_ios-lxml.sax.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-lxml.sax.framework"; path = "../python3_ios/Frameworks/python3_ios-lxml.sax.framework"; sourceTree = "<group>"; };
+		22D2973323C248440069FE4F /* pythonC-lxml._elementpath.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-lxml._elementpath.framework"; path = "../python3_ios/Frameworks/pythonC-lxml._elementpath.framework"; sourceTree = "<group>"; };
+		22D2973423C248440069FE4F /* pythonA-lxml._elementpath.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-lxml._elementpath.framework"; path = "../python3_ios/Frameworks/pythonA-lxml._elementpath.framework"; sourceTree = "<group>"; };
+		22D2973523C248440069FE4F /* pythonB-lxml._elementpath.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-lxml._elementpath.framework"; path = "../python3_ios/Frameworks/pythonB-lxml._elementpath.framework"; sourceTree = "<group>"; };
+		22D2973623C248440069FE4F /* pythonD-lxml.html.clean.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-lxml.html.clean.framework"; path = "../python3_ios/Frameworks/pythonD-lxml.html.clean.framework"; sourceTree = "<group>"; };
+		22D2973723C248440069FE4F /* pythonD-lxml.html.diff.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-lxml.html.diff.framework"; path = "../python3_ios/Frameworks/pythonD-lxml.html.diff.framework"; sourceTree = "<group>"; };
+		22D2973823C248440069FE4F /* pythonB-lxml.builder.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-lxml.builder.framework"; path = "../python3_ios/Frameworks/pythonB-lxml.builder.framework"; sourceTree = "<group>"; };
+		22D2973923C248450069FE4F /* pythonE-lxml.builder.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-lxml.builder.framework"; path = "../python3_ios/Frameworks/pythonE-lxml.builder.framework"; sourceTree = "<group>"; };
+		22D2973A23C248450069FE4F /* pythonE-lxml.etree.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-lxml.etree.framework"; path = "../python3_ios/Frameworks/pythonE-lxml.etree.framework"; sourceTree = "<group>"; };
+		22D2973B23C248450069FE4F /* pythonD-lxml.builder.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-lxml.builder.framework"; path = "../python3_ios/Frameworks/pythonD-lxml.builder.framework"; sourceTree = "<group>"; };
+		22D2973C23C248450069FE4F /* pythonB-lxml.sax.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-lxml.sax.framework"; path = "../python3_ios/Frameworks/pythonB-lxml.sax.framework"; sourceTree = "<group>"; };
+		22D2973D23C248450069FE4F /* pythonD-lxml.etree.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-lxml.etree.framework"; path = "../python3_ios/Frameworks/pythonD-lxml.etree.framework"; sourceTree = "<group>"; };
+		22D2973E23C248450069FE4F /* pythonB-lxml.etree.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-lxml.etree.framework"; path = "../python3_ios/Frameworks/pythonB-lxml.etree.framework"; sourceTree = "<group>"; };
+		22D2973F23C248450069FE4F /* pythonC-lxml.html.clean.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-lxml.html.clean.framework"; path = "../python3_ios/Frameworks/pythonC-lxml.html.clean.framework"; sourceTree = "<group>"; };
+		22D2974023C248450069FE4F /* pythonC-lxml.objectify.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-lxml.objectify.framework"; path = "../python3_ios/Frameworks/pythonC-lxml.objectify.framework"; sourceTree = "<group>"; };
+		22D2974123C248450069FE4F /* pythonD-lxml._elementpath.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-lxml._elementpath.framework"; path = "../python3_ios/Frameworks/pythonD-lxml._elementpath.framework"; sourceTree = "<group>"; };
+		22D2974223C248460069FE4F /* pythonA-lxml.etree.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-lxml.etree.framework"; path = "../python3_ios/Frameworks/pythonA-lxml.etree.framework"; sourceTree = "<group>"; };
+		22D2974323C248460069FE4F /* python3_ios-lxml.html.diff.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-lxml.html.diff.framework"; path = "../python3_ios/Frameworks/python3_ios-lxml.html.diff.framework"; sourceTree = "<group>"; };
+		22D2974423C248460069FE4F /* pythonB-lxml.html.diff.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-lxml.html.diff.framework"; path = "../python3_ios/Frameworks/pythonB-lxml.html.diff.framework"; sourceTree = "<group>"; };
+		22D2974523C248460069FE4F /* pythonD-lxml.objectify.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-lxml.objectify.framework"; path = "../python3_ios/Frameworks/pythonD-lxml.objectify.framework"; sourceTree = "<group>"; };
+		22D2974623C248460069FE4F /* pythonC-lxml.sax.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-lxml.sax.framework"; path = "../python3_ios/Frameworks/pythonC-lxml.sax.framework"; sourceTree = "<group>"; };
+		22D2974723C248460069FE4F /* pythonE-lxml._elementpath.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-lxml._elementpath.framework"; path = "../python3_ios/Frameworks/pythonE-lxml._elementpath.framework"; sourceTree = "<group>"; };
+		22D2974823C248460069FE4F /* pythonB-lxml.objectify.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-lxml.objectify.framework"; path = "../python3_ios/Frameworks/pythonB-lxml.objectify.framework"; sourceTree = "<group>"; };
+		22D2974923C248460069FE4F /* pythonA-lxml.sax.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-lxml.sax.framework"; path = "../python3_ios/Frameworks/pythonA-lxml.sax.framework"; sourceTree = "<group>"; };
+		22D2974A23C248460069FE4F /* pythonB-lxml.html.clean.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-lxml.html.clean.framework"; path = "../python3_ios/Frameworks/pythonB-lxml.html.clean.framework"; sourceTree = "<group>"; };
+		22D2974B23C248460069FE4F /* pythonE-lxml.html.clean.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-lxml.html.clean.framework"; path = "../python3_ios/Frameworks/pythonE-lxml.html.clean.framework"; sourceTree = "<group>"; };
+		22D2974C23C248460069FE4F /* pythonE-lxml.html.diff.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-lxml.html.diff.framework"; path = "../python3_ios/Frameworks/pythonE-lxml.html.diff.framework"; sourceTree = "<group>"; };
+		22D2974D23C248470069FE4F /* pythonE-lxml.objectify.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-lxml.objectify.framework"; path = "../python3_ios/Frameworks/pythonE-lxml.objectify.framework"; sourceTree = "<group>"; };
+		22D2974E23C248470069FE4F /* python3_ios-lxml._elementpath.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-lxml._elementpath.framework"; path = "../python3_ios/Frameworks/python3_ios-lxml._elementpath.framework"; sourceTree = "<group>"; };
+		22D2974F23C248470069FE4F /* pythonA-lxml.html.diff.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-lxml.html.diff.framework"; path = "../python3_ios/Frameworks/pythonA-lxml.html.diff.framework"; sourceTree = "<group>"; };
+		22D2975023C248470069FE4F /* pythonE-lxml.sax.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-lxml.sax.framework"; path = "../python3_ios/Frameworks/pythonE-lxml.sax.framework"; sourceTree = "<group>"; };
+		22D2975123C248470069FE4F /* pythonC-lxml.etree.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-lxml.etree.framework"; path = "../python3_ios/Frameworks/pythonC-lxml.etree.framework"; sourceTree = "<group>"; };
+		22D2975223C248470069FE4F /* pythonC-lxml.builder.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-lxml.builder.framework"; path = "../python3_ios/Frameworks/pythonC-lxml.builder.framework"; sourceTree = "<group>"; };
+		22D2975323C248470069FE4F /* pythonC-lxml.html.diff.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-lxml.html.diff.framework"; path = "../python3_ios/Frameworks/pythonC-lxml.html.diff.framework"; sourceTree = "<group>"; };
+		22D2975423C248470069FE4F /* python3_ios-lxml.builder.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-lxml.builder.framework"; path = "../python3_ios/Frameworks/python3_ios-lxml.builder.framework"; sourceTree = "<group>"; };
+		22D2975523C248470069FE4F /* pythonA-lxml.objectify.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-lxml.objectify.framework"; path = "../python3_ios/Frameworks/pythonA-lxml.objectify.framework"; sourceTree = "<group>"; };
+		22D2975623C248470069FE4F /* pythonD-lxml.sax.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-lxml.sax.framework"; path = "../python3_ios/Frameworks/pythonD-lxml.sax.framework"; sourceTree = "<group>"; };
+		22D2975723C248470069FE4F /* pythonA-lxml.html.clean.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-lxml.html.clean.framework"; path = "../python3_ios/Frameworks/pythonA-lxml.html.clean.framework"; sourceTree = "<group>"; };
+		22D2975823C248470069FE4F /* python3_ios-lxml.html.clean.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-lxml.html.clean.framework"; path = "../python3_ios/Frameworks/python3_ios-lxml.html.clean.framework"; sourceTree = "<group>"; };
+		22D2975923C248480069FE4F /* pythonA-lxml.builder.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-lxml.builder.framework"; path = "../python3_ios/Frameworks/pythonA-lxml.builder.framework"; sourceTree = "<group>"; };
+		22D2975A23C248480069FE4F /* python3_ios-lxml.etree.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-lxml.etree.framework"; path = "../python3_ios/Frameworks/python3_ios-lxml.etree.framework"; sourceTree = "<group>"; };
+		22D2975B23C248480069FE4F /* python3_ios-lxml.objectify.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-lxml.objectify.framework"; path = "../python3_ios/Frameworks/python3_ios-lxml.objectify.framework"; sourceTree = "<group>"; };
 		22EF1E41225BE1BA0058BEAA /* pythonA-numpy.fft.fftpack_lite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-numpy.fft.fftpack_lite.framework"; path = "Frameworks/pythonA-numpy.fft.fftpack_lite.framework"; sourceTree = "<group>"; };
 		22EF1E42225BE1BA0058BEAA /* pythonA-numpy.linalg.lapack_lite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-numpy.linalg.lapack_lite.framework"; path = "Frameworks/pythonA-numpy.linalg.lapack_lite.framework"; sourceTree = "<group>"; };
 		22EF1E43225BE1BA0058BEAA /* pythonA-numpy.random.mtrand.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-numpy.random.mtrand.framework"; path = "Frameworks/pythonA-numpy.random.mtrand.framework"; sourceTree = "<group>"; };
@@ -1330,6 +1457,7 @@
 		221EE18021FCCBDB00D0394F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				2278F92223E713A200E86D81 /* ODR_bokeh */,
 				222975B92288349C009D93ED /* ODR_extensions */,
 				22FFDCF22263D78F003E97CF /* welcome */,
 				22F03F702219D9E500EBEA0B /* Library */,
@@ -1845,6 +1973,7 @@
 		22B750C121FC8F2C00241F27 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				22D2973123C2482D0069FE4F /* lxml */,
 				22AAFD2D22A52B0900192CB4 /* Pillow */,
 				226CD0ED22A1639D004133E7 /* cryptography */,
 				2273F6332269E37600256401 /* pandas */,
@@ -1870,6 +1999,55 @@
 				22B750DE21FCA4D000241F27 /* text.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		22D2973123C2482D0069FE4F /* lxml */ = {
+			isa = PBXGroup;
+			children = (
+				22D2974E23C248470069FE4F /* python3_ios-lxml._elementpath.framework */,
+				22D2975423C248470069FE4F /* python3_ios-lxml.builder.framework */,
+				22D2975A23C248480069FE4F /* python3_ios-lxml.etree.framework */,
+				22D2975823C248470069FE4F /* python3_ios-lxml.html.clean.framework */,
+				22D2974323C248460069FE4F /* python3_ios-lxml.html.diff.framework */,
+				22D2975B23C248480069FE4F /* python3_ios-lxml.objectify.framework */,
+				22D2973223C248440069FE4F /* python3_ios-lxml.sax.framework */,
+				22D2973423C248440069FE4F /* pythonA-lxml._elementpath.framework */,
+				22D2975923C248480069FE4F /* pythonA-lxml.builder.framework */,
+				22D2974223C248460069FE4F /* pythonA-lxml.etree.framework */,
+				22D2975723C248470069FE4F /* pythonA-lxml.html.clean.framework */,
+				22D2974F23C248470069FE4F /* pythonA-lxml.html.diff.framework */,
+				22D2975523C248470069FE4F /* pythonA-lxml.objectify.framework */,
+				22D2974923C248460069FE4F /* pythonA-lxml.sax.framework */,
+				22D2973523C248440069FE4F /* pythonB-lxml._elementpath.framework */,
+				22D2973823C248440069FE4F /* pythonB-lxml.builder.framework */,
+				22D2973E23C248450069FE4F /* pythonB-lxml.etree.framework */,
+				22D2974A23C248460069FE4F /* pythonB-lxml.html.clean.framework */,
+				22D2974423C248460069FE4F /* pythonB-lxml.html.diff.framework */,
+				22D2974823C248460069FE4F /* pythonB-lxml.objectify.framework */,
+				22D2973C23C248450069FE4F /* pythonB-lxml.sax.framework */,
+				22D2973323C248440069FE4F /* pythonC-lxml._elementpath.framework */,
+				22D2975223C248470069FE4F /* pythonC-lxml.builder.framework */,
+				22D2975123C248470069FE4F /* pythonC-lxml.etree.framework */,
+				22D2973F23C248450069FE4F /* pythonC-lxml.html.clean.framework */,
+				22D2975323C248470069FE4F /* pythonC-lxml.html.diff.framework */,
+				22D2974023C248450069FE4F /* pythonC-lxml.objectify.framework */,
+				22D2974623C248460069FE4F /* pythonC-lxml.sax.framework */,
+				22D2974123C248450069FE4F /* pythonD-lxml._elementpath.framework */,
+				22D2973B23C248450069FE4F /* pythonD-lxml.builder.framework */,
+				22D2973D23C248450069FE4F /* pythonD-lxml.etree.framework */,
+				22D2973623C248440069FE4F /* pythonD-lxml.html.clean.framework */,
+				22D2973723C248440069FE4F /* pythonD-lxml.html.diff.framework */,
+				22D2974523C248460069FE4F /* pythonD-lxml.objectify.framework */,
+				22D2975623C248470069FE4F /* pythonD-lxml.sax.framework */,
+				22D2974723C248460069FE4F /* pythonE-lxml._elementpath.framework */,
+				22D2973923C248450069FE4F /* pythonE-lxml.builder.framework */,
+				22D2973A23C248450069FE4F /* pythonE-lxml.etree.framework */,
+				22D2974B23C248460069FE4F /* pythonE-lxml.html.clean.framework */,
+				22D2974C23C248460069FE4F /* pythonE-lxml.html.diff.framework */,
+				22D2974D23C248470069FE4F /* pythonE-lxml.objectify.framework */,
+				22D2975023C248470069FE4F /* pythonE-lxml.sax.framework */,
+			);
+			name = lxml;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1902,7 +2080,6 @@
 				KnownAssetTags = (
 					extensions,
 					welcome,
-					widgets,
 				);
 				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 1010;
@@ -2131,7 +2308,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Carnets/Carnets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 59;
+				CURRENT_PROJECT_VERSION = 76;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = VG8Z23C8YL;
 				ENABLE_BITCODE = NO;
@@ -2149,7 +2326,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.7;
+				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = AsheKube.Carnets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -2166,7 +2343,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Carnets/Carnets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 59;
+				CURRENT_PROJECT_VERSION = 76;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = VG8Z23C8YL;
 				ENABLE_BITCODE = NO;
@@ -2184,7 +2361,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.7;
+				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = AsheKube.Carnets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
