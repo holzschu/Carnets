@@ -1,0 +1,3 @@
+[console_scripts]
+bokeh = bokeh.__main__:main
+

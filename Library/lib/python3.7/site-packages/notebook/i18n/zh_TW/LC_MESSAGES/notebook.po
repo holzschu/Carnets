@@ -1,0 +1,530 @@
+# Translations template for Jupyter.
+# Copyright (C) 2017 ORGANIZATION
+# This file is distributed under the same license as the Jupyter project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Jupyter VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2017-07-08 21:52-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
+
+#: notebook/notebookapp.py:53
+msgid "The Jupyter Notebook requires tornado >= 4.0"
+msgstr "Jupyter Notebook 需要 Tornado 版本 >= 4.0"
+
+#: notebook/notebookapp.py:57
+msgid "The Jupyter Notebook requires tornado >= 4.0, but you have < 1.1.0"
+msgstr "Jupyter Notebook 需要 Tornado 版本 >= 4.0，但是你的版本 < 1.1.0"
+
+#: notebook/notebookapp.py:59
+#, python-format
+msgid "The Jupyter Notebook requires tornado >= 4.0, but you have %s"
+msgstr "Jupyter Notebook 需要 Tornado 版本 >= 4.0，但是你的版本是 %s"
+
+#: notebook/notebookapp.py:209
+msgid "The `ignore_minified_js` flag is deprecated and no longer works."
+msgstr "`ignore_minified_js` 已棄用，不再起作用。"
+
+#: notebook/notebookapp.py:210
+#, python-format
+msgid "Alternatively use `%s` when working on the notebook's Javascript and LESS"
+msgstr "在使用 Notebook 的 Javascript 和 LESS 時，也可以使用 `%s`"
+
+#: notebook/notebookapp.py:211
+msgid "The `ignore_minified_js` flag is deprecated and will be removed in Notebook 6.0"
+msgstr "`ignore_minified_js` 已被棄用，並將在 Notebook 6.0 中刪除"
+
+#: notebook/notebookapp.py:389
+msgid "List currently running notebook servers."
+msgstr "列出目前正在執行的 Notebook 服務。"
+
+#: notebook/notebookapp.py:393
+msgid "Produce machine-readable JSON output."
+msgstr "產生 machine-readable JSON 輸出。"
+
+#: notebook/notebookapp.py:397
+msgid "If True, each line of output will be a JSON object with the details from the server info file."
+msgstr "如果為True，則輸出的每一行將是一個 JSON 對象，其中包含伺服器虛席文件中的詳細資訊。"
+
+#: notebook/notebookapp.py:402
+msgid "Currently running servers:"
+msgstr "目前正在運行的伺服器："
+
+#: notebook/notebookapp.py:419
+msgid "Don't open the notebook in a browser after startup."
+msgstr "啟動後不要在瀏覽器中打開 Notebook。"
+
+#: notebook/notebookapp.py:423
+msgid "DISABLED: use %pylab or %matplotlib in the notebook to enable matplotlib."
+msgstr "禁用：在 Notebook 中啟用 matplotlib 下使用 %pylab 或 %matplotlib。"
+
+#: notebook/notebookapp.py:439
+msgid "Allow the notebook to be run from root user."
+msgstr "允許 Notebook 以 root 運行。"
+
+#: notebook/notebookapp.py:470
+msgid ""
+"The Jupyter HTML Notebook.\n"
+"    \n"
+"    This launches a Tornado based HTML Notebook Server that serves up an HTML5/Javascript Notebook client."
+msgstr ""
+"Jupyter HTML Notebook.\n"
+"    \n"
+"    這將啟動基於 Tornado 的 HTML Notebook 伺服器，該伺服器提供 HTML5/Javascript Notebook 客戶端。"
+
+#: notebook/notebookapp.py:509
+msgid "Deprecated: Use minified JS file or not, mainly use during dev to avoid JS recompilation"
+msgstr "不推薦使用：是否使用縮小的 JS 檔案，主要在開發期間使用以避免 JS 重新編譯"
+
+#: notebook/notebookapp.py:540
+msgid "Set the Access-Control-Allow-Credentials: true header"
+msgstr "設置訪問控制允許憑據：true header”"
+
+#: notebook/notebookapp.py:544
+msgid "Whether to allow the user to run the notebook as root."
+msgstr "是否允許用戶以 root 執行 Notebook。"
+
+#: notebook/notebookapp.py:548
+msgid "The default URL to redirect to from `/`"
+msgstr "重新定義 `/` 為默認的 URL"
+
+#: notebook/notebookapp.py:552
+msgid "The IP address the notebook server will listen on."
+msgstr "Notebook 伺服器 所使用的 IP 位置。"
+
+#: notebook/notebookapp.py:565
+#, python-format
+msgid ""
+"Cannot bind to localhost, using 127.0.0.1 as default ip\n"
+"%s"
+msgstr ""
+"無法綁定這台電腦，使用 127.0.0.1 作為默認 IP\n"
+"%s"
+
+#: notebook/notebookapp.py:579
+msgid "The port the notebook server will listen on."
+msgstr "Notebook 伺服器將使用的通訊埠。"
+
+#: notebook/notebookapp.py:583
+msgid "The number of additional ports to try if the specified port is not available."
+msgstr "如果指定的通訊埠不可用，請嘗試其他通訊埠。"
+
+#: notebook/notebookapp.py:587
+msgid "The full path to an SSL/TLS certificate file."
+msgstr "SSL/TLS 憑證文件所在的完整路徑。"
+
+#: notebook/notebookapp.py:591
+msgid "The full path to a private key file for usage with SSL/TLS."
+msgstr "與 SSL/TLS 一起使用的私鑰文件的完整路徑。"
+
+#: notebook/notebookapp.py:595
+msgid "The full path to a certificate authority certificate for SSL/TLS client authentication."
+msgstr "用於 SSL/TLS 客戶端身份驗證的憑證頒發證書的完整路徑。"
+
+#: notebook/notebookapp.py:599
+msgid "The file where the cookie secret is stored."
+msgstr "Cookie 密鑰的文件被保存了。"
+
+#: notebook/notebookapp.py:628
+#, python-format
+msgid "Writing notebook server cookie secret to %s"
+msgstr "將 Notebook 伺服器 Cookie 密鑰寫入 %s"
+
+#: notebook/notebookapp.py:635
+#, python-format
+msgid "Could not set permissions on %s"
+msgstr "無法在 %s 上設置權限”"
+
+#: notebook/notebookapp.py:640
+msgid ""
+"Token used for authenticating first-time connections to the server.\n"
+"\n"
+"        When no password is enabled,\n"
+"        the default is to generate a new, random token.\n"
+"\n"
+"        Setting to an empty string disables authentication altogether, which is NOT RECOMMENDED.\n"
+"        "
+msgstr ""
+"Token 用於驗證與伺服器的首次連接。\ n”\n"
+"\n"
+"        密碼未啟用時,\n"
+"        默認會生成一個隨機的 Token.\n"
+"\n"
+"        不建議設置為空字符串，因為這將完全禁用身份驗證。\n"
+"        "
+
+#: notebook/notebookapp.py:650
+msgid ""
+"One-time token used for opening a browser.\n"
+"        Once used, this token cannot be used again.\n"
+"        "
+msgstr ""
+"用於打開瀏覽器的一次性 Token。\n"
+"        一旦使用，此 Token 將無法再次使用。\n"
+"        "
+
+#: notebook/notebookapp.py:726
+msgid ""
+"Specify Where to open the notebook on startup. This is the\n"
+"        `new` argument passed to the standard library method `webbrowser.open`.\n"
+"        The behaviour is not guaranteed, but depends on browser support. Valid\n"
+"        values are:\n"
+"            2 opens a new tab,\n"
+"            1 opens a new window,\n"
+"            0 opens in an existing window.\n"
+"        See the `webbrowser.open` documentation for details.\n"
+"        "
+msgstr ""
+"指定啟動時在哪裡打開筆記本。這是\n"
+"        將「新」參數傳遞給標準庫方法 webbrowser.open。\n"
+"        無法保證行為，但取決於瀏覽器支持。有效值為：\n"
+"            2 打開一個新標籤\n"
+"            1 打開一個新窗口\n"
+"            0 在現有窗口中打開\n"
+"        有關詳細資訊，請參閱`webbrowser.open`文檔。\n"
+"        "
+
+#: notebook/notebookapp.py:737
+msgid "DEPRECATED, use tornado_settings"
+msgstr "已棄用，請使用 tornado_settings"
+
+#: notebook/notebookapp.py:742
+msgid ""
+"\n"
+"    webapp_settings is deprecated, use tornado_settings.\n"
+msgstr ""
+"\n"
+"    webapp_settings 已過時，請使用 tornado_settings。\n"
+
+#: notebook/notebookapp.py:746
+msgid "Supply overrides for the tornado.web.Application that the Jupyter notebook uses."
+msgstr "提供 Jupyter Notebook 使用 tornado.web.Application 作為替代。"
+
+#: notebook/notebookapp.py:750
+msgid ""
+"\n"
+"        Set the tornado compression options for websocket connections.\n"
+"\n"
+"        This value will be returned from :meth:`WebSocketHandler.get_compression_options`.\n"
+"        None (default) will disable compression.\n"
+"        A dict (even an empty one) will enable compression.\n"
+"\n"
+"        See the tornado docs for WebSocketHandler.get_compression_options for details.\n"
+"        "
+msgstr ""
+"\n"
+"        設置 websocket 連接的 Tornado 壓縮選項。\n"
+"\n"
+"        此值將從:meth:`WebSocketHandler.get_compression_options` 返回.\n"
+"        None (默認) 將禁用壓縮\n"
+"        一個 dict (即時是空值) 也會啟用壓縮功能\n"
+"\n"
+"        有關詳細資訊，請參閱 Tornado 的 WebSocketHandler.get_compression_options 文檔。\n"
+"        "
+
+#: notebook/notebookapp.py:761
+msgid "Supply overrides for terminado. Currently only supports \"shell_command\"."
+msgstr "提供終端替代，目前僅支援 \"shell_command\"。"
+
+#: notebook/notebookapp.py:764
+msgid "Extra keyword arguments to pass to `set_secure_cookie`. See tornado's set_secure_cookie docs for details."
+msgstr "額外的關鍵字參數傳遞給 `set_secure_cookie`，有關詳細資訊，請參閱 Tornado 的 set_secure_cookie 文檔。"
+
+#: notebook/notebookapp.py:768
+msgid ""
+"Supply SSL options for the tornado HTTPServer.\n"
+"            See the tornado docs for details."
+msgstr ""
+"為 Tornado HTTPServer 提供 SSL 選項。\ n”\n"
+"            有關詳細資訊，請參閱 Tornado 文檔"
+
+#: notebook/notebookapp.py:772
+msgid "Supply extra arguments that will be passed to Jinja environment."
+msgstr "提供額外的參數，這些參數將傳遞給 Jinja 環境。"
+
+#: notebook/notebookapp.py:776
+msgid "Extra variables to supply to jinja templates when rendering."
+msgstr "渲染時提供給 jinja 模板額外變量。"
+
+#: notebook/notebookapp.py:812
+msgid "DEPRECATED use base_url"
+msgstr "棄用 base_url"
+
+#: notebook/notebookapp.py:816
+msgid "base_project_url is deprecated, use base_url"
+msgstr "不建議使用 base_project_url，請使用 base_url"
+
+#: notebook/notebookapp.py:832
+msgid "Path to search for custom.js, css"
+msgstr "搜索 custom.js, css 的路徑"
+
+#: notebook/notebookapp.py:844
+msgid ""
+"Extra paths to search for serving jinja templates.\n"
+"\n"
+"        Can be used to override templates from notebook.templates."
+msgstr ""
+"搜索服務 Jinja 模板的其他路徑。\n"
+"\n"
+"        可用於覆蓋 notebook.templates 中的模板。"
+
+#: notebook/notebookapp.py:855
+msgid "extra paths to look for Javascript notebook extensions"
+msgstr "尋找 Javascript Notebook 擴展的額外路徑"
+
+#: notebook/notebookapp.py:900
+#, python-format
+msgid "Using MathJax: %s"
+msgstr "使用 MathJax： %s"
+
+#: notebook/notebookapp.py:903
+msgid "The MathJax.js configuration file that is to be used."
+msgstr "將要使用的 MathJax.js 配置文件。"
+
+#: notebook/notebookapp.py:908
+#, python-format
+msgid "Using MathJax configuration file: %s"
+msgstr "使用 MathJax 配置文件：%s"
+
+#: notebook/notebookapp.py:914
+msgid "The notebook manager class to use."
+msgstr "要使用的 Notebook manager class。"
+
+#: notebook/notebookapp.py:920
+msgid "The kernel manager class to use."
+msgstr "要使用的 Kernel manager class"
+
+#: notebook/notebookapp.py:926
+msgid "The session manager class to use."
+msgstr "要使用的 Session manager class"
+
+#: notebook/notebookapp.py:932
+msgid "The config manager class to use"
+msgstr "要使用的 Config manager class"
+
+#: notebook/notebookapp.py:953
+msgid "The login handler class to use."
+msgstr "要使用的 Login handler class"
+
+#: notebook/notebookapp.py:960
+msgid "The logout handler class to use."
+msgstr "要使用的 Logout handler class"
+
+#: notebook/notebookapp.py:964
+msgid "Whether to trust or not X-Scheme/X-Forwarded-Proto and X-Real-Ip/X-Forwarded-For headerssent by the upstream reverse proxy. Necessary if the proxy handles SSL"
+msgstr "是否信任上游反向代理發送的 X-Scheme/X-Forwarded-Proto 和 X-Real-Ip/X-Forwarded-For headerssent。如果由代理處理 SSL，則是必需的"
+
+#: notebook/notebookapp.py:976
+msgid ""
+"\n"
+"        DISABLED: use %pylab or %matplotlib in the notebook to enable matplotlib.\n"
+"        "
+msgstr ""
+"\n"
+"        禁用：在 Notebook 中啟用 matplotlib 下使用 %pylab 或 %matplotlib。\n"
+"        "
+
+#: notebook/notebookapp.py:988
+msgid "Support for specifying --pylab on the command line has been removed."
+msgstr "刪除了在命令行上指定 --pylab 的支持。”"
+
+#: notebook/notebookapp.py:990
+msgid "Please use `%pylab{0}` or `%matplotlib{0}` in the notebook itself."
+msgstr "請在 Notebook 中使用 `%pylab{0}` 或 `%matplotlib{0}`。"
+
+#: notebook/notebookapp.py:995
+msgid "The directory to use for notebooks and kernels."
+msgstr "用於 Notebooks 和 Kernels 的目錄。"
+
+#: notebook/notebookapp.py:1018
+#, python-format
+msgid "No such notebook dir: '%r'"
+msgstr "沒有這樣的 Notebooks 目錄：'%r'"
+
+#: notebook/notebookapp.py:1031
+msgid "DEPRECATED use the nbserver_extensions dict instead"
+msgstr "已棄用，請改用 nbserver_extensions 字典"
+
+#: notebook/notebookapp.py:1036
+msgid "server_extensions is deprecated, use nbserver_extensions"
+msgstr ""
+
+#: notebook/notebookapp.py:1040
+msgid "Dict of Python modules to load as notebook server extensions.Entry values can be used to enable and disable the loading ofthe extensions. The extensions will be loaded in alphabetical order."
+msgstr "Python 模組的字典，可作為 Notebook 伺服器讀取擴展。條目值可用於啟用和禁用擴展的讀取。擴展名將按字母順序讀取。"
+
+#: notebook/notebookapp.py:1049
+msgid "Reraise exceptions encountered loading server extensions?"
+msgstr "重新引發讀取伺服器擴展時遇到的異常？”"
+
+#: notebook/notebookapp.py:1052
+msgid ""
+"(msgs/sec)\n"
+"        Maximum rate at which messages can be sent on iopub before they are\n"
+"        limited."
+msgstr ""
+"(msgs/sec)\n"
+"        郵件在受到限制之前可以在iopub上發送的最大速率。"
+
+#: notebook/notebookapp.py:1056
+msgid ""
+"(bytes/sec)\n"
+"        Maximum rate at which stream output can be sent on iopub before they are\n"
+"        limited."
+msgstr ""
+"(bytes/sec)\n"
+"        限制串流輸出之前，可以在 iopub 上發送串流輸出的最大速率。"
+
+#: notebook/notebookapp.py:1060
+msgid ""
+"(sec) Time window used to \n"
+"        check the message and data rate limits."
+msgstr ""
+"(sec) 時間窗口，用於檢查消息和數據速率限制。"
+
+#: notebook/notebookapp.py:1071
+#, python-format
+msgid "No such file or directory: %s"
+msgstr "沒有這樣的文件或目錄：%s"
+
+#: notebook/notebookapp.py:1141
+msgid "Notebook servers are configured to only be run with a password."
+msgstr "Notebook 伺服器配置為僅使用密碼運行。"
+
+#: notebook/notebookapp.py:1142
+msgid "Hint: run the following command to set a password"
+msgstr "提示：執行以下命令來設置密碼"
+
+#: notebook/notebookapp.py:1143
+msgid "\t$ python -m notebook.auth password"
+msgstr ""
+
+#: notebook/notebookapp.py:1181
+#, python-format
+msgid "The port %i is already in use, trying another port."
+msgstr "通訊埠 %i 已在使用中，請嘗試其他通訊埠"
+
+#: notebook/notebookapp.py:1184
+#, python-format
+msgid "Permission to listen on port %i denied"
+msgstr "拒絕監聽通訊埠 %i 的權限"
+
+#: notebook/notebookapp.py:1193
+msgid "ERROR: the notebook server could not be started because no available port could be found."
+msgstr "錯誤：Notebook 伺服器無法啟動，因為找不到可用的通訊埠。"
+
+#: notebook/notebookapp.py:1199
+msgid "[all ip addresses on your system]"
+msgstr "[系統上的所有 IP 地址]"
+
+#: notebook/notebookapp.py:1223
+#, python-format
+msgid "Terminals not available (error was %s)"
+msgstr "終端不可用 (錯誤為%s)"
+
+#: notebook/notebookapp.py:1259
+msgid "interrupted"
+msgstr "中斷"
+
+#: notebook/notebookapp.py:1261
+msgid "y"
+msgstr ""
+
+#: notebook/notebookapp.py:1262
+msgid "n"
+msgstr ""
+
+#: notebook/notebookapp.py:1263
+#, python-format
+msgid "Shutdown this notebook server (%s/[%s])? "
+msgstr "關閉此 Notebook 伺服器 (%s/[%s])？"
+
+#: notebook/notebookapp.py:1269
+msgid "Shutdown confirmed"
+msgstr "已確認關閉"
+
+#: notebook/notebookapp.py:1273
+msgid "No answer for 5s:"
+msgstr "5s 沒有反應："
+
+#: notebook/notebookapp.py:1274
+msgid "resuming operation..."
+msgstr "正在恢復操作..."
+
+#: notebook/notebookapp.py:1282
+#, python-format
+msgid "received signal %s, stopping"
+msgstr "接受訊號 %s，正在停止"
+
+#: notebook/notebookapp.py:1338
+#, python-format
+msgid "Error loading server extension %s"
+msgstr "讀取伺服器擴展 %s 時出錯"
+
+#: notebook/notebookapp.py:1369
+#, python-format
+msgid "Shutting down %d kernels"
+msgstr "關閉 %d Kernel”"
+
+#: notebook/notebookapp.py:1375
+#, python-format
+msgid "%d active kernel"
+msgid_plural "%d active kernels"
+msgstr[0] "%d 活躍 Kernel"
+# msgstr[1] "%d 活躍 Kernel"
+
+#: notebook/notebookapp.py:1379
+#, python-format
+msgid ""
+"The Jupyter Notebook is running at:\n"
+"\r"
+"%s"
+msgstr ""
+"Jupyter Notebook 在以下位置運行：\n"
+"\r"
+"%s"
+
+#: notebook/notebookapp.py:1426
+msgid "Running as root is not recommended. Use --allow-root to bypass."
+msgstr "不建議以 root 身份運行。使用 --allow-root 繞過。"
+
+#: notebook/notebookapp.py:1432
+msgid "Use Control-C to stop this server and shut down all kernels (twice to skip confirmation)."
+msgstr "使用 Control-C 停止該伺服器並關閉所有 Kernel (兩次跳過確認)。"
+
+#: notebook/notebookapp.py:1434
+msgid "Welcome to Project Jupyter! Explore the various tools available and their corresponding documentation. If you are interested in contributing to the platform, please visit the communityresources section at http://jupyter.org/community.html."
+msgstr "歡迎來到 Jupyter 計畫！探索各種可用的工具及其相應的文檔。如果您有興趣為該平台做出貢獻，請訪問 http://jupyter.org/community.html。"
+
+#: notebook/notebookapp.py:1445
+#, python-format
+msgid "No web browser found: %s."
+msgstr "找不到 Web 瀏覽器：%s。"
+
+#: notebook/notebookapp.py:1450
+#, python-format
+msgid "%s does not exist"
+msgstr "%s 不存在"
+
+#: notebook/notebookapp.py:1484
+msgid "Interrupted..."
+msgstr "中斷..."
+
+#: notebook/services/contents/filemanager.py:506
+#, python-format
+msgid "Serving notebooks from local directory: %s"
+msgstr "啟動 Notebooks 本地路徑：%s"
+
+#: notebook/services/contents/manager.py:68
+msgid "Untitled"
+msgstr "未命名"
+

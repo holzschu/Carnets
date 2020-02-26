@@ -1,0 +1,177 @@
+
+/*****************************************************************
+LaTeX things
+*****************************************************************/
+.latex_maintitle{
+    margin-top: 22px;
+    font-size:40px; 
+    color:blue;
+    text-align: center; 
+    font-weight: bold;
+    line-height: 100%;
+}
+.latex_author{
+    margin-top: 22px;
+    font-size:20px; 
+    color:blue;
+    text-align: center; 
+    font-weight: normal;
+}
+
+    .latex_tmp {text-align: justify;}
+
+    .latex_prob,
+    .latex_examp,
+    .latex_excs,
+    .latex_problem,
+    .latex_example,
+    .latex_exercise,
+    .latex_proof {
+        font-style: normal;
+        text-align: justify;
+        margin-left: 0px;
+	    margin-right: 10px;
+	    margin-top: 10px;
+        margin-bottom: 0px;
+        background-color: #CCFFCC;
+        display: block;
+    }
+
+    .latex_title {
+        float: left;
+        font-weight: bold;
+        /*margin-top: 10px;        */
+        padding-right: 10px;
+    }
+
+    .latex_title_opt {
+        padding-left: 10px;
+        /*text-transform: capitalize;
+        color: blue;*/
+    }
+
+    .latex_title_opt:before {
+        content: "-";
+        padding-right: 10px;
+    }
+
+    .latex_proofend {
+        float: right;
+    }
+
+    .latex_listing {
+        display: block;
+        text-align: justify;
+        margin-right: 30px;
+        font-family: 'Lucida Sans Typewriter';
+        color:black;
+        background-color: GhostWhite ;
+    }
+
+
+    .latex_thm, .latex_theorem, .latex_lem, .latex_cor, .latex_defn, .latex_prop, .latex_rem, .latex_property,
+    .latex_lemma, .latex_corollary, .latex_definition, .latex_proposition, .latex_remark, .latex_proof {
+
+        display: block;
+        text-align: justify;
+        margin-right: 10px;
+	    margin-left: 0px;
+	    margin-top: 10px;
+        margin-bottom: 0px;
+        font-style: italic;
+        color:black;
+        background-color: beige;
+    }
+
+    .latex_textboxa {
+        display: block;
+        font-weight: bold;
+        text-align: center;
+        width: 80%;
+        margin: auto;
+        border: 2px solid;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        background-color: #f2dede;
+        border-color: #eed3d7;
+        color: #CC0099;
+        border-radius: 8px;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        border-radius: 8px
+    }
+
+    .latex_comment {
+        display: block;
+        width: 95%;
+        margin: auto;
+        border: 2px solid;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        background-color: #F0E68C;
+        border-color: #F0E99F;
+        color: black;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        border-radius: 8px
+    }
+
+
+    img.latex_img {
+        display: block;
+        margin:  auto;
+        /*height: XXXpx; /*  */
+        width: 75%;
+    }
+
+    p.latex_img {
+        display: block;
+        width: 85%;
+        margin:  auto;
+        text-align: justify;
+    }
+
+/*
+    .rendered_html pre, .rendered_html code {
+      border: 0;
+      background-color: rgba(161, 139, 139, 0);
+      font-size: 100%;
+      padding: 0;
+    }
+*/   
+ 
+/* this is for figcaption */
+    .caption {
+        font-weight: normal;
+        text-align: left;
+        width:60%; margin-left:10%; border:2px solid; padding-top:5px; padding-bottom:5px;
+        background-color:white;border-color:#efd3d7;color:black;
+        border-radius:8px;-webkit-border-radius:8px;-moz-border-radius:8px;border-radius:8px
+    }
+
+/* enumerate ----------------------------------------------
+
+div.latex_list OL { counter-reset: item }
+div.latex_list LI { display: block }
+div.latex_list LI:before { content: counters(item, ".") " "; counter-increment: item }
+*/
+/* User can change the class enum below to customize items in enumerate environment 
+Similarly, a class item, with ul.item and li.item is available to customize unordered 
+lists*/
+
+ol.enum {
+    counter-reset: item;
+}
+ol.enum li.enum {
+    display: block;
+    position: relative;
+}
+ol.enum > li.enum:before {
+    content: counters(item, ".")".";
+    counter-increment: item;
+    position: absolute;
+    margin-right: 100%;
+    right: 10px; /* space between number and text */
+} 
+
+/* enumerate end ----------------------------------------------*/

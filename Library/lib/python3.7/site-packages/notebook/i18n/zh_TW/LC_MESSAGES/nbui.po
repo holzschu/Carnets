@@ -1,0 +1,732 @@
+# Translations template for Jupyter.
+# Copyright (C) 2017 ORGANIZATION
+# This file is distributed under the same license as the Jupyter project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Jupyter VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2017-07-07 12:48-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
+
+#: notebook/templates/404.html:3
+msgid "You are requesting a page that does not exist!"
+msgstr "您正在請求一個不存在的頁面！"
+
+#: notebook/templates/edit.html:37
+msgid "current mode"
+msgstr "目前的模式"
+
+#: notebook/templates/edit.html:48 notebook/templates/notebook.html:78
+msgid "File"
+msgstr "檔案"
+
+#: notebook/templates/edit.html:50 notebook/templates/tree.html:57
+msgid "New"
+msgstr "新建"
+
+#: notebook/templates/edit.html:51
+msgid "Save"
+msgstr "儲存"
+
+#: notebook/templates/edit.html:52 notebook/templates/tree.html:36
+msgid "Rename"
+msgstr "重新命名"
+
+#: notebook/templates/edit.html:53 notebook/templates/tree.html:38
+msgid "Download"
+msgstr "下載"
+
+#: notebook/templates/edit.html:56 notebook/templates/notebook.html:131
+#: notebook/templates/tree.html:41
+msgid "Edit"
+msgstr "編輯"
+
+#: notebook/templates/edit.html:58
+msgid "Find"
+msgstr "尋找"
+
+#: notebook/templates/edit.html:59
+msgid "Find &amp; Replace"
+msgstr "尋找 &amp; 取代"
+
+#: notebook/templates/edit.html:61
+msgid "Key Map"
+msgstr ""
+
+#: notebook/templates/edit.html:62
+msgid "Default"
+msgstr "默認"
+
+#: notebook/templates/edit.html:63
+msgid "Sublime Text"
+msgstr ""
+
+#: notebook/templates/edit.html:68 notebook/templates/notebook.html:159
+#: notebook/templates/tree.html:40
+msgid "View"
+msgstr "檢視"
+
+#: notebook/templates/edit.html:70 notebook/templates/notebook.html:162
+msgid "Show/Hide the logo and notebook title (above menu bar)"
+msgstr "顯示/隱藏 標誌和 Notebook 標題 (在選單欄上方)"
+
+#: notebook/templates/edit.html:71 notebook/templates/notebook.html:163
+msgid "Toggle Header"
+msgstr "切換(隱藏/顯示) 頁眉"
+
+#: notebook/templates/edit.html:72 notebook/templates/notebook.html:171
+msgid "Toggle Line Numbers"
+msgstr "切換(隱藏/顯示) 行號"
+
+#: notebook/templates/edit.html:75
+msgid "Language"
+msgstr "語言"
+
+#: notebook/templates/error.html:23
+msgid "The error was:"
+msgstr "錯誤："
+
+#: notebook/templates/login.html:24
+msgid "Password or token:"
+msgstr "密碼或 Token"
+
+#: notebook/templates/login.html:26
+msgid "Password:"
+msgstr "密碼："
+
+#: notebook/templates/login.html:31
+msgid "Log in"
+msgstr "登入"
+
+#: notebook/templates/login.html:39
+msgid "No login available, you shouldn't be seeing this page."
+msgstr "沒有可用的登錄訊息，您無法看到此頁面。"
+
+#: notebook/templates/logout.html:24
+#, python-format
+msgid "Proceed to the <a href=\"%(base_url)s\">dashboard"
+msgstr "進入 <a href=\"%(base_url)s\"> 儀錶盤"
+
+#: notebook/templates/logout.html:26
+#, python-format
+msgid "Proceed to the <a href=\"%(base_url)slogin\">login page"
+msgstr "進入 <a href=\"%(base_url)slogin\"> 登錄頁面"
+
+#: notebook/templates/notebook.html:62
+msgid "Menu"
+msgstr "選單"
+
+#: notebook/templates/notebook.html:65 notebook/templates/notebook.html:254
+msgid "Kernel"
+msgstr ""
+
+#: notebook/templates/notebook.html:68
+msgid "This notebook is read-only"
+msgstr "這個 Notebook 只能唯讀"
+
+#: notebook/templates/notebook.html:81
+msgid "New Notebook"
+msgstr "新的 Notebook"
+
+#: notebook/templates/notebook.html:85
+msgid "Opens a new window with the Dashboard view"
+msgstr "使用儀表板視圖打開一個新的視窗"
+
+#: notebook/templates/notebook.html:86
+msgid "Open..."
+msgstr "開啟..."
+
+#: notebook/templates/notebook.html:90
+msgid "Open a copy of this notebook's contents and start a new kernel"
+msgstr "打開此 Notebook 內容的副本並啟動新的 Kernel"
+
+#: notebook/templates/notebook.html:91
+msgid "Make a Copy..."
+msgstr "複製..."
+
+#: notebook/templates/notebook.html:92
+msgid "Rename..."
+msgstr "重新命名..."
+
+#: notebook/templates/notebook.html:93
+msgid "Save and Checkpoint"
+msgstr "儲存和檢查"
+
+#: notebook/templates/notebook.html:96
+msgid "Revert to Checkpoint"
+msgstr "回復到檢查點"
+
+#: notebook/templates/notebook.html:106
+msgid "Print Preview"
+msgstr "預覽列印"
+
+#: notebook/templates/notebook.html:107
+msgid "Download as"
+msgstr "下載為"
+
+#: notebook/templates/notebook.html:109
+msgid "Notebook (.ipynb)"
+msgstr ""
+
+#: notebook/templates/notebook.html:110
+msgid "Script"
+msgstr ""
+
+#: notebook/templates/notebook.html:111
+msgid "HTML (.html)"
+msgstr ""
+
+#: notebook/templates/notebook.html:112
+msgid "Markdown (.md)"
+msgstr ""
+
+#: notebook/templates/notebook.html:113
+msgid "reST (.rst)"
+msgstr ""
+
+#: notebook/templates/notebook.html:114
+msgid "LaTeX (.tex)"
+msgstr ""
+
+#: notebook/templates/notebook.html:115
+msgid "PDF via LaTeX (.pdf)"
+msgstr ""
+
+#: notebook/templates/notebook.html:118
+msgid "Deploy as"
+msgstr ""
+
+#: notebook/templates/notebook.html:123
+msgid "Trust the output of this notebook"
+msgstr "信任 Notebook 的輸出"
+
+#: notebook/templates/notebook.html:124
+msgid "Trust Notebook"
+msgstr "信任 Notebook"
+
+#: notebook/templates/notebook.html:127
+msgid "Shutdown this notebook's kernel, and close this window"
+msgstr "關閉此 Notebook 的 Kernel，然後關閉此視窗"
+
+#: notebook/templates/notebook.html:128
+msgid "Close and Halt"
+msgstr "關閉並停止"
+
+#: notebook/templates/notebook.html:133
+msgid "Cut Cells"
+msgstr "剪下 Cell(s)"
+
+#: notebook/templates/notebook.html:134
+msgid "Copy Cells"
+msgstr "複製 Cell(s)"
+
+#: notebook/templates/notebook.html:135
+msgid "Paste Cells Above"
+msgstr "在上方貼入 Cell(s)"
+
+#: notebook/templates/notebook.html:136
+msgid "Paste Cells Below"
+msgstr "在下方貼入 Cell(s)"
+
+#: notebook/templates/notebook.html:137
+msgid "Paste Cells &amp; Replace"
+msgstr "貼上 Cell(s) &amp; 覆蓋"
+
+#: notebook/templates/notebook.html:138
+msgid "Delete Cells"
+msgstr "刪除 Cell(s)"
+
+#: notebook/templates/notebook.html:139
+msgid "Undo Delete Cells"
+msgstr "取消刪除 Cell(s)"
+
+#: notebook/templates/notebook.html:141
+msgid "Split Cell"
+msgstr "分割 Cell"
+
+#: notebook/templates/notebook.html:142
+msgid "Merge Cell Above"
+msgstr "合併上方的 Cell"
+
+#: notebook/templates/notebook.html:143
+msgid "Merge Cell Below"
+msgstr "合併下方的 Cell"
+
+#: notebook/templates/notebook.html:145
+msgid "Move Cell Up"
+msgstr "上移 Cell"
+
+#: notebook/templates/notebook.html:146
+msgid "Move Cell Down"
+msgstr "下移 Cell"
+
+#: notebook/templates/notebook.html:148
+msgid "Edit Notebook Metadata"
+msgstr "編輯 Notebook Metadata"
+
+#: notebook/templates/notebook.html:150
+msgid "Find and Replace"
+msgstr "尋找和取代"
+
+#: notebook/templates/notebook.html:152
+msgid "Cut Cell Attachments"
+msgstr "剪下 Cell 附件"
+
+#: notebook/templates/notebook.html:153
+msgid "Copy Cell Attachments"
+msgstr "複製 Cell 附件"
+
+#: notebook/templates/notebook.html:154
+msgid "Paste Cell Attachments"
+msgstr "貼上 Cell 附件"
+
+#: notebook/templates/notebook.html:156
+msgid "Insert Image"
+msgstr "插入圖片"
+
+#: notebook/templates/notebook.html:166
+msgid "Show/Hide the action icons (below menu bar)"
+msgstr "顯示/隱藏 工具列 (在選單欄下方)"
+
+#: notebook/templates/notebook.html:167
+msgid "Toggle Toolbar"
+msgstr "切換(隱藏/顯示) 工具列"
+
+#: notebook/templates/notebook.html:170
+msgid "Show/Hide line numbers in cells"
+msgstr "切換(隱藏/顯示) Cell(s) 的行號"
+
+#: notebook/templates/notebook.html:174
+msgid "Cell Toolbar"
+msgstr "Cell 工具列"
+
+#: notebook/templates/notebook.html:179
+msgid "Insert"
+msgstr "插入"
+
+#: notebook/templates/notebook.html:182
+msgid "Insert an empty Code cell above the currently active cell"
+msgstr "在目前編輯的 Cell 上方插入一個空的 Cell"
+
+#: notebook/templates/notebook.html:183
+msgid "Insert Cell Above"
+msgstr "在上方插入 Cell"
+
+#: notebook/templates/notebook.html:185
+msgid "Insert an empty Code cell below the currently active cell"
+msgstr "在目前編輯的 Cell 下方插入一個空的 Cell"
+
+#: notebook/templates/notebook.html:186
+msgid "Insert Cell Below"
+msgstr "在下方插入 Cell"
+
+#: notebook/templates/notebook.html:189
+msgid "Cell"
+msgstr ""
+
+#: notebook/templates/notebook.html:191
+msgid "Run this cell, and move cursor to the next one"
+msgstr "執行此 Cell，然後將游標移至下一個 Cell"
+
+#: notebook/templates/notebook.html:192
+msgid "Run Cells"
+msgstr "執行 Cell(s)"
+
+#: notebook/templates/notebook.html:193
+msgid "Run this cell, select below"
+msgstr "執行此 Cell，選擇下一個 Cell"
+
+#: notebook/templates/notebook.html:194
+msgid "Run Cells and Select Below"
+msgstr "執行 Cell(s) 並選擇下一個 Cell"
+
+#: notebook/templates/notebook.html:195
+msgid "Run this cell, insert below"
+msgstr "執行此 Cell，在下面插入一個新的 Cell"
+
+#: notebook/templates/notebook.html:196
+msgid "Run Cells and Insert Below"
+msgstr "執行 Cell(s) 並在下面插入"
+
+#: notebook/templates/notebook.html:197
+msgid "Run all cells in the notebook"
+msgstr "執行所有的 Notebook Cell(s)"
+
+#: notebook/templates/notebook.html:198
+msgid "Run All"
+msgstr "執行全部"
+
+#: notebook/templates/notebook.html:199
+msgid "Run all cells above (but not including) this cell"
+msgstr "執行此 Cell 上方所有的 Cell (不包括目前的 Cell) "
+
+#: notebook/templates/notebook.html:200
+msgid "Run All Above"
+msgstr "執行上面全部"
+
+#: notebook/templates/notebook.html:201
+msgid "Run this cell and all cells below it"
+msgstr "執行此 Cell 及其下面所有的 Cell(s)"
+
+#: notebook/templates/notebook.html:202
+msgid "Run All Below"
+msgstr "執行下面全部"
+
+#: notebook/templates/notebook.html:205
+msgid "All cells in the notebook have a cell type. By default, new cells are created as 'Code' cells"
+msgstr "在 Notebook 中的所有的 Cell 都有一個 Cell 型別。默認情況下，新的 Cell(s) 會被創建「Code」型別的 Cell(s)"
+
+#: notebook/templates/notebook.html:206
+msgid "Cell Type"
+msgstr "Cell 型別"
+
+#: notebook/templates/notebook.html:209
+msgid "Contents will be sent to the kernel for execution, and output will display in the footer of cell"
+msgstr "內容將發送到 Kernel 以執行，輸出結果將顯示在 Cell 下方的頁腳中"
+
+#: notebook/templates/notebook.html:212
+msgid "Contents will be rendered as HTML and serve as explanatory text"
+msgstr "內容將以 HTML 呈現，並作為說明性的文字"
+
+#: notebook/templates/notebook.html:213 notebook/templates/notebook.html:298
+msgid "Markdown"
+msgstr ""
+
+#: notebook/templates/notebook.html:215
+msgid "Contents will pass through nbconvert unmodified"
+msgstr "內容將通過 nbconvert 未經修改"
+
+#: notebook/templates/notebook.html:216
+msgid "Raw NBConvert"
+msgstr ""
+
+#: notebook/templates/notebook.html:220
+msgid "Current Outputs"
+msgstr "目前的輸出"
+
+#: notebook/templates/notebook.html:223
+msgid "Hide/Show the output of the current cell"
+msgstr "隱藏/顯示 目前 Cell 的輸出"
+
+#: notebook/templates/notebook.html:224 notebook/templates/notebook.html:240
+msgid "Toggle"
+msgstr "切換"
+
+#: notebook/templates/notebook.html:227
+msgid "Scroll the output of the current cell"
+msgstr "開啟/關閉 當前 Cell 輸出的滾動條"
+
+#: notebook/templates/notebook.html:228 notebook/templates/notebook.html:244
+msgid "Toggle Scrolling"
+msgstr "切換滾動模式"
+
+#: notebook/templates/notebook.html:231
+msgid "Clear the output of the current cell"
+msgstr "清除當前的 Cell 的輸出"
+
+#: notebook/templates/notebook.html:232 notebook/templates/notebook.html:248
+msgid "Clear"
+msgstr "清除"
+
+#: notebook/templates/notebook.html:236
+msgid "All Output"
+msgstr "全部的輸出"
+
+#: notebook/templates/notebook.html:239
+msgid "Hide/Show the output of all cells"
+msgstr "隱藏/顯示 所有 Cell(s) 的輸出"
+
+#: notebook/templates/notebook.html:243
+msgid "Scroll the output of all cells"
+msgstr "開啟/關閉 所有 Cell(s) 輸出的滾動條"
+
+#: notebook/templates/notebook.html:247
+msgid "Clear the output of all cells"
+msgstr "清除所有 Cell(s) 的輸出"
+
+#: notebook/templates/notebook.html:257
+msgid "Send Keyboard Interrupt (CTRL-C) to the Kernel"
+msgstr "發送鍵盤中斷 (CTRL-C) 到 Kernel"
+
+#: notebook/templates/notebook.html:258
+msgid "Interrupt"
+msgstr "中斷運行"
+
+#: notebook/templates/notebook.html:261
+msgid "Restart the Kernel"
+msgstr "重新啟動 Kernel"
+
+#: notebook/templates/notebook.html:262
+msgid "Restart"
+msgstr "重新啟動"
+
+#: notebook/templates/notebook.html:265
+msgid "Restart the Kernel and clear all output"
+msgstr "重新啟動 Kernel 並清除所有輸出"
+
+#: notebook/templates/notebook.html:266
+msgid "Restart &amp; Clear Output"
+msgstr "重新啟動 &amp; 清除輸出"
+
+#: notebook/templates/notebook.html:269
+msgid "Restart the Kernel and re-run the notebook"
+msgstr "重新啟動 Kernel 並重新執行 Notebook"
+
+#: notebook/templates/notebook.html:270
+msgid "Restart &amp; Run All"
+msgstr "重新啟動 &amp; 執行全部"
+
+#: notebook/templates/notebook.html:273
+msgid "Reconnect to the Kernel"
+msgstr "重新連接到 Kernel"
+
+#: notebook/templates/notebook.html:274
+msgid "Reconnect"
+msgstr "重新連接"
+
+#: notebook/templates/notebook.html:282
+msgid "Change kernel"
+msgstr "更改 Kernel"
+
+#: notebook/templates/notebook.html:287
+msgid "Help"
+msgstr "幫助"
+
+#: notebook/templates/notebook.html:290
+msgid "A quick tour of the notebook user interface"
+msgstr "Notebook 用戶界面快速瀏覽”"
+
+#: notebook/templates/notebook.html:290
+msgid "User Interface Tour"
+msgstr "用戶界面導覽"
+
+#: notebook/templates/notebook.html:291
+msgid "Opens a tooltip with all keyboard shortcuts"
+msgstr "使用所有鍵盤快捷鍵打開工具提示"
+
+#: notebook/templates/notebook.html:291
+msgid "Keyboard Shortcuts"
+msgstr "鍵盤快捷鍵"
+
+#: notebook/templates/notebook.html:292
+msgid "Opens a dialog allowing you to edit Keyboard shortcuts"
+msgstr "打開一個對話框，可讓您編輯鍵盤快捷鍵"
+
+#: notebook/templates/notebook.html:292
+msgid "Edit Keyboard Shortcuts"
+msgstr "編輯鍵盤快捷鍵"
+
+#: notebook/templates/notebook.html:297
+msgid "Notebook Help"
+msgstr "Notebook 幫助"
+
+#: notebook/templates/notebook.html:303
+msgid "Opens in a new window"
+msgstr "在新視窗開啟"
+
+#: notebook/templates/notebook.html:319
+msgid "About Jupyter Notebook"
+msgstr "關於 Jupyter Notebook"
+
+#: notebook/templates/notebook.html:319
+msgid "About"
+msgstr "關於"
+
+#: notebook/templates/page.html:114
+msgid "Jupyter Notebook requires JavaScript."
+msgstr "Jupyter Notebook 需要 JavaScript。"
+
+#: notebook/templates/page.html:115
+msgid "Please enable it to proceed. "
+msgstr "請啟用它以繼續。"
+
+#: notebook/templates/page.html:121
+msgid "dashboard"
+msgstr "儀表板"
+
+#: notebook/templates/page.html:132
+msgid "Logout"
+msgstr "登出"
+
+#: notebook/templates/page.html:134
+msgid "Login"
+msgstr "登入"
+
+#: notebook/templates/tree.html:23
+msgid "Files"
+msgstr "檔案"
+
+#: notebook/templates/tree.html:24
+msgid "Running"
+msgstr "執行中"
+
+#: notebook/templates/tree.html:25
+msgid "Clusters"
+msgstr "集群"
+
+#: notebook/templates/tree.html:32
+msgid "Select items to perform actions on them."
+msgstr "選擇要對其執行操作的對象。"
+
+#: notebook/templates/tree.html:35
+msgid "Duplicate selected"
+msgstr "複製所選"
+
+#: notebook/templates/tree.html:35
+msgid "Duplicate"
+msgstr "複製"
+
+#: notebook/templates/tree.html:36
+msgid "Rename selected"
+msgstr "重新命名所選"
+
+#: notebook/templates/tree.html:37
+msgid "Move selected"
+msgstr "移動所選"
+
+#: notebook/templates/tree.html:37
+msgid "Move"
+msgstr "移動"
+
+#: notebook/templates/tree.html:38
+msgid "Download selected"
+msgstr "下載選擇對象"
+
+#: notebook/templates/tree.html:39
+msgid "Shutdown selected notebook(s)"
+msgstr "關閉選定的 Notebook(s)"
+
+#: notebook/templates/notebook.html:278
+#: notebook/templates/tree.html:39
+msgid "Shutdown"
+msgstr "關閉"
+
+#: notebook/templates/tree.html:40
+msgid "View selected"
+msgstr "查看所選"
+
+#: notebook/templates/tree.html:41
+msgid "Edit selected"
+msgstr "編輯所選"
+
+#: notebook/templates/tree.html:42
+msgid "Delete selected"
+msgstr "刪除所選"
+
+#: notebook/templates/tree.html:50
+msgid "Click to browse for a file to upload."
+msgstr "點擊瀏覽要上傳的檔案。"
+
+#: notebook/templates/tree.html:51
+msgid "Upload"
+msgstr "上傳"
+
+#: notebook/templates/tree.html:65
+msgid "Text File"
+msgstr "文字檔"
+
+#: notebook/templates/tree.html:68
+msgid "Folder"
+msgstr "檔案夾"
+
+#: notebook/templates/tree.html:72
+msgid "Terminal"
+msgstr "終端"
+
+#: notebook/templates/tree.html:76
+msgid "Terminals Unavailable"
+msgstr "終端不可用"
+
+#: notebook/templates/tree.html:82
+msgid "Refresh notebook list"
+msgstr "刷新 Notebook 清單"
+
+#: notebook/templates/tree.html:90
+msgid "Select All / None"
+msgstr "全選/無"
+
+#: notebook/templates/tree.html:93
+msgid "Select..."
+msgstr "選擇..."
+
+#: notebook/templates/tree.html:98
+msgid "Select All Folders"
+msgstr "選擇所有檔案夾"
+
+#: notebook/templates/tree.html:98
+msgid "Folders"
+msgstr "檔案夾"
+
+#: notebook/templates/tree.html:99
+msgid "Select All Notebooks"
+msgstr "選擇所有 Notebooks"
+
+#: notebook/templates/tree.html:99
+msgid "All Notebooks"
+msgstr "所有 Notebooks"
+
+#: notebook/templates/tree.html:100
+msgid "Select Running Notebooks"
+msgstr "選擇正在執行的 Notebooks"
+
+#: notebook/templates/tree.html:100
+msgid "Running"
+msgstr "執行中"
+
+#: notebook/templates/tree.html:101
+msgid "Select All Files"
+msgstr "選擇所有檔案"
+
+#: notebook/templates/tree.html:101
+msgid "Files"
+msgstr "檔案"
+
+#: notebook/templates/tree.html:114
+msgid "Last Modified"
+msgstr "上一次更改"
+
+#: notebook/templates/tree.html:120
+msgid "Name"
+msgstr "名稱"
+
+#: notebook/templates/tree.html:130
+msgid "Currently running Jupyter processes"
+msgstr "目前正在執行的 Jupyter 流程"
+
+#: notebook/templates/tree.html:134
+msgid "Refresh running list"
+msgstr "刷新執行清單"
+
+#: notebook/templates/tree.html:150
+msgid "There are no terminals running."
+msgstr "沒有終端在運行。"
+
+#: notebook/templates/tree.html:152
+msgid "Terminals are unavailable."
+msgstr "終端不可用。"
+
+#: notebook/templates/tree.html:162
+msgid "Notebooks"
+msgstr ""
+
+#: notebook/templates/tree.html:169
+msgid "There are no notebooks running."
+msgstr "沒有 Notebooks 在運行。"
+
+#: notebook/templates/tree.html:178
+msgid "Clusters tab is now provided by IPython parallel."
+msgstr "IPython parallel 現在提供了 Clusters tab。"
+
+#: notebook/templates/tree.html:179
+msgid "See '<a href=\"https://github.com/ipython/ipyparallel\">IPython parallel</a>' for installation details."
+msgstr "有關安裝詳細信息，請參閱 '<a href=\"https://github.com/ipython/ipyparallel\">IPython parallel</a>'。"
+
