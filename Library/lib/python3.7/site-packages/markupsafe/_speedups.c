@@ -5,8 +5,8 @@
  * C implementation of escaping for better performance. Used instead of
  * the native Python implementation when compiled.
  *
- * :copyright: © 2010 by the Pallets team.
- * :license: BSD, see LICENSE for more details.
+ * :copyright: 2010 Pallets
+ * :license: BSD-3-Clause
  */
 #include <Python.h>
 
@@ -311,6 +311,9 @@ escape(PyObject *self, PyObject *text)
 	if (html) {
 		s = PyObject_CallObject(html, NULL);
 		Py_DECREF(html);
+		if (s == NULL) {
+			return NULL;
+		}
 		/* Convert to Markup object */
 		rv = PyObject_CallFunctionObjArgs(markup, (PyObject*)s, NULL);
 		Py_DECREF(s);

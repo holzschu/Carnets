@@ -3,7 +3,7 @@
 from . import latex_envs
 
 
-__version__ = '1.4.0'
+__version__ = '1.4.1'
 
 
 def _jupyter_nbextension_paths():
