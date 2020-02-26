@@ -10,6 +10,8 @@ import UIKit
 import WebKit
 import UserNotifications
 import ios_system
+import MobileCoreServices
+
 
 var serverAddress: URL!
 // $HOME/Documents
@@ -25,6 +27,9 @@ var distantFiles: [URL: URL] = [:]  // correspondent between distant file and lo
 var externalKeyboardPresent: Bool?
 var multiCharLanguageWithSuggestions: Bool?
 let toolbarHeight: CGFloat = 35
+// Checking on members of ViewController does not tell us whether the viewController is active or the document browser.
+var notebookViewerActive = false // are we using the notebook viewer (viewController), or the documentBrowserViewController?
+
 
 // is this file URL inside the App sandbox or not? (do we need to copy it locally?)
 func insideSandbox(fileURL: URL) -> Bool {
@@ -106,19 +111,24 @@ public func openURL_internal(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutab
     return 0
 }
 
-
-class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler, NSFilePresenter {
+class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler, NSFilePresenter, UIDocumentPickerDelegate {
     
-    // The URL for the file being accessed (can be distant):
-    var presentedItemURL: URL?
     // A bookmark to the file being accessed (in case it changes name):
     var notebookBookmark: Data?
     // The URL for the notebook: http://localhost:8888/notebooks/private/var/mobile/Containers/Data/Application/B12A5C8D-DA05-4FE5-ABD6-DB12523ABAB7/tmp/(A%20Document%20Being%20Saved%20By%20Carnets)/Exploring%20Graphs%202.ipynb
     var kernelURL: URL?
+    // The URL for the file being accessed (can be distant):
+    var presentedItemURL: URL?
+
     var notebookCellInsertMode = false // are we editing a notebook, in insert mode?
     var selectorActive = false // if we are inside a picker (roll-up  menu), change the toolbar
 
     var presentedItemOperationQueue = OperationQueue()
+    // Create a document picker for directories.
+    private let documentPicker =
+        UIDocumentPickerViewController(documentTypes: [kUTTypeFolder as String],
+                                       in: .open)
+    var skippedURLs: [URL] = []
 
     func load(url: URL?) {
         if ((url != nil) && (url != presentedItemURL)) {
@@ -129,6 +139,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         guard (presentedItemURL != nil) else { return }
         kernelURL = urlFromFileURL(fileURL: presentedItemURL!)
         guard (appWebView != nil) else { return }
+        notebookViewerActive = true
         appWebView.load(URLRequest(url: kernelURL!))
     }
 
@@ -169,26 +180,6 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                                                 cutButton, copyButton, pasteButton]
                 }
             }
-        } else if (cmd == "back") {
-            // avoid infinite loops in back history.
-            // Same approach not required for forward history
-            // (also it does not work, forward history is cleared)
-            if self.webView.canGoBack {
-                var position = -1
-                var backPageItem = self.webView.backForwardList.item(at: position)
-                while ((backPageItem != nil) && (backPageItem?.url != nil) && ((backPageItem?.url.sameLocation(url: self.webView.url))!)) {
-                    position -= 1
-                    backPageItem = self.webView.backForwardList.item(at: position)
-                }
-                if (backPageItem != nil) {
-                    self.webView.go(to: backPageItem!)
-                    return
-                }
-            }
-            // Nothing left in history, so we open the file server:
-            var treeAddress = serverAddress
-            treeAddress = treeAddress?.appendingPathComponent("tree")
-            self.webView.load(URLRequest(url: treeAddress!))
         } else if (cmd.hasPrefix("rename:")) {
             // print(cmd)
             var newName = cmd
@@ -278,8 +269,11 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         } else if (cmd.hasPrefix("loadingSession:")) {
             NSLog(cmd)
             addRunningSession(session: cmd, url: self.webView!.url!)
-            if (numberOfRunningSessions() >= 4) { // Maybe "> 4"?
-                NSLog("More than 4 notebook running (including this one). Time to cleanup.")
+            // This should be a configureable option. Or running pip / python causes the removal of the oldest session?
+            // With 6 (maxPythonInterpreters), this leaves 1 server + 3 clients running simultaneously, so 4 process.
+            // Probably a good limit.
+            if (numberOfRunningSessions() > numPythonInterpreters - 3) { // Keep 1 for the server and 2 for running pip inside the notebook
+                NSLog("More than \(numPythonInterpreters - 2) notebooks running (including this one). Time to cleanup.")
                 removeOldestSession()
             }
         } else if (cmd.hasPrefix("killingSession:")) {
@@ -290,12 +284,234 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                 key = String(key.dropFirst())
             }
             removeRunningSessionWithID(session: key)
+        } else if (cmd == "allowFolderAccess") {
+            // User has requested permission access to a directory
+            // https://developer.apple.com/documentation/uikit/view_controllers/providing_access_to_directories
+            documentPicker.allowsMultipleSelection = true
+            documentPicker.delegate = self
+            
+            // Present the document picker.
+            DispatchQueue.main.async {
+                self.present(self.documentPicker, animated: true, completion: nil)
+            }
+        } else if (cmd.hasPrefix("convertFile:")) {
+            // "Download as" from nbconvert
+            var url = cmd
+            url.removeFirst("convertFile:/".count)
+            if (url.hasPrefix("files")) {
+                // print("Detected file saving")
+                return
+            }
+            guard (appWebView != nil) else { return }
+            var scriptAddress = serverAddress
+            scriptAddress = scriptAddress?.appendingPathComponent(url)
+            var urlRequest = URLRequest(url: scriptAddress!)
+            urlRequest.httpMethod = "GET"
+            let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+                if let error = error {
+                    self.displayAlert(title: "Error: could not save file", message:"\(error)")
+                    NSLog ("Error on file conversion: \(error)")
+                    return
+                }
+                guard let response = response as? HTTPURLResponse,
+                    (200...299).contains(response.statusCode) else {
+                        self.displayAlert(title: "Error: could not save file", message:"")
+                        NSLog ("Error on file conversion response.")
+                        return
+                }
+                if let newFileName = String(data: data!, encoding: .utf8) {
+                    // print("newFilenamea= \(newFileName)")
+                    // the new file was created here.
+                    let newFileURL = URL(fileURLWithPath: newFileName)
+                    if (insideSandbox(fileURL: newFileURL)) {
+                        print("new file is inside Sandbox = \(newFileURL) ")
+                        return
+                    }
+                    let localDirectory = self.localDirectoryFrom(localFile: newFileURL)
+                    // print("localDirectory found: \(localDirectory)")
+                    let distantFile = distantFiles[localDirectory]
+                    if (distantFile != nil) {
+                        // distant file, but we have write permission (with bookmarks):
+                        // if (&&  != self.presentedItemURL)
+                        var suffix = newFileURL.path
+                        suffix.removeFirst(localDirectory.path.count) // this is empty if localFile is a file
+                        // print("file name: \(suffix)")
+                        var stale = false
+                        // presentedItemURL corresponds to the directory that was opened last, or to the file localFileUrl
+                        do {
+                            let presentedItemURL = try URL(resolvingBookmarkData: self.notebookBookmark!, bookmarkDataIsStale: &stale)
+                            // save the actual file to its remote directory:
+                            self.replaceFileWithBookmark(securedURL: presentedItemURL, localFile: newFileURL, localDirectory: localDirectory)
+                        }
+                        catch {
+                            let distantFilePath = self.presentedItemURL?.appendingPathComponent(suffix)
+                            NSLog("Unable to create the distant file/directory: \(distantFilePath)")
+                            print(error)
+                        }
+                    } else {
+                        // the converted file was from a directory where we don't have writing permission -> save at home
+                        // (or we are trying to save ourselves, same idea, write at home)
+                        let suffix = newFileURL.lastPathComponent
+                        let documentsUrl = try! FileManager().url(for: .documentDirectory,
+                                                                  in: .userDomainMask,
+                                                                  appropriateFor: nil,
+                                                                  create: true)
+                        let localFileUrl = documentsUrl.appendingPathComponent(suffix)
+                        if (!FileManager().fileExists(atPath: localFileUrl.path)) {
+                            do {
+                                try FileManager().copyItem(atPath: newFileURL.path, toPath: localFileUrl.path)
+                            } catch {
+                                self.displayAlert(title: "Could not write file \(localFileUrl.path)", message: "")
+                            }
+                        } else {
+                            DispatchQueue.main.async {
+                                let alertController = UIAlertController(title: "File \(suffix) already exists, overwrite?", message: "", preferredStyle: .alert)
+                                alertController.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action) in
+                                    do {
+                                        try FileManager().removeItem(at: localFileUrl)
+                                        try FileManager().copyItem(atPath: newFileURL.path, toPath: localFileUrl.path)
+                                    } catch {
+                                        let alertController = UIAlertController(title: "Could not write file \(localFileUrl.path)", message: "", preferredStyle: .alert)
+                                        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                                        if let presenter = alertController.popoverPresentationController {
+                                            presenter.sourceView = self.view
+                                        }
+                                        self.present(alertController, animated: true, completion: nil)
+                                    }
+                                }))
+                                alertController.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
+                                if let presenter = alertController.popoverPresentationController {
+                                    presenter.sourceView = self.view
+                                }
+                                self.present(alertController, animated: true, completion: nil)
+                            }
+                        }
+                    }
+                }
+                // print("response= \(response)")
+            }
+            task.resume()
+            // self.webView.load(urlRequest) // use URLSession, of course
         } else {
             // JS console:
             NSLog("JavaScript message: \(message.body)")
         }
     }
         
+    func displayAlert(title: String, message: String) {
+        DispatchQueue.main.async {
+            // We could not copy the file, warn the user
+            let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            if let presenter = alertController.popoverPresentationController {
+                presenter.sourceView = self.view
+            }
+            self.present(alertController, animated: true, completion: nil)
+        }
+    }
+    
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        // Present the Document View Controller for the first document that was picked.
+        // If you support picking multiple items, make sure you handle them all.
+        let newDirectory = urls[0]
+        if (!newDirectory.isDirectory) { // on iOS 11-12, the user can select a file
+            displayAlert(title: "Error", message: "Please select a directory")
+            return
+        }
+        NSLog("received DirectoryPermission for: \(newDirectory.path.replacingOccurrences(of: " ", with: "\\ "))")
+        let isReadableWithoutSecurity = FileManager().isReadableFile(atPath: newDirectory.path)
+        let isSecuredURL = newDirectory.startAccessingSecurityScopedResource()
+        let isReadable = FileManager().isReadableFile(atPath: newDirectory.path)
+        guard isSecuredURL && isReadable else {
+            displayAlert(title: "Error", message: "Could not access folder.")
+            return
+        }
+        // If it's on iCloud, download the directory content
+        if (!downloadRemoteFile(fileURL: newDirectory)) {
+            if (isSecuredURL) {
+                newDirectory.stopAccessingSecurityScopedResource()
+            }
+            NSLog("Couldn't download \(newDirectory), stopAccessingSecurityScopedResource")
+            return
+        }
+        // Store the bookmark for this directory:
+        if (!isReadableWithoutSecurity) {
+            // Two possibilities:
+            // 1) we opened a file from the same directory before -- copy everything in the directory and go
+            // 2) never met this directory. Just copy and prepare for later
+            // We have a directory. Did we open a file from this directory before?
+            do {
+                for (localFileUrlStored, distantFileUrl) in distantFiles {
+                    if (distantFileUrl == newDirectory) {
+                        return // nothing to do here
+                    }
+                    let distantDirectory = distantFileUrl.deletingLastPathComponent()
+                    if (distantDirectory == newDirectory) {
+                        // Store the bookmark for this object:
+                        let fileBookmark = try newDirectory.bookmarkData(options: [],
+                                                                         includingResourceValuesForKeys: nil,
+                                                                         relativeTo: nil)
+                        bookmarks.updateValue(fileBookmark, forKey:newDirectory)
+                        // Copy the content of the entire directory there:
+                        var localDirectory = localFileUrlStored.deletingLastPathComponent()
+                        for fileURL in try FileManager().contentsOfDirectory(at: newDirectory, includingPropertiesForKeys: []) {
+                            if (fileURL == distantFileUrl) { continue } // We already copied this one
+                            var suffix = fileURL.path
+                            suffix.removeFirst(distantDirectory.path.count)
+                            let newLocalFile = localDirectory.appendingPathComponent(suffix)
+                            try FileManager().copyItem(at: fileURL, to: newLocalFile)
+                        }
+                        // Store relationship between local and distant directories:
+                        localDirectory = localDirectory.appendingPathComponent("/")
+                        distantFiles.updateValue(newDirectory, forKey: localDirectory)
+                        // reload the current web page (images probably became available)
+                        webView.reload()
+                        return
+                    }
+                }
+            }
+            catch {
+                NSLog("An error occured in copying: \(newDirectory)")
+                if isSecuredURL { newDirectory.stopAccessingSecurityScopedResource() }
+                return
+            }
+            // There are no existing files directly from this directory (it could be lower in the hierarchy)
+            // Create local directory, copy everything there.
+            let temporaryDirectory = try! FileManager().url(for: .itemReplacementDirectory,
+                                                            in: .userDomainMask,
+                                                            appropriateFor: URL(fileURLWithPath: documentsPath!),
+                                                            create: true)
+            // We need to make sure directories are stored as such, so we add a '/'
+            let destination = temporaryDirectory.appendingPathComponent(newDirectory.lastPathComponent).appendingPathComponent("/")
+            distantFiles.updateValue(newDirectory, forKey: destination)
+            do {
+                try FileManager().copyItem(at: newDirectory, to: destination)
+                // Now that we have copied, is the file currently opened inside the directory we copied?
+                var currentNotebookLocalPath = self.webView!.url!.path
+                let isNotebook = currentNotebookLocalPath.hasPrefix("/notebooks/")
+                if (isNotebook) {
+                    currentNotebookLocalPath.removeFirst("/notebooks".count)
+                }
+                let currentNotebookLocalURL = URL(fileURLWithPath: currentNotebookLocalPath)
+                guard let currentNotebookDistantURL = distantFiles[currentNotebookLocalURL] else { return }
+                if (currentNotebookDistantURL.path.hasPrefix(newDirectory.path)) {
+                    // it is a notebook from a distant place
+                    // Remove the connection with the file already stored
+                    distantFiles.removeValue(forKey: currentNotebookLocalURL)
+                    // Reload the notebook; we will skip this page when going back:
+                    skippedURLs.append(self.webView!.url!)
+                    saveDistantFile()
+                    kernelURL = urlFromFileURL(fileURL: currentNotebookDistantURL)
+                    webView.load(URLRequest(url: kernelURL!))
+                }
+            }
+            catch {
+                NSLog("An arror occured in copying: \(newDirectory)")
+                if isSecuredURL { newDirectory.stopAccessingSecurityScopedResource() }
+            }
+        }
+    }
+    
     var webView: WKWebView!
     
     var lastPageVisited: String!
@@ -303,7 +519,17 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     public lazy var editorToolbar: UIToolbar = {
         var toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: self.webView.bounds.width, height: toolbarHeight))
         if #available(iOS 13, *) {
-            toolbar.backgroundColor = UIColor.systemBackground.resolvedColor(with: self.traitCollection);
+            // Goal: reproduce keyboard tint and color.
+            toolbar.backgroundColor = UIColor.systemBackground.resolvedColor(with: traitCollection)
+            toolbar.isTranslucent = false
+            if (darkMode) {
+                toolbar.barTintColor = UIColor(hexString: "#25272B")
+                toolbar.tintColor = .white
+            } else {
+                // Measured on iPhone 8, iOS 13.3.1. Not the same as systemBackground.
+                toolbar.barTintColor = UIColor(hexString: "#D1D2D9")
+                toolbar.tintColor = .black
+            }
         }
         toolbar.items = [undoButton, redoButton,
                          UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
@@ -319,9 +545,9 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                          upButton, downButton, runButton] */
         return toolbar
     }()
-
+    
     override func loadView() {
-        let contentController = WKUserContentController();
+        let contentController = WKUserContentController()
         contentController.add(self, name: "Carnets")
         let config = WKWebViewConfiguration()
         config.userContentController = contentController
@@ -331,16 +557,25 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         config.preferences.setValue(true, forKey: "shouldAllowUserInstalledFonts")
         
         webView = WKWebView(frame: .zero, configuration: config)
-
         webView.navigationDelegate = self
         webView.uiDelegate = self
         view = webView
         appWebView = webView
+        let traitCollection = appWebView.traitCollection
+        appWebView.isOpaque = false
+        if #available(iOS 13, *) {
+            appWebView.tintColor = UIColor.placeholderText.resolvedColor(with: traitCollection)
+            if (darkMode) {
+                appWebView.backgroundColor = UIColor(hexString: "#2b303b")
+            } else {
+                appWebView.backgroundColor = UIColor.systemBackground.resolvedColor(with: traitCollection)
+            }
+        }
+        
         if (!UIDevice.current.modelName.hasPrefix("iPad")) {
             // toolbar for iPhones and iPod touch
             webView.addInputAccessoryView(toolbar: self.editorToolbar)
         }
-        
         
         NotificationCenter.default.addObserver(self, selector: #selector(undoAction), name: .NSUndoManagerWillUndoChange, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(redoAction), name: .NSUndoManagerWillRedoChange, object: nil)
@@ -373,7 +608,6 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                         let previousURL = try URL(resolvingBookmarkData: notebookBookmark!, bookmarkDataIsStale: &stale)
                         if (!stale && (previousURL.path == fileURL.path)) {
                             // They are the same, but the one from the bookmark still has the authorization
-                            print("bookmarked before in notebookBookmark")
                             fileURLToOpen = previousURL
                             bookmarks.updateValue(notebookBookmark!, forKey:fileURLToOpen!)
                         }
@@ -499,19 +733,54 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             directoryURL = directoryURL.deletingLastPathComponent()
         }
         // print("Changing directory to \(directoryURL.path)")
-        FileManager().changeCurrentDirectoryPath(directoryURL.path)
+        // FileManager().changeCurrentDirectoryPath(directoryURL.path)
+        ios_system("cd '\(directoryURL.path)'")
         // local files.
         if (filePath.hasPrefix("/")) { filePath = String(filePath.dropFirst()) }
         while (serverAddress == nil) {  }
         var fileAddressUrl = serverAddress!
-        if (filePath.hasSuffix(".ipynb")) {
+        // Notebook or python file: open as notebook
+        if (filePath.hasSuffix(".ipynb") || filePath.hasSuffix(".py")) {
             fileAddressUrl = fileAddressUrl.appendingPathComponent("notebooks")
         } else if (destinationIsDirectory) {
             fileAddressUrl = fileAddressUrl.appendingPathComponent("tree")
         } else {
-            fileAddressUrl = fileAddressUrl.appendingPathComponent("edit")
+            // We have been requested to open a file. Two actions: "view" or "edit", depending on file type.
+            let suffix = fileURL.pathExtension
+            // HTML files conform to both kUTTypeText and kUTTypeHTML
+            var action = "edit" // default action = edit the file as a text file
+            // Get the UTIs from the system:
+            let rawUtis = UTTypeCreateAllIdentifiersForTag(kUTTagClassFilenameExtension, suffix as CFString, nil)?.takeRetainedValue() as? [String]
+            if (rawUtis != nil) {
+                for rawUti in rawUtis! {
+                    // NSLog("\(suffix) has UTI \(rawUti)")
+                    // TODO: add more file types to the list
+                    if (UTTypeConformsTo(rawUti as CFString, kUTTypeImage)) { action = "direct" ; break;  }
+                    if (UTTypeConformsTo(rawUti as CFString, kUTTypeMovie)) { action = "view" ; break;  }
+                    if (UTTypeConformsTo(rawUti as CFString, kUTTypeAudio)) { action = "view" ; break;  }
+                    if (UTTypeConformsTo(rawUti as CFString, kUTTypeHTML)) { action = "view" ; break; }
+                    if (UTTypeConformsTo(rawUti as CFString, kUTTypeXML)) { action = "view" ; break;  } // discutable
+                    if (UTTypeConformsTo(rawUti as CFString, kUTTypePDF)) { action = "direct" ; break;  } // PDF
+                    if (rawUti.hasPrefix("com.apple.iwork")) { action = "direct" ; break;  } // iWork
+                    if (rawUti.hasPrefix("com.apple.keynote")) { action = "direct" ; break;  } // iWork
+                    if (rawUti.hasPrefix("org.openxmlformats.presentationml")) { action = "direct" ; break;  } // PPT
+                    if (rawUti.hasPrefix("org.openxmlformats.spreadsheetml")) { action = "view" ; break;  } // XLS
+                    if (rawUti.hasPrefix("org.openxmlformats.wordprocessingml")) { action = "view" ; break;  } // Word
+                    if (rawUti == "public.comma-separated-values-text") { action = "view" ; break;  } // CSV
+                    if (rawUti.hasPrefix("com.microsoft.")) { action = "view" ; break;  } // Microsoft Word, Excel, Powerpoint
+                    // if (rawUti.hasPrefix("dyn.age")) { action = "direct" ; break;  } // sQlite db, but also *.out
+                }
+            }
+            if (action == "direct") {
+                // Send the files directly to WKWebView instead of using .../view/...file
+                // (which uses view.html) as PDF files work better this way (and others are indifferent)
+                // CSV, Excel, MS Word + dark mode + direct view = all black (probably a WKWebView issue)
+                fileAddressUrl = URL(fileURLWithPath: "/")
+            } else {
+                // kernelAddress + /edit/ + fileName or kernelAddress + /view/ + fileName
+                fileAddressUrl = fileAddressUrl.appendingPathComponent(action)
+            }
         }
-        // var fileAddressUrl = serverAddress.appendingPathComponent("notebooks")
         fileAddressUrl = fileAddressUrl.appendingPathComponent(filePath)
         // Set up the date as the time we loaded the file:
         lastModificationDate = Date()
@@ -930,6 +1199,14 @@ extension ViewController: WKUIDelegate {
         return nil
     }
     
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        if (webView.title != nil) && (webView.title != "") {
+            title = webView.title
+        } else {
+            title = webView.url?.lastPathComponent            
+        }
+    }
+    
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         // Method called after a web page has been loaded, including as a result of goBack()
         // or goForward().
@@ -945,9 +1222,10 @@ extension ViewController: WKUIDelegate {
             presentedItemURL = nil
             kernelURL = nil
             NSFileCoordinator.removeFilePresenter(self)
+            notebookViewerActive = false
             dismiss(animated: true) // back to documentBrowser
         } else {
-            guard(webView.url != nil) else { return }
+            guard (webView.url!.isFileURL) else { return } // only store file URLs
             var fileLocation = webView.url!.path
             kernelURL = webView.url 
             if (!fileLocation.hasPrefix("/notebooks/")) { return } // Don't try to store if it's not a notebook

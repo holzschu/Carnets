@@ -53,5 +53,4 @@ extension WKWebView {
         let customInputAccessory = objc_getAssociatedObject(superWebView, &ToolbarHandle)
         return customInputAccessory as? UIView
     }
-    
 }

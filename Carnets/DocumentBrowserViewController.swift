@@ -21,9 +21,12 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let documentViewController = storyBoard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
         documentViewController.modalPresentationStyle = UIModalPresentationStyle.fullScreen;
+        
         let lastPageVisited = UserDefaults.standard.url(forKey: "lastOpenUrl")
 
-        if (lastPageVisited != nil) && (lastPageVisited!.path != "/tree") {
+        // Reopen where we were last time, but only if it is a notebook:
+        if (lastPageVisited != nil) && (lastPageVisited!.path != "/tree")
+            && lastPageVisited!.isFileURL && lastPageVisited!.path.hasPrefix("/notebooks") {
             documentViewController.presentedItemURL = lastPageVisited
             NSFileCoordinator.addFilePresenter(documentViewController)
             // print("presentedItemURL (DocumentBrowserViewController) = \(documentViewController.presentedItemURL)")
@@ -123,11 +126,16 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let documentViewController = storyBoard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
         documentViewController.modalPresentationStyle = UIModalPresentationStyle.fullScreen;
+
         documentViewController.presentedItemURL = documentURL
         NSFileCoordinator.addFilePresenter(documentViewController)
+        notebookViewerActive = true
         // print("presentedItemURL (DocumentBrowserViewController presentDocument) = \(documentViewController.presentedItemURL)")
         UserDefaults.standard.set(documentURL, forKey: "lastOpenUrl")
-        present(documentViewController, animated: true, completion: nil)
+        let navigationController = UINavigationController(rootViewController: documentViewController)
+        navigationController.modalPresentationStyle = UIModalPresentationStyle.fullScreen;
+        present(navigationController, animated: true, completion: nil)
+        // present(documentViewController, animated: true, completion: nil)
     }
 }
 

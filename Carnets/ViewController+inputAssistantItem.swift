@@ -58,6 +58,25 @@ extension ViewController {
         return true // All other iPad models.
     }
     
+    var darkMode: Bool {
+        if #available(iOS 13, *) {
+            // Are we in light mode or dark mode?
+            var H_fg: CGFloat = 0
+            var S_fg: CGFloat = 0
+            var B_fg: CGFloat = 0
+            var A_fg: CGFloat = 0
+            UIColor.placeholderText.resolvedColor(with: traitCollection).getHue(&H_fg, saturation: &S_fg, brightness: &B_fg, alpha: &A_fg)
+            var H_bg: CGFloat = 0
+            var S_bg: CGFloat = 0
+            var B_bg: CGFloat = 0
+            var A_bg: CGFloat = 0
+            UIColor.systemBackground.resolvedColor(with: traitCollection).getHue(&H_bg, saturation: &S_bg, brightness: &B_bg, alpha: &A_bg)
+            return (B_fg > B_bg)
+        } else {
+            return false
+        }
+    }
+    
     var fontSize: CGFloat {
         let deviceModel = UIDevice.current.modelName
         if (deviceModel.hasPrefix("iPad")) {
@@ -82,9 +101,26 @@ extension ViewController {
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-
+        NSLog("Called traitCollectionDidChange")
         if #available(iOS 13.0, *) {
             guard (kernelURL != nil) else { return } // too soon
+            // Change default color of appWebView:
+            appWebView.tintColor = UIColor.placeholderText.resolvedColor(with: traitCollection)
+            if (darkMode) {
+                appWebView.backgroundColor = UIColor(hexString: "#2b303b")
+            } else {
+                appWebView.backgroundColor = UIColor.systemBackground.resolvedColor(with: traitCollection)
+            }
+            // Change color of navigation bar:
+            navigationController?.navigationBar.tintColor = UIColor.placeholderText.resolvedColor(with: traitCollection)
+            if (darkMode) {
+                navigationController?.navigationBar.backgroundColor = UIColor(hexString: "#2b303b")
+                navigationController?.navigationBar.barTintColor = UIColor(hexString: "#2b303b")
+            } else {
+                // navigationController?.navigationBar.backgroundColor = UIColor.systemBackground.resolvedColor(with: traitCollection)
+                navigationController?.navigationBar.backgroundColor = UIColor(hexString: "#f8f8f8")
+                navigationController?.navigationBar.barTintColor = UIColor(hexString: "#f8f8f8")
+            }
             // redraw toolbar
             if (UIDevice.current.modelName.hasPrefix("iPad")) {
                 if (kernelURL!.path.hasPrefix("/notebooks")) {
@@ -120,6 +156,19 @@ extension ViewController {
                         [undoButton, redoButton, saveButton], representativeItem: nil)]
                     contentView?.inputAssistantItem.trailingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
                         [cutButton, copyButton, pasteButton], representativeItem: nil)]
+                }
+            } else {
+                // for iPhones and iPod Touch (14 installs in 8 months)
+                // Goal: reproduce keyboard tint and color.
+                editorToolbar.backgroundColor = UIColor.systemBackground.resolvedColor(with: traitCollection)
+                editorToolbar.isTranslucent = false
+                if (darkMode) {
+                    editorToolbar.barTintColor = UIColor(hexString: "#25272B")
+                    editorToolbar.tintColor = .white
+                } else {
+                    // Measured on iPhone 8, iOS 13.3.1. Not the same as systemBackground.
+                    editorToolbar.barTintColor = UIColor(hexString: "#D1D2D9")
+                    editorToolbar.tintColor = .black
                 }
             }
         }
@@ -410,6 +459,95 @@ extension ViewController {
         }
 
     }
+    
+    @objc func goBackAction(_ sender: UIBarButtonItem) {
+        if self.webView.canGoBack {
+            var position = -1
+            var backPageItem = self.webView.backForwardList.item(at: position)
+            while ((backPageItem != nil) && (backPageItem?.url != nil) && ((backPageItem?.url.sameLocation(url: self.webView.url))! || skippedURLs.contains(backPageItem!.url))) {
+                if let index = skippedURLs.firstIndex(of: backPageItem!.url) {
+                    skippedURLs.remove(at: index)
+                }
+                position -= 1
+                backPageItem = self.webView.backForwardList.item(at: position)
+            }
+            if (backPageItem != nil) {
+                self.webView.go(to: backPageItem!)
+                return
+            }
+        }
+        // Nothing left in history, so we open the file server:
+        var treeAddress = serverAddress
+        treeAddress = treeAddress?.appendingPathComponent("tree")
+        self.webView.load(URLRequest(url: treeAddress!))
+    }
+    
+    @objc func goForwardAction(_ sender: UIBarButtonItem) {
+        if self.webView.canGoForward {
+            var position = 1
+            var forwardPageItem = self.webView.backForwardList.item(at: position)
+            while ((forwardPageItem != nil) && (forwardPageItem?.url != nil) && ((forwardPageItem?.url.sameLocation(url: self.webView.url))!)) {
+                position += 1
+                forwardPageItem = self.webView.backForwardList.item(at: position)
+            }
+            if (forwardPageItem != nil) {
+                self.webView.go(to: forwardPageItem!)
+                return
+            }
+        }
+    }
+    
+    var backButton: UIBarButtonItem {
+        if #available(iOS 13.0, *) {
+            let configuration = UIImage.SymbolConfiguration(pointSize: fontSize, weight: .bold)
+            let backButton = UIBarButtonItem(image: UIImage(systemName: "chevron.left")!.withConfiguration(configuration), style: .plain, target: self, action: #selector(goBackAction(_:)))
+            backButton.tintColor = .systemBlue
+            return backButton
+        } else {
+        let backButton = UIBarButtonItem(title: "\u{f053}", style: .plain, target: self, action: #selector(goBackAction(_:)))
+        backButton.setTitleTextAttributes(
+            [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
+             NSAttributedString.Key.foregroundColor : UIColor.systemBlue,], for: .normal)
+        return backButton
+        }
+    }
+
+    var forwardButton: UIBarButtonItem {
+        if #available(iOS 13.0, *) {
+            let configuration = UIImage.SymbolConfiguration(pointSize: fontSize, weight: .bold)
+            let forwardButton = UIBarButtonItem(image: UIImage(systemName: "chevron.right")!.withConfiguration(configuration), style: .plain, target: self, action: #selector(goForwardAction(_:)))
+            forwardButton.tintColor = .systemBlue
+            return forwardButton
+        } else {
+        let forwardButton = UIBarButtonItem(title: "\u{f054}", style: .plain, target: self, action: #selector(goForwardAction(_:)))
+        forwardButton.setTitleTextAttributes(
+            [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
+             NSAttributedString.Key.foregroundColor : UIColor.systemBlue,], for: .normal)
+        return forwardButton
+        }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        // Add navigation bar at the top: back, title, forward
+        if #available(iOS 13, *) {
+            navigationController?.navigationBar.tintColor = UIColor.placeholderText.resolvedColor(with: traitCollection)
+            if (darkMode) {
+                navigationController?.navigationBar.backgroundColor = UIColor(hexString: "#2b303b")
+                navigationController?.navigationBar.barTintColor = UIColor(hexString: "#2b303b")
+            } else {
+                // navigationController?.navigationBar.backgroundColor = UIColor.systemBackground.resolvedColor(with: traitCollection)
+                navigationController?.navigationBar.backgroundColor = UIColor(hexString: "#f8f8f8")
+                navigationController?.navigationBar.barTintColor = UIColor(hexString: "#f8f8f8")
+            }
+        }
+        navigationItem.largeTitleDisplayMode = .never
+        navigationItem.leftBarButtonItem = backButton
+        navigationItem.rightBarButtonItem = forwardButton
+        navigationController?.navigationBar.isHidden = false
+        navigationController?.hidesBarsOnSwipe = true
+        navigationController?.navigationBar.isTranslucent = false // isTranslucent plays with the color, and it doesn't match the rest of the UI
+    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()

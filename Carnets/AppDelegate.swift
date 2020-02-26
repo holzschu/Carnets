@@ -29,6 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var versionUpToDate = true
     var libraryFilesUpToDate = true
     var updateExtensionsRunning = false
+    let jupyterServerSession = "jupyterServerSession"
     // Which version of the app are we running? Carnets, Carnets mini, Carnets scipy, Carnets Julia...?
 
     var appVersion: String? {
@@ -47,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             iCloudDocumentsURL = FileManager().url(forUbiquityContainerIdentifier: nil)
             if (iCloudDocumentsURL != nil) {
                 // Create a document in the iCloud folder to make it visible.
-                print("iCloudContainer = \(iCloudDocumentsURL)")
+                // print("iCloudContainer = \(iCloudDocumentsURL)")
                 let iCloudDirectory = iCloudDocumentsURL?.appendingPathComponent("Documents")
                 guard let iCloudDirectoryWelcome = iCloudDirectory?.appendingPathComponent("welcome") else { return }
                 if (!FileManager().fileExists(atPath: iCloudDirectoryWelcome.path)) {
@@ -145,7 +146,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // packages installed in previous versions. Must remove before anything else or they mess things up.
         let oldPythonDirectories = ["Library/lib/python3.7/site-packages/numpy-1.16.0-py3.7-macosx-12.1-iPad6,7.egg",
                                     "Library/lib/python3.7/site-packages/matplotlib-3.0.2-py3.7.egg",
-                                    "Library/lib/python3.7/site-packages/kiwisolver-1.0.1-py3.7-macosx-12.1-iPad6,7.egg"]
+                                    "Library/lib/python3.7/site-packages/kiwisolver-1.0.1-py3.7-macosx-12.1-iPad6,7.egg",
+                                    // Sympy files that disappeared with 1.5.1:
+                                    "Library/lib/python3.7/site-packages/sympy/integrals/rubi/rubi.py",
+                                    "Library/lib/python3.7/site-packages/sympy/physics/units/definitions.py",
+                                    "Library/lib/python3.7/site-packages/sympy/physics/unitsystems.py",
+                                    "Library/lib/python3.7/site-packages/sympy-1.3-py3.7.egg-info/"
+                                    ]
         let documentsUrl = try! FileManager().url(for: .documentDirectory,
                                                   in: .userDomainMask,
                                                   appropriateFor: nil,
@@ -191,6 +198,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                  "lib/python3.7/site-packages/jupyter_latex_envs-1.4.6-py3.7.egg",
                                  "lib/python3.7/site-packages/Pillow-6.0.0-py3.7-macosx-10.9-x86_64.egg",
                                  "lib/python3.7/site-packages/cryptography-2.7-py3.7-macosx-10.9-x86_64.egg",
+                                 "lib/python3.7/site-packages/lxml-4.4.2-py3.7-macosx-10.9-x86_64.egg",
+                                 "lib/python3.7/site-packages/bokeh-1.4.0-py3.7.egg",
+                                 "lib/python3.7/site-packages/packaging-20.1-py3.7.egg",
         ]
 
         if (appVersion != "Carnets mini") {
@@ -360,6 +370,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     // wait until Python files have been updated, if needed:
                     while (!self.libraryFilesUpToDate) { }
                     NSLog("Installing extensions.")
+                    // TODO: switch session back to install session before each command.
                     var pid:pid_t = ios_fork()
                     ios_system("jupyter-contrib nbextension install --user")
                     ios_waitpid(pid)
@@ -391,6 +402,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     self.versionUpToDate = true
                     extensionsBundleResource.endAccessingResources()
                     self.updateExtensionsRunning = false
+                    // for debugging:
+                    // numPythonInterpreters = 3
                }
             }
         })
@@ -406,6 +419,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setenv("LC_CTYPE", "UTF-8", 1);
         setenv("LC_ALL", "UTF-8", 1);
         setenv("CLICOLOR_FORCE", "1", 1)  // color ls
+        // TODO: have more languages
+        // Current options are: fr_FR or zh_CN (or english as default)
+        let language = UserDefaults.standard.string(forKey: "language_preference")
+        if (language != nil) {
+            setenv("LANGUAGE", language, 1);
+        }
         setlocale(LC_CTYPE, "UTF-8");
         setlocale(LC_ALL, "UTF-8");
         clearOldDirectories()
@@ -459,6 +478,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     @objc func settingsChanged() {
         // UserDefaults.didChangeNotification is called every time the window becomes active
         // We only act if things have really changed.
+        let language = UserDefaults.standard.string(forKey: "language_preference")
+        if (language != nil) {
+            setenv("LANGUAGE", language, 1);
+        }
     }
 
     func notebookServerTerminated() {
@@ -489,6 +512,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.notebookServerRunning = true
             // start the Jupyter notebook server:
             // (the server will call openURL with the name of the local file)
+            ios_switchSession(self.jupyterServerSession)
             NSLog("Starting jupyter notebook server")
             let shellCommand = "jupyter-notebook --notebook-dir /"
             ios_system(shellCommand)
@@ -654,8 +678,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
             let documentViewController = storyBoard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
             documentViewController.modalPresentationStyle = UIModalPresentationStyle.fullScreen;
+
             UserDefaults.standard.set(revealedDocumentURL, forKey: "lastOpenUrl")
-            if (documentViewController.kernelURL == nil) {
+            if (!notebookViewerActive) {
                 // The documentBrowserViewController is active, we ask it to display the document:
                 documentBrowserViewController.presentDocument(at: revealedDocumentURL!)
             } else {

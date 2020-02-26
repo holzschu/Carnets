@@ -26,6 +26,30 @@
 			<key>DefaultValue</key>
 			<false/>
 		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Language:</string>
+			<key>Key</key>
+			<string>language_preference</string>
+			<key>DefaultValue</key>
+			<string>en_EN</string>
+			<key>Titles</key>
+			<array>
+				<string>English</string>
+				<string>Français</string>
+				<string>简体中文</string>
+				<string>繁體中文</string>
+			</array>
+			<key>Values</key>
+			<array>
+				<string>en_EN</string>
+				<string>fr_FR</string>
+				<string>zh_CN</string>
+				<string>zh_TW</string>
+			</array>
+		</dict>
 	</array>
 </dict>
 </plist>
