@@ -1,0 +1,12 @@
+#!/Library/Frameworks/Python.framework/Versions/3.7/bin/python3
+# EASY-INSTALL-ENTRY-SCRIPT: 'astropy==4.0','console_scripts','showtable'
+__requires__ = 'astropy==4.0'
+import re
+import sys
+from pkg_resources import load_entry_point
+
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw?|\.exe)?$', '', sys.argv[0])
+    sys.exit(
+        load_entry_point('astropy==4.0', 'console_scripts', 'showtable')()
+    )

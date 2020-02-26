@@ -1390,8 +1390,6 @@ class Popen(object):
             else:
                 args = list(args)
 
-            # iOS: don't add "/bin/sh -c"
-            # shell = False # iOS: test without this
             if shell:
                 # On Android the default shell is at '/system/bin/sh'.
                 unix_shell = ('/system/bin/sh' if
