@@ -386,6 +386,108 @@
 		22AAFE0322A5C1C800192CB4 /* pythonE-cryptography.hazmat.bindings._constant_time.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCF622A166AB00192CB4 /* pythonE-cryptography.hazmat.bindings._constant_time.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22AAFE0422A5C1C800192CB4 /* pythonE-cryptography.hazmat.bindings._openssl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCF522A166AB00192CB4 /* pythonE-cryptography.hazmat.bindings._openssl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22AAFE0522A5C1C800192CB4 /* pythonE-cryptography.hazmat.bindings._padding.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22AAFCFA22A166AB00192CB4 /* pythonE-cryptography.hazmat.bindings._padding.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B184EB24067F4D0089C3BE /* python3_ios-astropy._erfa.ufunc.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184D124067F290089C3BE /* python3_ios-astropy._erfa.ufunc.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B184EC24067F4D0089C3BE /* python3_ios-astropy.compiler_version.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1849424067F220089C3BE /* python3_ios-astropy.compiler_version.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B184ED24067F4D0089C3BE /* python3_ios-astropy.convolution._convolve.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184B524067F250089C3BE /* python3_ios-astropy.convolution._convolve.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B184EE24067F4D0089C3BE /* python3_ios-astropy.cosmology.scalar_inv_efuncs.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184D424067F290089C3BE /* python3_ios-astropy.cosmology.scalar_inv_efuncs.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B184EF24067F4D0089C3BE /* python3_ios-astropy.io.ascii.cparser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184B824067F260089C3BE /* python3_ios-astropy.io.ascii.cparser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B184F024067F4D0089C3BE /* python3_ios-astropy.io.fits._utils.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184BC24067F260089C3BE /* python3_ios-astropy.io.fits._utils.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B184F124067F4D0089C3BE /* python3_ios-astropy.io.fits.compression.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184D824067F2A0089C3BE /* python3_ios-astropy.io.fits.compression.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B184F224067F4D0089C3BE /* python3_ios-astropy.io.votable.tablewriter.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1849F24067F230089C3BE /* python3_ios-astropy.io.votable.tablewriter.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B184F324067F4D0089C3BE /* python3_ios-astropy.modeling._projections.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184C224067F270089C3BE /* python3_ios-astropy.modeling._projections.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B184F424067F4D0089C3BE /* python3_ios-astropy.stats._stats.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184DA24067F2A0089C3BE /* python3_ios-astropy.stats._stats.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B184F524067F4D0089C3BE /* python3_ios-astropy.table._column_mixins.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184E924067F2B0089C3BE /* python3_ios-astropy.table._column_mixins.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B184F624067F4D0089C3BE /* python3_ios-astropy.table._np_utils.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184E824067F2B0089C3BE /* python3_ios-astropy.table._np_utils.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B184F724067F4D0089C3BE /* python3_ios-astropy.timeseries.periodograms.bls._impl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184DC24067F2A0089C3BE /* python3_ios-astropy.timeseries.periodograms.bls._impl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B184F824067F4D0089C3BE /* python3_ios-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184C024067F270089C3BE /* python3_ios-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B184F924067F4D0089C3BE /* python3_ios-astropy.utils._compiler.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1848B24067F210089C3BE /* python3_ios-astropy.utils._compiler.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B184FA24067F4D0089C3BE /* python3_ios-astropy.utils.xml._iterparser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1849E24067F230089C3BE /* python3_ios-astropy.utils.xml._iterparser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B184FB24067F4D0089C3BE /* python3_ios-astropy.wcs._wcs.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1848924067F210089C3BE /* python3_ios-astropy.wcs._wcs.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B184FC24067F4D0089C3BE /* pythonA-astropy._erfa.ufunc.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184CD24067F280089C3BE /* pythonA-astropy._erfa.ufunc.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B184FD24067F4D0089C3BE /* pythonA-astropy.compiler_version.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184AA24067F240089C3BE /* pythonA-astropy.compiler_version.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B184FE24067F4D0089C3BE /* pythonA-astropy.convolution._convolve.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184AD24067F240089C3BE /* pythonA-astropy.convolution._convolve.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B184FF24067F4D0089C3BE /* pythonA-astropy.cosmology.scalar_inv_efuncs.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184D624067F290089C3BE /* pythonA-astropy.cosmology.scalar_inv_efuncs.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1850024067F4D0089C3BE /* pythonA-astropy.io.ascii.cparser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184B924067F260089C3BE /* pythonA-astropy.io.ascii.cparser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1850124067F4D0089C3BE /* pythonA-astropy.io.fits._utils.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1849A24067F220089C3BE /* pythonA-astropy.io.fits._utils.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1850224067F4D0089C3BE /* pythonA-astropy.io.fits.compression.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184AF24067F250089C3BE /* pythonA-astropy.io.fits.compression.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1850324067F4D0089C3BE /* pythonA-astropy.io.votable.tablewriter.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184A624067F240089C3BE /* pythonA-astropy.io.votable.tablewriter.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1850424067F4D0089C3BE /* pythonA-astropy.modeling._projections.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184C924067F280089C3BE /* pythonA-astropy.modeling._projections.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1850524067F4D0089C3BE /* pythonA-astropy.stats._stats.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184CF24067F280089C3BE /* pythonA-astropy.stats._stats.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1850624067F4D0089C3BE /* pythonA-astropy.table._column_mixins.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184C824067F280089C3BE /* pythonA-astropy.table._column_mixins.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1850724067F4D0089C3BE /* pythonA-astropy.table._np_utils.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184BF24067F270089C3BE /* pythonA-astropy.table._np_utils.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1850824067F4D0089C3BE /* pythonA-astropy.timeseries.periodograms.bls._impl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184C124067F270089C3BE /* pythonA-astropy.timeseries.periodograms.bls._impl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1850924067F4D0089C3BE /* pythonA-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184A824067F240089C3BE /* pythonA-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1850A24067F4D0089C3BE /* pythonA-astropy.utils._compiler.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184C424067F270089C3BE /* pythonA-astropy.utils._compiler.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1850B24067F4D0089C3BE /* pythonA-astropy.utils.xml._iterparser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184DE24067F2A0089C3BE /* pythonA-astropy.utils.xml._iterparser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1850C24067F4D0089C3BE /* pythonA-astropy.wcs._wcs.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184D024067F280089C3BE /* pythonA-astropy.wcs._wcs.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1850D24067F4D0089C3BE /* pythonB-astropy._erfa.ufunc.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184A024067F230089C3BE /* pythonB-astropy._erfa.ufunc.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1850E24067F4D0089C3BE /* pythonB-astropy.compiler_version.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184E524067F2B0089C3BE /* pythonB-astropy.compiler_version.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1850F24067F4D0089C3BE /* pythonB-astropy.convolution._convolve.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184D924067F2A0089C3BE /* pythonB-astropy.convolution._convolve.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1851024067F4D0089C3BE /* pythonB-astropy.cosmology.scalar_inv_efuncs.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1849224067F210089C3BE /* pythonB-astropy.cosmology.scalar_inv_efuncs.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1851124067F4D0089C3BE /* pythonB-astropy.io.ascii.cparser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184A324067F230089C3BE /* pythonB-astropy.io.ascii.cparser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1851224067F4D0089C3BE /* pythonB-astropy.io.fits._utils.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1849724067F220089C3BE /* pythonB-astropy.io.fits._utils.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1851324067F4D0089C3BE /* pythonB-astropy.io.fits.compression.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1849924067F220089C3BE /* pythonB-astropy.io.fits.compression.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1851424067F4D0089C3BE /* pythonB-astropy.io.votable.tablewriter.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184CB24067F280089C3BE /* pythonB-astropy.io.votable.tablewriter.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1851524067F4D0089C3BE /* pythonB-astropy.modeling._projections.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184AC24067F240089C3BE /* pythonB-astropy.modeling._projections.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1851624067F4D0089C3BE /* pythonB-astropy.stats._stats.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184DF24067F2A0089C3BE /* pythonB-astropy.stats._stats.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1851724067F4D0089C3BE /* pythonB-astropy.table._column_mixins.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184B624067F250089C3BE /* pythonB-astropy.table._column_mixins.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1851824067F4D0089C3BE /* pythonB-astropy.table._np_utils.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1849124067F210089C3BE /* pythonB-astropy.table._np_utils.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1851924067F4D0089C3BE /* pythonB-astropy.timeseries.periodograms.bls._impl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184C324067F270089C3BE /* pythonB-astropy.timeseries.periodograms.bls._impl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1851A24067F4E0089C3BE /* pythonB-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184A224067F230089C3BE /* pythonB-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1851B24067F4E0089C3BE /* pythonB-astropy.utils._compiler.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1848E24067F210089C3BE /* pythonB-astropy.utils._compiler.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1851C24067F4E0089C3BE /* pythonB-astropy.utils.xml._iterparser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184C724067F280089C3BE /* pythonB-astropy.utils.xml._iterparser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1851D24067F4E0089C3BE /* pythonB-astropy.wcs._wcs.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184D324067F290089C3BE /* pythonB-astropy.wcs._wcs.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1851E24067F4E0089C3BE /* pythonC-astropy._erfa.ufunc.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184EA24067F2B0089C3BE /* pythonC-astropy._erfa.ufunc.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1851F24067F4E0089C3BE /* pythonC-astropy.compiler_version.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184C624067F270089C3BE /* pythonC-astropy.compiler_version.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1852024067F4E0089C3BE /* pythonC-astropy.convolution._convolve.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184E424067F2B0089C3BE /* pythonC-astropy.convolution._convolve.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1852124067F4E0089C3BE /* pythonC-astropy.cosmology.scalar_inv_efuncs.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1848A24067F210089C3BE /* pythonC-astropy.cosmology.scalar_inv_efuncs.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1852224067F4E0089C3BE /* pythonC-astropy.io.ascii.cparser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1849024067F210089C3BE /* pythonC-astropy.io.ascii.cparser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1852324067F4E0089C3BE /* pythonC-astropy.io.fits._utils.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184E124067F2A0089C3BE /* pythonC-astropy.io.fits._utils.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1852424067F4E0089C3BE /* pythonC-astropy.io.fits.compression.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1849B24067F220089C3BE /* pythonC-astropy.io.fits.compression.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1852524067F4E0089C3BE /* pythonC-astropy.io.votable.tablewriter.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184D524067F290089C3BE /* pythonC-astropy.io.votable.tablewriter.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1852624067F4E0089C3BE /* pythonC-astropy.modeling._projections.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1848D24067F210089C3BE /* pythonC-astropy.modeling._projections.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1852724067F4E0089C3BE /* pythonC-astropy.stats._stats.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184DD24067F2A0089C3BE /* pythonC-astropy.stats._stats.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1852824067F4E0089C3BE /* pythonC-astropy.table._column_mixins.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184AB24067F240089C3BE /* pythonC-astropy.table._column_mixins.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1852924067F4E0089C3BE /* pythonC-astropy.table._np_utils.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1848F24067F210089C3BE /* pythonC-astropy.table._np_utils.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1852A24067F4E0089C3BE /* pythonC-astropy.timeseries.periodograms.bls._impl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184B124067F250089C3BE /* pythonC-astropy.timeseries.periodograms.bls._impl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1852B24067F4E0089C3BE /* pythonC-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184E024067F2A0089C3BE /* pythonC-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1852C24067F4E0089C3BE /* pythonC-astropy.utils._compiler.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1849C24067F230089C3BE /* pythonC-astropy.utils._compiler.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1852D24067F4E0089C3BE /* pythonC-astropy.utils.xml._iterparser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184E224067F2B0089C3BE /* pythonC-astropy.utils.xml._iterparser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1852E24067F4E0089C3BE /* pythonC-astropy.wcs._wcs.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184C524067F270089C3BE /* pythonC-astropy.wcs._wcs.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1852F24067F4E0089C3BE /* pythonD-astropy._erfa.ufunc.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1849824067F220089C3BE /* pythonD-astropy._erfa.ufunc.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1853024067F4E0089C3BE /* pythonD-astropy.compiler_version.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184A424067F240089C3BE /* pythonD-astropy.compiler_version.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1853124067F4E0089C3BE /* pythonD-astropy.convolution._convolve.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1848824067F200089C3BE /* pythonD-astropy.convolution._convolve.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1853224067F4E0089C3BE /* pythonD-astropy.cosmology.scalar_inv_efuncs.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184D224067F290089C3BE /* pythonD-astropy.cosmology.scalar_inv_efuncs.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1853324067F4E0089C3BE /* pythonD-astropy.io.ascii.cparser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184B324067F250089C3BE /* pythonD-astropy.io.ascii.cparser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1853424067F4E0089C3BE /* pythonD-astropy.io.fits._utils.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184A124067F230089C3BE /* pythonD-astropy.io.fits._utils.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1853524067F4E0089C3BE /* pythonD-astropy.io.fits.compression.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184BB24067F260089C3BE /* pythonD-astropy.io.fits.compression.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1853624067F4E0089C3BE /* pythonD-astropy.io.votable.tablewriter.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1848C24067F210089C3BE /* pythonD-astropy.io.votable.tablewriter.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1853724067F4E0089C3BE /* pythonD-astropy.modeling._projections.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1848524067F200089C3BE /* pythonD-astropy.modeling._projections.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1853824067F4E0089C3BE /* pythonD-astropy.stats._stats.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184E324067F2B0089C3BE /* pythonD-astropy.stats._stats.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1853924067F4E0089C3BE /* pythonD-astropy.table._column_mixins.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184BD24067F260089C3BE /* pythonD-astropy.table._column_mixins.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1853A24067F4E0089C3BE /* pythonD-astropy.table._np_utils.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184CC24067F280089C3BE /* pythonD-astropy.table._np_utils.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1853B24067F4E0089C3BE /* pythonD-astropy.timeseries.periodograms.bls._impl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1849524067F220089C3BE /* pythonD-astropy.timeseries.periodograms.bls._impl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1853C24067F4E0089C3BE /* pythonD-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1848724067F200089C3BE /* pythonD-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1853D24067F4E0089C3BE /* pythonD-astropy.utils._compiler.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184BA24067F260089C3BE /* pythonD-astropy.utils._compiler.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1853E24067F4E0089C3BE /* pythonD-astropy.utils.xml._iterparser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184B424067F250089C3BE /* pythonD-astropy.utils.xml._iterparser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1853F24067F4E0089C3BE /* pythonD-astropy.wcs._wcs.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184A924067F240089C3BE /* pythonD-astropy.wcs._wcs.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1854024067F4E0089C3BE /* pythonE-astropy._erfa.ufunc.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184DB24067F2A0089C3BE /* pythonE-astropy._erfa.ufunc.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1854124067F4E0089C3BE /* pythonE-astropy.compiler_version.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1849624067F220089C3BE /* pythonE-astropy.compiler_version.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1854224067F4E0089C3BE /* pythonE-astropy.convolution._convolve.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184A724067F240089C3BE /* pythonE-astropy.convolution._convolve.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1854324067F4E0089C3BE /* pythonE-astropy.cosmology.scalar_inv_efuncs.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184A524067F240089C3BE /* pythonE-astropy.cosmology.scalar_inv_efuncs.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1854424067F4F0089C3BE /* pythonE-astropy.io.ascii.cparser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184E624067F2B0089C3BE /* pythonE-astropy.io.ascii.cparser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1854524067F4F0089C3BE /* pythonE-astropy.io.fits._utils.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1848624067F200089C3BE /* pythonE-astropy.io.fits._utils.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1854624067F4F0089C3BE /* pythonE-astropy.io.fits.compression.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184AE24067F250089C3BE /* pythonE-astropy.io.fits.compression.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1854724067F4F0089C3BE /* pythonE-astropy.io.votable.tablewriter.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184E724067F2B0089C3BE /* pythonE-astropy.io.votable.tablewriter.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1854824067F4F0089C3BE /* pythonE-astropy.modeling._projections.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184CA24067F280089C3BE /* pythonE-astropy.modeling._projections.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1854924067F4F0089C3BE /* pythonE-astropy.stats._stats.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184CE24067F280089C3BE /* pythonE-astropy.stats._stats.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1854A24067F4F0089C3BE /* pythonE-astropy.table._column_mixins.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184B024067F250089C3BE /* pythonE-astropy.table._column_mixins.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1854B24067F4F0089C3BE /* pythonE-astropy.table._np_utils.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1849D24067F230089C3BE /* pythonE-astropy.table._np_utils.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1854C24067F4F0089C3BE /* pythonE-astropy.timeseries.periodograms.bls._impl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B1849324067F210089C3BE /* pythonE-astropy.timeseries.periodograms.bls._impl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1854D24067F4F0089C3BE /* pythonE-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184B224067F250089C3BE /* pythonE-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1854E24067F4F0089C3BE /* pythonE-astropy.utils._compiler.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184B724067F260089C3BE /* pythonE-astropy.utils._compiler.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1854F24067F4F0089C3BE /* pythonE-astropy.utils.xml._iterparser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184D724067F290089C3BE /* pythonE-astropy.utils.xml._iterparser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22B1855024067F4F0089C3BE /* pythonE-astropy.wcs._wcs.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B184BE24067F260089C3BE /* pythonE-astropy.wcs._wcs.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22B750B021FC671700241F27 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B750AF21FC671700241F27 /* AppDelegate.swift */; };
 		22B750B521FC671700241F27 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22B750B321FC671700241F27 /* Main.storyboard */; };
 		22B750B721FC671900241F27 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22B750B621FC671900241F27 /* Assets.xcassets */; };
@@ -947,6 +1049,108 @@
 				22D2978323C2486F0069FE4F /* pythonE-lxml.html.diff.framework in Embed Frameworks */,
 				22D2978423C2486F0069FE4F /* pythonE-lxml.objectify.framework in Embed Frameworks */,
 				22D2978523C2486F0069FE4F /* pythonE-lxml.sax.framework in Embed Frameworks */,
+				22B184EB24067F4D0089C3BE /* python3_ios-astropy._erfa.ufunc.framework in Embed Frameworks */,
+				22B184EC24067F4D0089C3BE /* python3_ios-astropy.compiler_version.framework in Embed Frameworks */,
+				22B184ED24067F4D0089C3BE /* python3_ios-astropy.convolution._convolve.framework in Embed Frameworks */,
+				22B184EE24067F4D0089C3BE /* python3_ios-astropy.cosmology.scalar_inv_efuncs.framework in Embed Frameworks */,
+				22B184EF24067F4D0089C3BE /* python3_ios-astropy.io.ascii.cparser.framework in Embed Frameworks */,
+				22B184F024067F4D0089C3BE /* python3_ios-astropy.io.fits._utils.framework in Embed Frameworks */,
+				22B184F124067F4D0089C3BE /* python3_ios-astropy.io.fits.compression.framework in Embed Frameworks */,
+				22B184F224067F4D0089C3BE /* python3_ios-astropy.io.votable.tablewriter.framework in Embed Frameworks */,
+				22B184F324067F4D0089C3BE /* python3_ios-astropy.modeling._projections.framework in Embed Frameworks */,
+				22B184F424067F4D0089C3BE /* python3_ios-astropy.stats._stats.framework in Embed Frameworks */,
+				22B184F524067F4D0089C3BE /* python3_ios-astropy.table._column_mixins.framework in Embed Frameworks */,
+				22B184F624067F4D0089C3BE /* python3_ios-astropy.table._np_utils.framework in Embed Frameworks */,
+				22B184F724067F4D0089C3BE /* python3_ios-astropy.timeseries.periodograms.bls._impl.framework in Embed Frameworks */,
+				22B184F824067F4D0089C3BE /* python3_ios-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework in Embed Frameworks */,
+				22B184F924067F4D0089C3BE /* python3_ios-astropy.utils._compiler.framework in Embed Frameworks */,
+				22B184FA24067F4D0089C3BE /* python3_ios-astropy.utils.xml._iterparser.framework in Embed Frameworks */,
+				22B184FB24067F4D0089C3BE /* python3_ios-astropy.wcs._wcs.framework in Embed Frameworks */,
+				22B184FC24067F4D0089C3BE /* pythonA-astropy._erfa.ufunc.framework in Embed Frameworks */,
+				22B184FD24067F4D0089C3BE /* pythonA-astropy.compiler_version.framework in Embed Frameworks */,
+				22B184FE24067F4D0089C3BE /* pythonA-astropy.convolution._convolve.framework in Embed Frameworks */,
+				22B184FF24067F4D0089C3BE /* pythonA-astropy.cosmology.scalar_inv_efuncs.framework in Embed Frameworks */,
+				22B1850024067F4D0089C3BE /* pythonA-astropy.io.ascii.cparser.framework in Embed Frameworks */,
+				22B1850124067F4D0089C3BE /* pythonA-astropy.io.fits._utils.framework in Embed Frameworks */,
+				22B1850224067F4D0089C3BE /* pythonA-astropy.io.fits.compression.framework in Embed Frameworks */,
+				22B1850324067F4D0089C3BE /* pythonA-astropy.io.votable.tablewriter.framework in Embed Frameworks */,
+				22B1850424067F4D0089C3BE /* pythonA-astropy.modeling._projections.framework in Embed Frameworks */,
+				22B1850524067F4D0089C3BE /* pythonA-astropy.stats._stats.framework in Embed Frameworks */,
+				22B1850624067F4D0089C3BE /* pythonA-astropy.table._column_mixins.framework in Embed Frameworks */,
+				22B1850724067F4D0089C3BE /* pythonA-astropy.table._np_utils.framework in Embed Frameworks */,
+				22B1850824067F4D0089C3BE /* pythonA-astropy.timeseries.periodograms.bls._impl.framework in Embed Frameworks */,
+				22B1850924067F4D0089C3BE /* pythonA-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework in Embed Frameworks */,
+				22B1850A24067F4D0089C3BE /* pythonA-astropy.utils._compiler.framework in Embed Frameworks */,
+				22B1850B24067F4D0089C3BE /* pythonA-astropy.utils.xml._iterparser.framework in Embed Frameworks */,
+				22B1850C24067F4D0089C3BE /* pythonA-astropy.wcs._wcs.framework in Embed Frameworks */,
+				22B1850D24067F4D0089C3BE /* pythonB-astropy._erfa.ufunc.framework in Embed Frameworks */,
+				22B1850E24067F4D0089C3BE /* pythonB-astropy.compiler_version.framework in Embed Frameworks */,
+				22B1850F24067F4D0089C3BE /* pythonB-astropy.convolution._convolve.framework in Embed Frameworks */,
+				22B1851024067F4D0089C3BE /* pythonB-astropy.cosmology.scalar_inv_efuncs.framework in Embed Frameworks */,
+				22B1851124067F4D0089C3BE /* pythonB-astropy.io.ascii.cparser.framework in Embed Frameworks */,
+				22B1851224067F4D0089C3BE /* pythonB-astropy.io.fits._utils.framework in Embed Frameworks */,
+				22B1851324067F4D0089C3BE /* pythonB-astropy.io.fits.compression.framework in Embed Frameworks */,
+				22B1851424067F4D0089C3BE /* pythonB-astropy.io.votable.tablewriter.framework in Embed Frameworks */,
+				22B1851524067F4D0089C3BE /* pythonB-astropy.modeling._projections.framework in Embed Frameworks */,
+				22B1851624067F4D0089C3BE /* pythonB-astropy.stats._stats.framework in Embed Frameworks */,
+				22B1851724067F4D0089C3BE /* pythonB-astropy.table._column_mixins.framework in Embed Frameworks */,
+				22B1851824067F4D0089C3BE /* pythonB-astropy.table._np_utils.framework in Embed Frameworks */,
+				22B1851924067F4D0089C3BE /* pythonB-astropy.timeseries.periodograms.bls._impl.framework in Embed Frameworks */,
+				22B1851A24067F4E0089C3BE /* pythonB-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework in Embed Frameworks */,
+				22B1851B24067F4E0089C3BE /* pythonB-astropy.utils._compiler.framework in Embed Frameworks */,
+				22B1851C24067F4E0089C3BE /* pythonB-astropy.utils.xml._iterparser.framework in Embed Frameworks */,
+				22B1851D24067F4E0089C3BE /* pythonB-astropy.wcs._wcs.framework in Embed Frameworks */,
+				22B1851E24067F4E0089C3BE /* pythonC-astropy._erfa.ufunc.framework in Embed Frameworks */,
+				22B1851F24067F4E0089C3BE /* pythonC-astropy.compiler_version.framework in Embed Frameworks */,
+				22B1852024067F4E0089C3BE /* pythonC-astropy.convolution._convolve.framework in Embed Frameworks */,
+				22B1852124067F4E0089C3BE /* pythonC-astropy.cosmology.scalar_inv_efuncs.framework in Embed Frameworks */,
+				22B1852224067F4E0089C3BE /* pythonC-astropy.io.ascii.cparser.framework in Embed Frameworks */,
+				22B1852324067F4E0089C3BE /* pythonC-astropy.io.fits._utils.framework in Embed Frameworks */,
+				22B1852424067F4E0089C3BE /* pythonC-astropy.io.fits.compression.framework in Embed Frameworks */,
+				22B1852524067F4E0089C3BE /* pythonC-astropy.io.votable.tablewriter.framework in Embed Frameworks */,
+				22B1852624067F4E0089C3BE /* pythonC-astropy.modeling._projections.framework in Embed Frameworks */,
+				22B1852724067F4E0089C3BE /* pythonC-astropy.stats._stats.framework in Embed Frameworks */,
+				22B1852824067F4E0089C3BE /* pythonC-astropy.table._column_mixins.framework in Embed Frameworks */,
+				22B1852924067F4E0089C3BE /* pythonC-astropy.table._np_utils.framework in Embed Frameworks */,
+				22B1852A24067F4E0089C3BE /* pythonC-astropy.timeseries.periodograms.bls._impl.framework in Embed Frameworks */,
+				22B1852B24067F4E0089C3BE /* pythonC-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework in Embed Frameworks */,
+				22B1852C24067F4E0089C3BE /* pythonC-astropy.utils._compiler.framework in Embed Frameworks */,
+				22B1852D24067F4E0089C3BE /* pythonC-astropy.utils.xml._iterparser.framework in Embed Frameworks */,
+				22B1852E24067F4E0089C3BE /* pythonC-astropy.wcs._wcs.framework in Embed Frameworks */,
+				22B1852F24067F4E0089C3BE /* pythonD-astropy._erfa.ufunc.framework in Embed Frameworks */,
+				22B1853024067F4E0089C3BE /* pythonD-astropy.compiler_version.framework in Embed Frameworks */,
+				22B1853124067F4E0089C3BE /* pythonD-astropy.convolution._convolve.framework in Embed Frameworks */,
+				22B1853224067F4E0089C3BE /* pythonD-astropy.cosmology.scalar_inv_efuncs.framework in Embed Frameworks */,
+				22B1853324067F4E0089C3BE /* pythonD-astropy.io.ascii.cparser.framework in Embed Frameworks */,
+				22B1853424067F4E0089C3BE /* pythonD-astropy.io.fits._utils.framework in Embed Frameworks */,
+				22B1853524067F4E0089C3BE /* pythonD-astropy.io.fits.compression.framework in Embed Frameworks */,
+				22B1853624067F4E0089C3BE /* pythonD-astropy.io.votable.tablewriter.framework in Embed Frameworks */,
+				22B1853724067F4E0089C3BE /* pythonD-astropy.modeling._projections.framework in Embed Frameworks */,
+				22B1853824067F4E0089C3BE /* pythonD-astropy.stats._stats.framework in Embed Frameworks */,
+				22B1853924067F4E0089C3BE /* pythonD-astropy.table._column_mixins.framework in Embed Frameworks */,
+				22B1853A24067F4E0089C3BE /* pythonD-astropy.table._np_utils.framework in Embed Frameworks */,
+				22B1853B24067F4E0089C3BE /* pythonD-astropy.timeseries.periodograms.bls._impl.framework in Embed Frameworks */,
+				22B1853C24067F4E0089C3BE /* pythonD-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework in Embed Frameworks */,
+				22B1853D24067F4E0089C3BE /* pythonD-astropy.utils._compiler.framework in Embed Frameworks */,
+				22B1853E24067F4E0089C3BE /* pythonD-astropy.utils.xml._iterparser.framework in Embed Frameworks */,
+				22B1853F24067F4E0089C3BE /* pythonD-astropy.wcs._wcs.framework in Embed Frameworks */,
+				22B1854024067F4E0089C3BE /* pythonE-astropy._erfa.ufunc.framework in Embed Frameworks */,
+				22B1854124067F4E0089C3BE /* pythonE-astropy.compiler_version.framework in Embed Frameworks */,
+				22B1854224067F4E0089C3BE /* pythonE-astropy.convolution._convolve.framework in Embed Frameworks */,
+				22B1854324067F4E0089C3BE /* pythonE-astropy.cosmology.scalar_inv_efuncs.framework in Embed Frameworks */,
+				22B1854424067F4F0089C3BE /* pythonE-astropy.io.ascii.cparser.framework in Embed Frameworks */,
+				22B1854524067F4F0089C3BE /* pythonE-astropy.io.fits._utils.framework in Embed Frameworks */,
+				22B1854624067F4F0089C3BE /* pythonE-astropy.io.fits.compression.framework in Embed Frameworks */,
+				22B1854724067F4F0089C3BE /* pythonE-astropy.io.votable.tablewriter.framework in Embed Frameworks */,
+				22B1854824067F4F0089C3BE /* pythonE-astropy.modeling._projections.framework in Embed Frameworks */,
+				22B1854924067F4F0089C3BE /* pythonE-astropy.stats._stats.framework in Embed Frameworks */,
+				22B1854A24067F4F0089C3BE /* pythonE-astropy.table._column_mixins.framework in Embed Frameworks */,
+				22B1854B24067F4F0089C3BE /* pythonE-astropy.table._np_utils.framework in Embed Frameworks */,
+				22B1854C24067F4F0089C3BE /* pythonE-astropy.timeseries.periodograms.bls._impl.framework in Embed Frameworks */,
+				22B1854D24067F4F0089C3BE /* pythonE-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework in Embed Frameworks */,
+				22B1854E24067F4F0089C3BE /* pythonE-astropy.utils._compiler.framework in Embed Frameworks */,
+				22B1854F24067F4F0089C3BE /* pythonE-astropy.utils.xml._iterparser.framework in Embed Frameworks */,
+				22B1855024067F4F0089C3BE /* pythonE-astropy.wcs._wcs.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1333,6 +1537,108 @@
 		22AAFD4922A52C3C00192CB4 /* pythonC-PIL._imaging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-PIL._imaging.framework"; path = "Frameworks/pythonC-PIL._imaging.framework"; sourceTree = "<group>"; };
 		22AAFD4A22A52C3C00192CB4 /* pythonD-PIL._imaging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-PIL._imaging.framework"; path = "Frameworks/pythonD-PIL._imaging.framework"; sourceTree = "<group>"; };
 		22AAFD4B22A52C3C00192CB4 /* pythonE-PIL._imagingmath.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-PIL._imagingmath.framework"; path = "Frameworks/pythonE-PIL._imagingmath.framework"; sourceTree = "<group>"; };
+		22B1848524067F200089C3BE /* pythonD-astropy.modeling._projections.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-astropy.modeling._projections.framework"; path = "Frameworks/pythonD-astropy.modeling._projections.framework"; sourceTree = "<group>"; };
+		22B1848624067F200089C3BE /* pythonE-astropy.io.fits._utils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-astropy.io.fits._utils.framework"; path = "Frameworks/pythonE-astropy.io.fits._utils.framework"; sourceTree = "<group>"; };
+		22B1848724067F200089C3BE /* pythonD-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework"; path = "Frameworks/pythonD-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework"; sourceTree = "<group>"; };
+		22B1848824067F200089C3BE /* pythonD-astropy.convolution._convolve.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-astropy.convolution._convolve.framework"; path = "Frameworks/pythonD-astropy.convolution._convolve.framework"; sourceTree = "<group>"; };
+		22B1848924067F210089C3BE /* python3_ios-astropy.wcs._wcs.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-astropy.wcs._wcs.framework"; path = "Frameworks/python3_ios-astropy.wcs._wcs.framework"; sourceTree = "<group>"; };
+		22B1848A24067F210089C3BE /* pythonC-astropy.cosmology.scalar_inv_efuncs.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-astropy.cosmology.scalar_inv_efuncs.framework"; path = "Frameworks/pythonC-astropy.cosmology.scalar_inv_efuncs.framework"; sourceTree = "<group>"; };
+		22B1848B24067F210089C3BE /* python3_ios-astropy.utils._compiler.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-astropy.utils._compiler.framework"; path = "Frameworks/python3_ios-astropy.utils._compiler.framework"; sourceTree = "<group>"; };
+		22B1848C24067F210089C3BE /* pythonD-astropy.io.votable.tablewriter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-astropy.io.votable.tablewriter.framework"; path = "Frameworks/pythonD-astropy.io.votable.tablewriter.framework"; sourceTree = "<group>"; };
+		22B1848D24067F210089C3BE /* pythonC-astropy.modeling._projections.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-astropy.modeling._projections.framework"; path = "Frameworks/pythonC-astropy.modeling._projections.framework"; sourceTree = "<group>"; };
+		22B1848E24067F210089C3BE /* pythonB-astropy.utils._compiler.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-astropy.utils._compiler.framework"; path = "Frameworks/pythonB-astropy.utils._compiler.framework"; sourceTree = "<group>"; };
+		22B1848F24067F210089C3BE /* pythonC-astropy.table._np_utils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-astropy.table._np_utils.framework"; path = "Frameworks/pythonC-astropy.table._np_utils.framework"; sourceTree = "<group>"; };
+		22B1849024067F210089C3BE /* pythonC-astropy.io.ascii.cparser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-astropy.io.ascii.cparser.framework"; path = "Frameworks/pythonC-astropy.io.ascii.cparser.framework"; sourceTree = "<group>"; };
+		22B1849124067F210089C3BE /* pythonB-astropy.table._np_utils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-astropy.table._np_utils.framework"; path = "Frameworks/pythonB-astropy.table._np_utils.framework"; sourceTree = "<group>"; };
+		22B1849224067F210089C3BE /* pythonB-astropy.cosmology.scalar_inv_efuncs.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-astropy.cosmology.scalar_inv_efuncs.framework"; path = "Frameworks/pythonB-astropy.cosmology.scalar_inv_efuncs.framework"; sourceTree = "<group>"; };
+		22B1849324067F210089C3BE /* pythonE-astropy.timeseries.periodograms.bls._impl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-astropy.timeseries.periodograms.bls._impl.framework"; path = "Frameworks/pythonE-astropy.timeseries.periodograms.bls._impl.framework"; sourceTree = "<group>"; };
+		22B1849424067F220089C3BE /* python3_ios-astropy.compiler_version.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-astropy.compiler_version.framework"; path = "Frameworks/python3_ios-astropy.compiler_version.framework"; sourceTree = "<group>"; };
+		22B1849524067F220089C3BE /* pythonD-astropy.timeseries.periodograms.bls._impl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-astropy.timeseries.periodograms.bls._impl.framework"; path = "Frameworks/pythonD-astropy.timeseries.periodograms.bls._impl.framework"; sourceTree = "<group>"; };
+		22B1849624067F220089C3BE /* pythonE-astropy.compiler_version.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-astropy.compiler_version.framework"; path = "Frameworks/pythonE-astropy.compiler_version.framework"; sourceTree = "<group>"; };
+		22B1849724067F220089C3BE /* pythonB-astropy.io.fits._utils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-astropy.io.fits._utils.framework"; path = "Frameworks/pythonB-astropy.io.fits._utils.framework"; sourceTree = "<group>"; };
+		22B1849824067F220089C3BE /* pythonD-astropy._erfa.ufunc.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-astropy._erfa.ufunc.framework"; path = "Frameworks/pythonD-astropy._erfa.ufunc.framework"; sourceTree = "<group>"; };
+		22B1849924067F220089C3BE /* pythonB-astropy.io.fits.compression.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-astropy.io.fits.compression.framework"; path = "Frameworks/pythonB-astropy.io.fits.compression.framework"; sourceTree = "<group>"; };
+		22B1849A24067F220089C3BE /* pythonA-astropy.io.fits._utils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-astropy.io.fits._utils.framework"; path = "Frameworks/pythonA-astropy.io.fits._utils.framework"; sourceTree = "<group>"; };
+		22B1849B24067F220089C3BE /* pythonC-astropy.io.fits.compression.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-astropy.io.fits.compression.framework"; path = "Frameworks/pythonC-astropy.io.fits.compression.framework"; sourceTree = "<group>"; };
+		22B1849C24067F230089C3BE /* pythonC-astropy.utils._compiler.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-astropy.utils._compiler.framework"; path = "Frameworks/pythonC-astropy.utils._compiler.framework"; sourceTree = "<group>"; };
+		22B1849D24067F230089C3BE /* pythonE-astropy.table._np_utils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-astropy.table._np_utils.framework"; path = "Frameworks/pythonE-astropy.table._np_utils.framework"; sourceTree = "<group>"; };
+		22B1849E24067F230089C3BE /* python3_ios-astropy.utils.xml._iterparser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-astropy.utils.xml._iterparser.framework"; path = "Frameworks/python3_ios-astropy.utils.xml._iterparser.framework"; sourceTree = "<group>"; };
+		22B1849F24067F230089C3BE /* python3_ios-astropy.io.votable.tablewriter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-astropy.io.votable.tablewriter.framework"; path = "Frameworks/python3_ios-astropy.io.votable.tablewriter.framework"; sourceTree = "<group>"; };
+		22B184A024067F230089C3BE /* pythonB-astropy._erfa.ufunc.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-astropy._erfa.ufunc.framework"; path = "Frameworks/pythonB-astropy._erfa.ufunc.framework"; sourceTree = "<group>"; };
+		22B184A124067F230089C3BE /* pythonD-astropy.io.fits._utils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-astropy.io.fits._utils.framework"; path = "Frameworks/pythonD-astropy.io.fits._utils.framework"; sourceTree = "<group>"; };
+		22B184A224067F230089C3BE /* pythonB-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework"; path = "Frameworks/pythonB-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework"; sourceTree = "<group>"; };
+		22B184A324067F230089C3BE /* pythonB-astropy.io.ascii.cparser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-astropy.io.ascii.cparser.framework"; path = "Frameworks/pythonB-astropy.io.ascii.cparser.framework"; sourceTree = "<group>"; };
+		22B184A424067F240089C3BE /* pythonD-astropy.compiler_version.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-astropy.compiler_version.framework"; path = "Frameworks/pythonD-astropy.compiler_version.framework"; sourceTree = "<group>"; };
+		22B184A524067F240089C3BE /* pythonE-astropy.cosmology.scalar_inv_efuncs.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-astropy.cosmology.scalar_inv_efuncs.framework"; path = "Frameworks/pythonE-astropy.cosmology.scalar_inv_efuncs.framework"; sourceTree = "<group>"; };
+		22B184A624067F240089C3BE /* pythonA-astropy.io.votable.tablewriter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-astropy.io.votable.tablewriter.framework"; path = "Frameworks/pythonA-astropy.io.votable.tablewriter.framework"; sourceTree = "<group>"; };
+		22B184A724067F240089C3BE /* pythonE-astropy.convolution._convolve.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-astropy.convolution._convolve.framework"; path = "Frameworks/pythonE-astropy.convolution._convolve.framework"; sourceTree = "<group>"; };
+		22B184A824067F240089C3BE /* pythonA-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework"; path = "Frameworks/pythonA-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework"; sourceTree = "<group>"; };
+		22B184A924067F240089C3BE /* pythonD-astropy.wcs._wcs.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-astropy.wcs._wcs.framework"; path = "Frameworks/pythonD-astropy.wcs._wcs.framework"; sourceTree = "<group>"; };
+		22B184AA24067F240089C3BE /* pythonA-astropy.compiler_version.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-astropy.compiler_version.framework"; path = "Frameworks/pythonA-astropy.compiler_version.framework"; sourceTree = "<group>"; };
+		22B184AB24067F240089C3BE /* pythonC-astropy.table._column_mixins.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-astropy.table._column_mixins.framework"; path = "Frameworks/pythonC-astropy.table._column_mixins.framework"; sourceTree = "<group>"; };
+		22B184AC24067F240089C3BE /* pythonB-astropy.modeling._projections.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-astropy.modeling._projections.framework"; path = "Frameworks/pythonB-astropy.modeling._projections.framework"; sourceTree = "<group>"; };
+		22B184AD24067F240089C3BE /* pythonA-astropy.convolution._convolve.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-astropy.convolution._convolve.framework"; path = "Frameworks/pythonA-astropy.convolution._convolve.framework"; sourceTree = "<group>"; };
+		22B184AE24067F250089C3BE /* pythonE-astropy.io.fits.compression.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-astropy.io.fits.compression.framework"; path = "Frameworks/pythonE-astropy.io.fits.compression.framework"; sourceTree = "<group>"; };
+		22B184AF24067F250089C3BE /* pythonA-astropy.io.fits.compression.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-astropy.io.fits.compression.framework"; path = "Frameworks/pythonA-astropy.io.fits.compression.framework"; sourceTree = "<group>"; };
+		22B184B024067F250089C3BE /* pythonE-astropy.table._column_mixins.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-astropy.table._column_mixins.framework"; path = "Frameworks/pythonE-astropy.table._column_mixins.framework"; sourceTree = "<group>"; };
+		22B184B124067F250089C3BE /* pythonC-astropy.timeseries.periodograms.bls._impl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-astropy.timeseries.periodograms.bls._impl.framework"; path = "Frameworks/pythonC-astropy.timeseries.periodograms.bls._impl.framework"; sourceTree = "<group>"; };
+		22B184B224067F250089C3BE /* pythonE-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework"; path = "Frameworks/pythonE-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework"; sourceTree = "<group>"; };
+		22B184B324067F250089C3BE /* pythonD-astropy.io.ascii.cparser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-astropy.io.ascii.cparser.framework"; path = "Frameworks/pythonD-astropy.io.ascii.cparser.framework"; sourceTree = "<group>"; };
+		22B184B424067F250089C3BE /* pythonD-astropy.utils.xml._iterparser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-astropy.utils.xml._iterparser.framework"; path = "Frameworks/pythonD-astropy.utils.xml._iterparser.framework"; sourceTree = "<group>"; };
+		22B184B524067F250089C3BE /* python3_ios-astropy.convolution._convolve.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-astropy.convolution._convolve.framework"; path = "Frameworks/python3_ios-astropy.convolution._convolve.framework"; sourceTree = "<group>"; };
+		22B184B624067F250089C3BE /* pythonB-astropy.table._column_mixins.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-astropy.table._column_mixins.framework"; path = "Frameworks/pythonB-astropy.table._column_mixins.framework"; sourceTree = "<group>"; };
+		22B184B724067F260089C3BE /* pythonE-astropy.utils._compiler.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-astropy.utils._compiler.framework"; path = "Frameworks/pythonE-astropy.utils._compiler.framework"; sourceTree = "<group>"; };
+		22B184B824067F260089C3BE /* python3_ios-astropy.io.ascii.cparser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-astropy.io.ascii.cparser.framework"; path = "Frameworks/python3_ios-astropy.io.ascii.cparser.framework"; sourceTree = "<group>"; };
+		22B184B924067F260089C3BE /* pythonA-astropy.io.ascii.cparser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-astropy.io.ascii.cparser.framework"; path = "Frameworks/pythonA-astropy.io.ascii.cparser.framework"; sourceTree = "<group>"; };
+		22B184BA24067F260089C3BE /* pythonD-astropy.utils._compiler.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-astropy.utils._compiler.framework"; path = "Frameworks/pythonD-astropy.utils._compiler.framework"; sourceTree = "<group>"; };
+		22B184BB24067F260089C3BE /* pythonD-astropy.io.fits.compression.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-astropy.io.fits.compression.framework"; path = "Frameworks/pythonD-astropy.io.fits.compression.framework"; sourceTree = "<group>"; };
+		22B184BC24067F260089C3BE /* python3_ios-astropy.io.fits._utils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-astropy.io.fits._utils.framework"; path = "Frameworks/python3_ios-astropy.io.fits._utils.framework"; sourceTree = "<group>"; };
+		22B184BD24067F260089C3BE /* pythonD-astropy.table._column_mixins.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-astropy.table._column_mixins.framework"; path = "Frameworks/pythonD-astropy.table._column_mixins.framework"; sourceTree = "<group>"; };
+		22B184BE24067F260089C3BE /* pythonE-astropy.wcs._wcs.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-astropy.wcs._wcs.framework"; path = "Frameworks/pythonE-astropy.wcs._wcs.framework"; sourceTree = "<group>"; };
+		22B184BF24067F270089C3BE /* pythonA-astropy.table._np_utils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-astropy.table._np_utils.framework"; path = "Frameworks/pythonA-astropy.table._np_utils.framework"; sourceTree = "<group>"; };
+		22B184C024067F270089C3BE /* python3_ios-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework"; path = "Frameworks/python3_ios-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework"; sourceTree = "<group>"; };
+		22B184C124067F270089C3BE /* pythonA-astropy.timeseries.periodograms.bls._impl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-astropy.timeseries.periodograms.bls._impl.framework"; path = "Frameworks/pythonA-astropy.timeseries.periodograms.bls._impl.framework"; sourceTree = "<group>"; };
+		22B184C224067F270089C3BE /* python3_ios-astropy.modeling._projections.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-astropy.modeling._projections.framework"; path = "Frameworks/python3_ios-astropy.modeling._projections.framework"; sourceTree = "<group>"; };
+		22B184C324067F270089C3BE /* pythonB-astropy.timeseries.periodograms.bls._impl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-astropy.timeseries.periodograms.bls._impl.framework"; path = "Frameworks/pythonB-astropy.timeseries.periodograms.bls._impl.framework"; sourceTree = "<group>"; };
+		22B184C424067F270089C3BE /* pythonA-astropy.utils._compiler.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-astropy.utils._compiler.framework"; path = "Frameworks/pythonA-astropy.utils._compiler.framework"; sourceTree = "<group>"; };
+		22B184C524067F270089C3BE /* pythonC-astropy.wcs._wcs.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-astropy.wcs._wcs.framework"; path = "Frameworks/pythonC-astropy.wcs._wcs.framework"; sourceTree = "<group>"; };
+		22B184C624067F270089C3BE /* pythonC-astropy.compiler_version.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-astropy.compiler_version.framework"; path = "Frameworks/pythonC-astropy.compiler_version.framework"; sourceTree = "<group>"; };
+		22B184C724067F280089C3BE /* pythonB-astropy.utils.xml._iterparser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-astropy.utils.xml._iterparser.framework"; path = "Frameworks/pythonB-astropy.utils.xml._iterparser.framework"; sourceTree = "<group>"; };
+		22B184C824067F280089C3BE /* pythonA-astropy.table._column_mixins.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-astropy.table._column_mixins.framework"; path = "Frameworks/pythonA-astropy.table._column_mixins.framework"; sourceTree = "<group>"; };
+		22B184C924067F280089C3BE /* pythonA-astropy.modeling._projections.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-astropy.modeling._projections.framework"; path = "Frameworks/pythonA-astropy.modeling._projections.framework"; sourceTree = "<group>"; };
+		22B184CA24067F280089C3BE /* pythonE-astropy.modeling._projections.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-astropy.modeling._projections.framework"; path = "Frameworks/pythonE-astropy.modeling._projections.framework"; sourceTree = "<group>"; };
+		22B184CB24067F280089C3BE /* pythonB-astropy.io.votable.tablewriter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-astropy.io.votable.tablewriter.framework"; path = "Frameworks/pythonB-astropy.io.votable.tablewriter.framework"; sourceTree = "<group>"; };
+		22B184CC24067F280089C3BE /* pythonD-astropy.table._np_utils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-astropy.table._np_utils.framework"; path = "Frameworks/pythonD-astropy.table._np_utils.framework"; sourceTree = "<group>"; };
+		22B184CD24067F280089C3BE /* pythonA-astropy._erfa.ufunc.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-astropy._erfa.ufunc.framework"; path = "Frameworks/pythonA-astropy._erfa.ufunc.framework"; sourceTree = "<group>"; };
+		22B184CE24067F280089C3BE /* pythonE-astropy.stats._stats.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-astropy.stats._stats.framework"; path = "Frameworks/pythonE-astropy.stats._stats.framework"; sourceTree = "<group>"; };
+		22B184CF24067F280089C3BE /* pythonA-astropy.stats._stats.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-astropy.stats._stats.framework"; path = "Frameworks/pythonA-astropy.stats._stats.framework"; sourceTree = "<group>"; };
+		22B184D024067F280089C3BE /* pythonA-astropy.wcs._wcs.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-astropy.wcs._wcs.framework"; path = "Frameworks/pythonA-astropy.wcs._wcs.framework"; sourceTree = "<group>"; };
+		22B184D124067F290089C3BE /* python3_ios-astropy._erfa.ufunc.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-astropy._erfa.ufunc.framework"; path = "Frameworks/python3_ios-astropy._erfa.ufunc.framework"; sourceTree = "<group>"; };
+		22B184D224067F290089C3BE /* pythonD-astropy.cosmology.scalar_inv_efuncs.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-astropy.cosmology.scalar_inv_efuncs.framework"; path = "Frameworks/pythonD-astropy.cosmology.scalar_inv_efuncs.framework"; sourceTree = "<group>"; };
+		22B184D324067F290089C3BE /* pythonB-astropy.wcs._wcs.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-astropy.wcs._wcs.framework"; path = "Frameworks/pythonB-astropy.wcs._wcs.framework"; sourceTree = "<group>"; };
+		22B184D424067F290089C3BE /* python3_ios-astropy.cosmology.scalar_inv_efuncs.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-astropy.cosmology.scalar_inv_efuncs.framework"; path = "Frameworks/python3_ios-astropy.cosmology.scalar_inv_efuncs.framework"; sourceTree = "<group>"; };
+		22B184D524067F290089C3BE /* pythonC-astropy.io.votable.tablewriter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-astropy.io.votable.tablewriter.framework"; path = "Frameworks/pythonC-astropy.io.votable.tablewriter.framework"; sourceTree = "<group>"; };
+		22B184D624067F290089C3BE /* pythonA-astropy.cosmology.scalar_inv_efuncs.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-astropy.cosmology.scalar_inv_efuncs.framework"; path = "Frameworks/pythonA-astropy.cosmology.scalar_inv_efuncs.framework"; sourceTree = "<group>"; };
+		22B184D724067F290089C3BE /* pythonE-astropy.utils.xml._iterparser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-astropy.utils.xml._iterparser.framework"; path = "Frameworks/pythonE-astropy.utils.xml._iterparser.framework"; sourceTree = "<group>"; };
+		22B184D824067F2A0089C3BE /* python3_ios-astropy.io.fits.compression.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-astropy.io.fits.compression.framework"; path = "Frameworks/python3_ios-astropy.io.fits.compression.framework"; sourceTree = "<group>"; };
+		22B184D924067F2A0089C3BE /* pythonB-astropy.convolution._convolve.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-astropy.convolution._convolve.framework"; path = "Frameworks/pythonB-astropy.convolution._convolve.framework"; sourceTree = "<group>"; };
+		22B184DA24067F2A0089C3BE /* python3_ios-astropy.stats._stats.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-astropy.stats._stats.framework"; path = "Frameworks/python3_ios-astropy.stats._stats.framework"; sourceTree = "<group>"; };
+		22B184DB24067F2A0089C3BE /* pythonE-astropy._erfa.ufunc.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-astropy._erfa.ufunc.framework"; path = "Frameworks/pythonE-astropy._erfa.ufunc.framework"; sourceTree = "<group>"; };
+		22B184DC24067F2A0089C3BE /* python3_ios-astropy.timeseries.periodograms.bls._impl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-astropy.timeseries.periodograms.bls._impl.framework"; path = "Frameworks/python3_ios-astropy.timeseries.periodograms.bls._impl.framework"; sourceTree = "<group>"; };
+		22B184DD24067F2A0089C3BE /* pythonC-astropy.stats._stats.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-astropy.stats._stats.framework"; path = "Frameworks/pythonC-astropy.stats._stats.framework"; sourceTree = "<group>"; };
+		22B184DE24067F2A0089C3BE /* pythonA-astropy.utils.xml._iterparser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-astropy.utils.xml._iterparser.framework"; path = "Frameworks/pythonA-astropy.utils.xml._iterparser.framework"; sourceTree = "<group>"; };
+		22B184DF24067F2A0089C3BE /* pythonB-astropy.stats._stats.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-astropy.stats._stats.framework"; path = "Frameworks/pythonB-astropy.stats._stats.framework"; sourceTree = "<group>"; };
+		22B184E024067F2A0089C3BE /* pythonC-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework"; path = "Frameworks/pythonC-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework"; sourceTree = "<group>"; };
+		22B184E124067F2A0089C3BE /* pythonC-astropy.io.fits._utils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-astropy.io.fits._utils.framework"; path = "Frameworks/pythonC-astropy.io.fits._utils.framework"; sourceTree = "<group>"; };
+		22B184E224067F2B0089C3BE /* pythonC-astropy.utils.xml._iterparser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-astropy.utils.xml._iterparser.framework"; path = "Frameworks/pythonC-astropy.utils.xml._iterparser.framework"; sourceTree = "<group>"; };
+		22B184E324067F2B0089C3BE /* pythonD-astropy.stats._stats.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonD-astropy.stats._stats.framework"; path = "Frameworks/pythonD-astropy.stats._stats.framework"; sourceTree = "<group>"; };
+		22B184E424067F2B0089C3BE /* pythonC-astropy.convolution._convolve.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-astropy.convolution._convolve.framework"; path = "Frameworks/pythonC-astropy.convolution._convolve.framework"; sourceTree = "<group>"; };
+		22B184E524067F2B0089C3BE /* pythonB-astropy.compiler_version.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-astropy.compiler_version.framework"; path = "Frameworks/pythonB-astropy.compiler_version.framework"; sourceTree = "<group>"; };
+		22B184E624067F2B0089C3BE /* pythonE-astropy.io.ascii.cparser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-astropy.io.ascii.cparser.framework"; path = "Frameworks/pythonE-astropy.io.ascii.cparser.framework"; sourceTree = "<group>"; };
+		22B184E724067F2B0089C3BE /* pythonE-astropy.io.votable.tablewriter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-astropy.io.votable.tablewriter.framework"; path = "Frameworks/pythonE-astropy.io.votable.tablewriter.framework"; sourceTree = "<group>"; };
+		22B184E824067F2B0089C3BE /* python3_ios-astropy.table._np_utils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-astropy.table._np_utils.framework"; path = "Frameworks/python3_ios-astropy.table._np_utils.framework"; sourceTree = "<group>"; };
+		22B184E924067F2B0089C3BE /* python3_ios-astropy.table._column_mixins.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-astropy.table._column_mixins.framework"; path = "Frameworks/python3_ios-astropy.table._column_mixins.framework"; sourceTree = "<group>"; };
+		22B184EA24067F2B0089C3BE /* pythonC-astropy._erfa.ufunc.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonC-astropy._erfa.ufunc.framework"; path = "Frameworks/pythonC-astropy._erfa.ufunc.framework"; sourceTree = "<group>"; };
 		22B750AC21FC671700241F27 /* Carnets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Carnets.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22B750AF21FC671700241F27 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		22B750B421FC671700241F27 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -1924,6 +2230,115 @@
 			name = Pillow;
 			sourceTree = "<group>";
 		};
+		22B1848424067EF70089C3BE /* astropy */ = {
+			isa = PBXGroup;
+			children = (
+				22B184D124067F290089C3BE /* python3_ios-astropy._erfa.ufunc.framework */,
+				22B1849424067F220089C3BE /* python3_ios-astropy.compiler_version.framework */,
+				22B184B524067F250089C3BE /* python3_ios-astropy.convolution._convolve.framework */,
+				22B184D424067F290089C3BE /* python3_ios-astropy.cosmology.scalar_inv_efuncs.framework */,
+				22B184B824067F260089C3BE /* python3_ios-astropy.io.ascii.cparser.framework */,
+				22B184BC24067F260089C3BE /* python3_ios-astropy.io.fits._utils.framework */,
+				22B184D824067F2A0089C3BE /* python3_ios-astropy.io.fits.compression.framework */,
+				22B1849F24067F230089C3BE /* python3_ios-astropy.io.votable.tablewriter.framework */,
+				22B184C224067F270089C3BE /* python3_ios-astropy.modeling._projections.framework */,
+				22B184DA24067F2A0089C3BE /* python3_ios-astropy.stats._stats.framework */,
+				22B184E924067F2B0089C3BE /* python3_ios-astropy.table._column_mixins.framework */,
+				22B184E824067F2B0089C3BE /* python3_ios-astropy.table._np_utils.framework */,
+				22B184DC24067F2A0089C3BE /* python3_ios-astropy.timeseries.periodograms.bls._impl.framework */,
+				22B184C024067F270089C3BE /* python3_ios-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework */,
+				22B1848B24067F210089C3BE /* python3_ios-astropy.utils._compiler.framework */,
+				22B1849E24067F230089C3BE /* python3_ios-astropy.utils.xml._iterparser.framework */,
+				22B1848924067F210089C3BE /* python3_ios-astropy.wcs._wcs.framework */,
+				22B184CD24067F280089C3BE /* pythonA-astropy._erfa.ufunc.framework */,
+				22B184AA24067F240089C3BE /* pythonA-astropy.compiler_version.framework */,
+				22B184AD24067F240089C3BE /* pythonA-astropy.convolution._convolve.framework */,
+				22B184D624067F290089C3BE /* pythonA-astropy.cosmology.scalar_inv_efuncs.framework */,
+				22B184B924067F260089C3BE /* pythonA-astropy.io.ascii.cparser.framework */,
+				22B1849A24067F220089C3BE /* pythonA-astropy.io.fits._utils.framework */,
+				22B184AF24067F250089C3BE /* pythonA-astropy.io.fits.compression.framework */,
+				22B184A624067F240089C3BE /* pythonA-astropy.io.votable.tablewriter.framework */,
+				22B184C924067F280089C3BE /* pythonA-astropy.modeling._projections.framework */,
+				22B184CF24067F280089C3BE /* pythonA-astropy.stats._stats.framework */,
+				22B184C824067F280089C3BE /* pythonA-astropy.table._column_mixins.framework */,
+				22B184BF24067F270089C3BE /* pythonA-astropy.table._np_utils.framework */,
+				22B184C124067F270089C3BE /* pythonA-astropy.timeseries.periodograms.bls._impl.framework */,
+				22B184A824067F240089C3BE /* pythonA-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework */,
+				22B184C424067F270089C3BE /* pythonA-astropy.utils._compiler.framework */,
+				22B184DE24067F2A0089C3BE /* pythonA-astropy.utils.xml._iterparser.framework */,
+				22B184D024067F280089C3BE /* pythonA-astropy.wcs._wcs.framework */,
+				22B184A024067F230089C3BE /* pythonB-astropy._erfa.ufunc.framework */,
+				22B184E524067F2B0089C3BE /* pythonB-astropy.compiler_version.framework */,
+				22B184D924067F2A0089C3BE /* pythonB-astropy.convolution._convolve.framework */,
+				22B1849224067F210089C3BE /* pythonB-astropy.cosmology.scalar_inv_efuncs.framework */,
+				22B184A324067F230089C3BE /* pythonB-astropy.io.ascii.cparser.framework */,
+				22B1849724067F220089C3BE /* pythonB-astropy.io.fits._utils.framework */,
+				22B1849924067F220089C3BE /* pythonB-astropy.io.fits.compression.framework */,
+				22B184CB24067F280089C3BE /* pythonB-astropy.io.votable.tablewriter.framework */,
+				22B184AC24067F240089C3BE /* pythonB-astropy.modeling._projections.framework */,
+				22B184DF24067F2A0089C3BE /* pythonB-astropy.stats._stats.framework */,
+				22B184B624067F250089C3BE /* pythonB-astropy.table._column_mixins.framework */,
+				22B1849124067F210089C3BE /* pythonB-astropy.table._np_utils.framework */,
+				22B184C324067F270089C3BE /* pythonB-astropy.timeseries.periodograms.bls._impl.framework */,
+				22B184A224067F230089C3BE /* pythonB-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework */,
+				22B1848E24067F210089C3BE /* pythonB-astropy.utils._compiler.framework */,
+				22B184C724067F280089C3BE /* pythonB-astropy.utils.xml._iterparser.framework */,
+				22B184D324067F290089C3BE /* pythonB-astropy.wcs._wcs.framework */,
+				22B184EA24067F2B0089C3BE /* pythonC-astropy._erfa.ufunc.framework */,
+				22B184C624067F270089C3BE /* pythonC-astropy.compiler_version.framework */,
+				22B184E424067F2B0089C3BE /* pythonC-astropy.convolution._convolve.framework */,
+				22B1848A24067F210089C3BE /* pythonC-astropy.cosmology.scalar_inv_efuncs.framework */,
+				22B1849024067F210089C3BE /* pythonC-astropy.io.ascii.cparser.framework */,
+				22B184E124067F2A0089C3BE /* pythonC-astropy.io.fits._utils.framework */,
+				22B1849B24067F220089C3BE /* pythonC-astropy.io.fits.compression.framework */,
+				22B184D524067F290089C3BE /* pythonC-astropy.io.votable.tablewriter.framework */,
+				22B1848D24067F210089C3BE /* pythonC-astropy.modeling._projections.framework */,
+				22B184DD24067F2A0089C3BE /* pythonC-astropy.stats._stats.framework */,
+				22B184AB24067F240089C3BE /* pythonC-astropy.table._column_mixins.framework */,
+				22B1848F24067F210089C3BE /* pythonC-astropy.table._np_utils.framework */,
+				22B184B124067F250089C3BE /* pythonC-astropy.timeseries.periodograms.bls._impl.framework */,
+				22B184E024067F2A0089C3BE /* pythonC-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework */,
+				22B1849C24067F230089C3BE /* pythonC-astropy.utils._compiler.framework */,
+				22B184E224067F2B0089C3BE /* pythonC-astropy.utils.xml._iterparser.framework */,
+				22B184C524067F270089C3BE /* pythonC-astropy.wcs._wcs.framework */,
+				22B1849824067F220089C3BE /* pythonD-astropy._erfa.ufunc.framework */,
+				22B184A424067F240089C3BE /* pythonD-astropy.compiler_version.framework */,
+				22B1848824067F200089C3BE /* pythonD-astropy.convolution._convolve.framework */,
+				22B184D224067F290089C3BE /* pythonD-astropy.cosmology.scalar_inv_efuncs.framework */,
+				22B184B324067F250089C3BE /* pythonD-astropy.io.ascii.cparser.framework */,
+				22B184A124067F230089C3BE /* pythonD-astropy.io.fits._utils.framework */,
+				22B184BB24067F260089C3BE /* pythonD-astropy.io.fits.compression.framework */,
+				22B1848C24067F210089C3BE /* pythonD-astropy.io.votable.tablewriter.framework */,
+				22B1848524067F200089C3BE /* pythonD-astropy.modeling._projections.framework */,
+				22B184E324067F2B0089C3BE /* pythonD-astropy.stats._stats.framework */,
+				22B184BD24067F260089C3BE /* pythonD-astropy.table._column_mixins.framework */,
+				22B184CC24067F280089C3BE /* pythonD-astropy.table._np_utils.framework */,
+				22B1849524067F220089C3BE /* pythonD-astropy.timeseries.periodograms.bls._impl.framework */,
+				22B1848724067F200089C3BE /* pythonD-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework */,
+				22B184BA24067F260089C3BE /* pythonD-astropy.utils._compiler.framework */,
+				22B184B424067F250089C3BE /* pythonD-astropy.utils.xml._iterparser.framework */,
+				22B184A924067F240089C3BE /* pythonD-astropy.wcs._wcs.framework */,
+				22B184DB24067F2A0089C3BE /* pythonE-astropy._erfa.ufunc.framework */,
+				22B1849624067F220089C3BE /* pythonE-astropy.compiler_version.framework */,
+				22B184A724067F240089C3BE /* pythonE-astropy.convolution._convolve.framework */,
+				22B184A524067F240089C3BE /* pythonE-astropy.cosmology.scalar_inv_efuncs.framework */,
+				22B184E624067F2B0089C3BE /* pythonE-astropy.io.ascii.cparser.framework */,
+				22B1848624067F200089C3BE /* pythonE-astropy.io.fits._utils.framework */,
+				22B184AE24067F250089C3BE /* pythonE-astropy.io.fits.compression.framework */,
+				22B184E724067F2B0089C3BE /* pythonE-astropy.io.votable.tablewriter.framework */,
+				22B184CA24067F280089C3BE /* pythonE-astropy.modeling._projections.framework */,
+				22B184CE24067F280089C3BE /* pythonE-astropy.stats._stats.framework */,
+				22B184B024067F250089C3BE /* pythonE-astropy.table._column_mixins.framework */,
+				22B1849D24067F230089C3BE /* pythonE-astropy.table._np_utils.framework */,
+				22B1849324067F210089C3BE /* pythonE-astropy.timeseries.periodograms.bls._impl.framework */,
+				22B184B224067F250089C3BE /* pythonE-astropy.timeseries.periodograms.lombscargle.implementations.cython_impl.framework */,
+				22B184B724067F260089C3BE /* pythonE-astropy.utils._compiler.framework */,
+				22B184D724067F290089C3BE /* pythonE-astropy.utils.xml._iterparser.framework */,
+				22B184BE24067F260089C3BE /* pythonE-astropy.wcs._wcs.framework */,
+			);
+			name = astropy;
+			sourceTree = "<group>";
+		};
 		22B750A321FC671700241F27 = {
 			isa = PBXGroup;
 			children = (
@@ -1973,6 +2388,7 @@
 		22B750C121FC8F2C00241F27 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				22B1848424067EF70089C3BE /* astropy */,
 				22D2973123C2482D0069FE4F /* lxml */,
 				22AAFD2D22A52B0900192CB4 /* Pillow */,
 				226CD0ED22A1639D004133E7 /* cryptography */,
@@ -2308,7 +2724,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Carnets/Carnets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 76;
+				CURRENT_PROJECT_VERSION = 77;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = VG8Z23C8YL;
 				ENABLE_BITCODE = NO;
@@ -2326,7 +2742,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
 				);
-				MARKETING_VERSION = 1.4.0;
+				MARKETING_VERSION = 1.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = AsheKube.Carnets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -2343,7 +2759,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Carnets/Carnets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 76;
+				CURRENT_PROJECT_VERSION = 77;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = VG8Z23C8YL;
 				ENABLE_BITCODE = NO;
@@ -2361,7 +2777,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
 				);
-				MARKETING_VERSION = 1.4.0;
+				MARKETING_VERSION = 1.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = AsheKube.Carnets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
