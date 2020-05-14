@@ -123,7 +123,7 @@ extension ViewController {
             }
             // redraw toolbar
             if (UIDevice.current.modelName.hasPrefix("iPad")) {
-                if (kernelURL!.path.hasPrefix("/notebooks")) {
+                if (kernelURL!.path.hasPrefix("/notebooks") || kernelURL!.path.hasPrefix("/tree")) {
                     if ((externalKeyboardPresent ?? false) || !(multiCharLanguageWithSuggestions ?? false)) {
                         var leadingButtons: [UIBarButtonItem] =  [doneButton]
                         if (needTabKey && !(externalKeyboardPresent ?? false)) {
@@ -397,10 +397,10 @@ extension ViewController {
             // this is the easy way:
             webView.evaluateJavaScript("var event = new KeyboardEvent('keydown', {which:13, keyCode:13, bubbles:true});  Jupyter.notebook.get_selected_cell().completer.keydown(event);") { (result, error) in
                 if error != nil {
-                    print(error)
+                    // print(error)
                 }
                 if (result != nil) {
-                    print(result)
+                    // print(result)
                 }
             }
         } else {
@@ -418,8 +418,13 @@ extension ViewController {
         // Other views (including edit):
         // undo, redo, save // cut, copy, paste.
         
+        // When prepareFirstKeyboard, we have presentedItemURL (and not always) but not kernelURL
         let filePath = presentedItemURL?.path
-        if (filePath?.hasSuffix(".ipynb") ?? false) {
+        // Prepare the full extended keyboard for notebooks.
+        // If the user is browsing a directory, the first notebook opened will be displayed with this keyboard. We use the full keyboard for this.
+        // This function is called early, and the directory may not yet have permission (in which case isDirectory is false, even for a directory)
+        // For this, we use .hasSuffix("/"). For the same reason, we don't have kernelURL available yet.
+        if (filePath?.hasSuffix(".ipynb") ?? false) || (filePath?.hasSuffix(".py") ?? false) || (presentedItemURL?.isDirectory ?? false) || (filePath?.hasSuffix("/") ?? false){
             if ((externalKeyboardPresent ?? false) || !(multiCharLanguageWithSuggestions ?? false)) {
 
                 var leadingButtons: [UIBarButtonItem] =  [doneButton]
@@ -477,9 +482,9 @@ extension ViewController {
             }
         }
         // Nothing left in history, so we open the file server:
-        var treeAddress = serverAddress
-        treeAddress = treeAddress?.appendingPathComponent("tree")
-        self.webView.load(URLRequest(url: treeAddress!))
+        guard var treeAddress = serverAddress else { return }
+        treeAddress = treeAddress.appendingPathComponent("tree")
+        self.webView.load(URLRequest(url: treeAddress))
     }
     
     @objc func goForwardAction(_ sender: UIBarButtonItem) {
@@ -590,10 +595,10 @@ extension ViewController {
         if (notebookCellInsertMode) {
             webView.evaluateJavaScript("var event = new KeyboardEvent('keydown', {which:9, keyCode:9, bubbles:true}); if (!Jupyter.notebook.get_selected_cell().handle_keyevent(Jupyter.notebook.get_selected_cell().code_mirror, event)) { Jupyter.notebook.get_selected_cell().code_mirror.execCommand('defaultSoftTab');} ") { (result, error) in
                 if error != nil {
-                    print(error)
+                    // print(error)
                 }
                 if (result != nil) {
-                    print(result)
+                    // print(result)
                 }
             }
         }
@@ -606,10 +611,10 @@ extension ViewController {
         if (notebookCellInsertMode) {
             webView.evaluateJavaScript("var event = new KeyboardEvent('keydown', {which:9, keyCode:9, shiftKey:true, bubbles:true}); if (!Jupyter.notebook.get_selected_cell().handle_keyevent(Jupyter.notebook.get_selected_cell().code_mirror, event)) { Jupyter.notebook.get_selected_cell().code_mirror.execCommand('indentLess');} ") { (result, error) in
                 if error != nil {
-                    print(error)
+                    // print(error)
                 }
                 if (result != nil) {
-                    print(result)
+                    // print(result)
                 }
             }
         }
@@ -619,10 +624,10 @@ extension ViewController {
         // edit mode cut (works)
         webView.evaluateJavaScript("document.execCommand('cut');") { (result, error) in
             if error != nil {
-                print(error)
+                // print(error)
             }
             if (result != nil) {
-                print(result)
+                // print(result)
             }
         }
         // command mode cut (works)
@@ -637,10 +642,10 @@ extension ViewController {
         // edit mode copy (works)
         webView.evaluateJavaScript("document.execCommand('copy');") { (result, error) in
             if error != nil {
-                print(error)
+                // print(error)
             }
             if (result != nil) {
-                print(result)
+                // print(result)
             }
         }
         // command mode copy (works)
@@ -672,19 +677,19 @@ extension ViewController {
         if (kernelURL!.path.hasPrefix("/notebooks")) {
             webView.evaluateJavaScript("Jupyter.notebook.save_notebook();") { (result, error) in
                 if error != nil {
-                    print(error)
+                    // print(error)
                 }
                 if (result != nil) {
-                    print(result)
+                    // print(result)
                 }
             }
         } else {
             webView.evaluateJavaScript("Jupyter.editor.save();") { (result, error) in
                 if error != nil {
-                    print(error)
+                    // print(error)
                 }
                 if (result != nil) {
-                    print(result)
+                    // print(result)
                 }
             }
         }
@@ -695,10 +700,10 @@ extension ViewController {
         if (notebookCellInsertMode) {
             webView.evaluateJavaScript("Jupyter.notebook.insert_cell_below(); Jupyter.notebook.select_next(true); Jupyter.notebook.focus_cell(); Jupyter.notebook.edit_mode();") { (result, error) in
                 if error != nil {
-                    print(error)
+                    // print(error)
                 }
                 if (result != nil) {
-                    print(result)
+                    // print(result)
                 }
             }
         }
@@ -708,10 +713,10 @@ extension ViewController {
         if (notebookCellInsertMode) {
             webView.evaluateJavaScript("Jupyter.notebook.execute_cell_and_select_below(); Jupyter.notebook.edit_mode();") { (result, error) in
                 if error != nil {
-                    print(error)
+                    // print(error)
                 }
                 if (result != nil) {
-                    print(result)
+                    // print(result)
                 }
             }
         }
@@ -721,10 +726,10 @@ extension ViewController {
         if (notebookCellInsertMode) {
             webView.evaluateJavaScript("Jupyter.notebook.select_prev(true); Jupyter.notebook.focus_cell(); Jupyter.notebook.edit_mode();") { (result, error) in
                 if error != nil {
-                    print(error)
+                    // print(error)
                 }
                 if (result != nil) {
-                    print(result)
+                    // print(result)
                 }
             }
         }
@@ -734,10 +739,10 @@ extension ViewController {
         if (notebookCellInsertMode) {
             webView.evaluateJavaScript("Jupyter.notebook.select_next(true); Jupyter.notebook.focus_cell(); Jupyter.notebook.edit_mode();") { (result, error) in
                 if error != nil {
-                    print(error)
+                    // print(error)
                 }
                 if (result != nil) {
-                    print(result)
+                    // print(result)
                 }
             }
         }
@@ -748,10 +753,10 @@ extension ViewController {
         if (notebookCellInsertMode) {
             webView.evaluateJavaScript("Jupyter.notebook.kernel.interrupt();") { (result, error) in
                 if error != nil {
-                    print(error)
+                    // print(error)
                 }
                 if (result != nil) {
-                    print(result)
+                    // print(result)
                 }
             }
         }
@@ -762,19 +767,19 @@ extension ViewController {
         if (notebookCellInsertMode) {
             webView.evaluateJavaScript("Jupyter.notebook.get_selected_cell().code_mirror.execCommand('undo');") { (result, error) in
                 if error != nil {
-                    print(error)
+                    // print(error)
                 }
                 if (result != nil) {
-                    print(result)
+                    // print(result)
                 }
             }
         } else {
             webView.evaluateJavaScript("Jupyter.editor.codemirror.execCommand('undo');") { (result, error) in
                 if error != nil {
-                    print(error)
+                    // print(error)
                 }
                 if (result != nil) {
-                    print(result)
+                    // print(result)
                 }
             }
         }
@@ -785,19 +790,19 @@ extension ViewController {
         if (notebookCellInsertMode) {
             webView.evaluateJavaScript("Jupyter.notebook.get_selected_cell().code_mirror.execCommand('redo');") { (result, error) in
                 if error != nil {
-                    print(error)
+                    // print(error)
                 }
                 if (result != nil) {
-                    print(result)
+                    // print(result)
                 }
             }
         } else {
             webView.evaluateJavaScript("Jupyter.editor.codemirror.execCommand('redo');") { (result, error) in
                 if error != nil {
-                    print(error)
+                    // print(error)
                 }
                 if (result != nil) {
-                    print(result)
+                    // print(result)
                 }
             }
         }
@@ -812,32 +817,34 @@ extension ViewController {
         // If it's a notebook, a file being edited, a tree, remove /prefix:
         // Only use "representativeItem" if keyboard has suggestion bar. Otherwise use "nil".
         // First update multiCharLanguageWithSuggestions:
-        // First update multiCharLanguageWithSuggestions:
         let keyboardLanguage = contentView?.textInputMode?.primaryLanguage
         if (keyboardLanguage != nil) {
             // TODO: currently, we have no way to distinguish between Hindi and Hindi-Transliteration.
             // We treat them the same until we have a way to separate.
-            // Is the keyboard language one of the multi-input language? Chinese, Japanese and Hindi-Transliteration
+            // Is the keyboard language one of the multi-input language? Chinese, Japanese, Korean and Hindi-Transliteration
             // keyboardLanguage = "hi" -- not enough
             // keyboardLanguage = "zh-": all of them
             // keyboardLanguage = "jp-": all of them
+            NSLog("Called keyboardDidChange, language=\(keyboardLanguage)")
             if (keyboardLanguage!.hasPrefix("hi") || keyboardLanguage!.hasPrefix("zh") || keyboardLanguage!.hasPrefix("ja")) {
                 multiCharLanguageWithSuggestions = true
+                NSLog("Called keyboardDidChange, setting=\(multiCharLanguageWithSuggestions)")
                 if (UIDevice.current.systemVersionMajor < 13) {
                     // fix a Javascript issue in iOS versions before 13.
                     webView.evaluateJavaScript("iOS_multiCharLanguage = true;") { (result, error) in
                         if error != nil {
-                            print(error)
+                            // print(error)
                         }
                     }
                 }
             } else {
                 // otherwise return false:
                 multiCharLanguageWithSuggestions = false
+                NSLog("Called keyboardDidChange, setting=\(multiCharLanguageWithSuggestions)")
                 if (UIDevice.current.systemVersionMajor < 13) {
                     webView.evaluateJavaScript("iOS_multiCharLanguage = false;") { (result, error) in
                         if error != nil {
-                            print(error)
+                            // print(error)
                         }
                     }
                 }
@@ -865,7 +872,7 @@ extension ViewController {
                 // a picker is active: display only one button, with "Done". Only needed on iPhones
                 self.editorToolbar.items = [UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
                                             pickerDoneButton]
-            } else if (kernelURL!.path.hasPrefix("/notebooks")) {
+            } else if (kernelURL!.path.hasPrefix("/notebooks") || kernelURL!.path.hasPrefix("/tree")) {
                 self.editorToolbar.items = [undoButton, redoButton,
                                             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
                                             tabButton, shiftTabButton,
@@ -891,7 +898,7 @@ extension ViewController {
             externalKeyboardPresent = keyboardFrame.size.height < 60
         }
         
-        if (kernelURL!.path.hasPrefix("/notebooks")) {
+        if (kernelURL!.path.hasPrefix("/notebooks") || kernelURL!.path.hasPrefix("/tree")) {
             if ((externalKeyboardPresent ?? false) || !(multiCharLanguageWithSuggestions ?? false)) {
                 var leadingButtons: [UIBarButtonItem] =  [doneButton]
                 if (needTabKey && !(externalKeyboardPresent ?? false)) {

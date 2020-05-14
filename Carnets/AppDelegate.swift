@@ -67,6 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                 NSLog("Welcome resource succesfully downloaded")
                                 let welcomeFiles=["welcome/Welcome to Carnets.ipynb",
                                                   "welcome/top.png",
+                                                  "welcome/bottom_iphone.png",
                                                   "welcome/bottom.png"]
                                 for fileName in welcomeFiles {
                                     guard let welcomeFileLocation = welcomeBundleResource.bundle.path(forResource: fileName, ofType: nil) else { continue }
@@ -151,7 +152,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                     "Library/lib/python3.7/site-packages/sympy/integrals/rubi/rubi.py",
                                     "Library/lib/python3.7/site-packages/sympy/physics/units/definitions.py",
                                     "Library/lib/python3.7/site-packages/sympy/physics/unitsystems.py",
-                                    "Library/lib/python3.7/site-packages/sympy-1.3-py3.7.egg-info/"
+                                    "Library/lib/python3.7/site-packages/sympy-1.3-py3.7.egg-info/",
                                     ]
         let documentsUrl = try! FileManager().url(for: .documentDirectory,
                                                   in: .userDomainMask,
@@ -160,8 +161,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let homeUrl = documentsUrl.deletingLastPathComponent()
         for directoryName in oldPythonDirectories {
             let homeDirectory = homeUrl.appendingPathComponent(directoryName)
-            if (FileManager().fileExists(atPath: homeDirectory.path)) {
-                try! FileManager().removeItem(at: homeDirectory)
+            // "fileExists" fails (replies false even if the directory/file does exist)
+            // So we always remove the items, and catch the exceptions.
+            do {
+                try FileManager().removeItem(at: homeDirectory)
+            }
+            catch {
+                NSLog("Could not remove \(homeDirectory). ")
             }
         }
     }
@@ -201,6 +207,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                  "lib/python3.7/site-packages/lxml-4.4.2-py3.7-macosx-10.9-x86_64.egg",
                                  "lib/python3.7/site-packages/bokeh-1.4.0-py3.7.egg",
                                  "lib/python3.7/site-packages/packaging-20.1-py3.7.egg",
+                                 "Library/lib/python3.7/site-packages/astropy-4.0-py3.7-macosx-10.9-x86_64.egg",
         ]
 
         if (appVersion != "Carnets mini") {
