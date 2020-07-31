@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -61,17 +61,30 @@
 		221BB1C122625B14000AF355 /* python3_ios-matplotlib.backends._backend_agg.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB1B322625B0A000AF355 /* python3_ios-matplotlib.backends._backend_agg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		221BB1C222625B14000AF355 /* python3_ios-matplotlib.ft2font.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB1BA22625B0B000AF355 /* python3_ios-matplotlib.ft2font.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		221BB1C322625B14000AF355 /* python3_ios-matplotlib.ttconv.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 221BB1B722625B0B000AF355 /* python3_ios-matplotlib.ttconv.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22288E312212099D0081D86C /* ios_system.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750D921FCA4CF00241F27 /* ios_system.framework */; };
+		222450A324D40BAD008C9CA3 /* libssh2.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 222450A124D40BA5008C9CA3 /* libssh2.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		222450A424D40BB0008C9CA3 /* openssl.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 222450A224D40BA5008C9CA3 /* openssl.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		222450B124D40D3D008C9CA3 /* ios_system.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 222450AE24D40D35008C9CA3 /* ios_system.xcframework */; };
+		222450B224D40D47008C9CA3 /* ios_system.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 222450AE24D40D35008C9CA3 /* ios_system.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		222450B324D40D58008C9CA3 /* awk.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 222450AB24D40D34008C9CA3 /* awk.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		222450B424D40D6F008C9CA3 /* curl_ios.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 222450A824D40D34008C9CA3 /* curl_ios.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		222450B524D40D83008C9CA3 /* files.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 222450AA24D40D34008C9CA3 /* files.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		222450B624D40DA6008C9CA3 /* shell.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 222450A924D40D34008C9CA3 /* shell.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		222450B724D40DB9008C9CA3 /* ssh_cmd.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 222450AD24D40D35008C9CA3 /* ssh_cmd.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		222450B824D40DC6008C9CA3 /* tar.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 222450B024D40D35008C9CA3 /* tar.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		222450B924D40DD0008C9CA3 /* text.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 222450AC24D40D34008C9CA3 /* text.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		222450BE24D40E50008C9CA3 /* network_ios.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 222450BD24D40E48008C9CA3 /* network_ios.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		222450C524D40F4F008C9CA3 /* openblas.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 222450C224D40F42008C9CA3 /* openblas.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		222450C624D40F59008C9CA3 /* freetype.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 222450C324D40F44008C9CA3 /* freetype.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		222450C724D40F64008C9CA3 /* harfbuzz.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 222450C424D40F47008C9CA3 /* harfbuzz.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		222450D124D410F4008C9CA3 /* python3_ios.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 222450CD24D410EE008C9CA3 /* python3_ios.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		222450D224D410F4008C9CA3 /* pythonA.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 222450CC24D410ED008C9CA3 /* pythonA.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		222450D324D410F4008C9CA3 /* pythonB.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 222450D024D410EE008C9CA3 /* pythonB.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		222450D424D410F4008C9CA3 /* pythonC.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 222450CF24D410EE008C9CA3 /* pythonC.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		222450D524D410F4008C9CA3 /* pythonD.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 222450CE24D410EE008C9CA3 /* pythonD.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		222450D624D410F4008C9CA3 /* pythonE.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 222450CB24D410ED008C9CA3 /* pythonE.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		222975B82286E7B5009D93ED /* welcome in Resources */ = {isa = PBXBuildFile; fileRef = 22FFDCF22263D78F003E97CF /* welcome */; settings = {ASSET_TAGS = (welcome, ); }; };
 		222975BA2288349C009D93ED /* ODR_extensions in Resources */ = {isa = PBXBuildFile; fileRef = 222975B92288349C009D93ED /* ODR_extensions */; settings = {ASSET_TAGS = (extensions, ); }; };
-		2239A8DB2212106A005C73D0 /* openblas.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22288E222212098C0081D86C /* openblas.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22557AA422B9474700FFBB49 /* WkWebViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22557AA322B9474700FFBB49 /* WkWebViewExtension.swift */; };
-		22623B3D225B6B0E0002DB71 /* python3_ios.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B3B225B6B090002DB71 /* python3_ios.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22623B3F225B6B0E0002DB71 /* pythonA.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B38225B6B090002DB71 /* pythonA.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22623B41225B6B0E0002DB71 /* pythonB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B39225B6B090002DB71 /* pythonB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22623B43225B6B0E0002DB71 /* pythonC.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B37225B6B090002DB71 /* pythonC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22623B45225B6B0E0002DB71 /* pythonD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B3A225B6B090002DB71 /* pythonD.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22623B47225B6B0E0002DB71 /* pythonE.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B36225B6B090002DB71 /* pythonE.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22623B6B225B87C60002DB71 /* pythonA-kiwisolver.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B69225B87C50002DB71 /* pythonA-kiwisolver.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22623B71225B8AAD0002DB71 /* pythonB-kiwisolver.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B6C225B8AAB0002DB71 /* pythonB-kiwisolver.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22623B73225B8AAD0002DB71 /* pythonE-kiwisolver.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22623B6D225B8AAC0002DB71 /* pythonE-kiwisolver.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -492,17 +505,6 @@
 		22B750B521FC671700241F27 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22B750B321FC671700241F27 /* Main.storyboard */; };
 		22B750B721FC671900241F27 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22B750B621FC671900241F27 /* Assets.xcassets */; };
 		22B750BA21FC671900241F27 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22B750B821FC671900241F27 /* LaunchScreen.storyboard */; };
-		22B7510E21FCA53200241F27 /* awk.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750DB21FCA4CF00241F27 /* awk.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22B7511221FCA53200241F27 /* curl_ios.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750D621FCA4CF00241F27 /* curl_ios.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22B7511421FCA53200241F27 /* files.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750DA21FCA4CF00241F27 /* files.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22B7511A21FCA53200241F27 /* ios_system.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750D921FCA4CF00241F27 /* ios_system.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22B7512121FCA53200241F27 /* libssh2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750D821FCA4CF00241F27 /* libssh2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22B7512621FCA53200241F27 /* network_ios.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750DC21FCA4CF00241F27 /* network_ios.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22B7512821FCA53200241F27 /* openssl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750D221FCA4CF00241F27 /* openssl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22B7514021FCA53300241F27 /* shell.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750DD21FCA4D000241F27 /* shell.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22B7514221FCA53300241F27 /* ssh_cmd.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750E621FCA4D100241F27 /* ssh_cmd.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22B7514421FCA53300241F27 /* tar.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750E721FCA4D100241F27 /* tar.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22B7514621FCA53300241F27 /* text.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750DE21FCA4D000241F27 /* text.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22B7515021FCCB9F00241F27 /* commandDictionary.plist in Resources */ = {isa = PBXBuildFile; fileRef = 22B7514F21FCCB9F00241F27 /* commandDictionary.plist */; };
 		22B827F92288AC84001E91C3 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 22B827F82288AC84001E91C3 /* Settings.bundle */; };
 		22C9A7842236CEDE0016B538 /* DocumentBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C9A7812236CEDE0016B538 /* DocumentBrowserViewController.swift */; };
@@ -586,8 +588,6 @@
 		22EF1EAA225BE6090058BEAA /* python3_ios-numpy.linalg.lapack_lite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E9F225BE6010058BEAA /* python3_ios-numpy.linalg.lapack_lite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22EF1EAC225BE6090058BEAA /* python3_ios-numpy.random.mtrand.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22EF1E9C225BE6000058BEAA /* python3_ios-numpy.random.mtrand.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22F03F73222087AB00EBEA0B /* ListPythonFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F03F72222087AB00EBEA0B /* ListPythonFiles.swift */; };
-		22FDD69E22119AEC003FABFE /* freetype.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750EA21FCA4D100241F27 /* freetype.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22FDD69F22119AEC003FABFE /* harfbuzz.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22B750CF21FCA4CE00241F27 /* harfbuzz.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -597,21 +597,26 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				22B7511A21FCA53200241F27 /* ios_system.framework in Embed Frameworks */,
-				22B7512821FCA53200241F27 /* openssl.framework in Embed Frameworks */,
-				22B7512121FCA53200241F27 /* libssh2.framework in Embed Frameworks */,
-				22B7514221FCA53300241F27 /* ssh_cmd.framework in Embed Frameworks */,
-				22B7514421FCA53300241F27 /* tar.framework in Embed Frameworks */,
-				22B7514021FCA53300241F27 /* shell.framework in Embed Frameworks */,
-				22B7514621FCA53300241F27 /* text.framework in Embed Frameworks */,
-				2239A8DB2212106A005C73D0 /* openblas.framework in Embed Frameworks */,
-				22FDD69E22119AEC003FABFE /* freetype.framework in Embed Frameworks */,
-				22FDD69F22119AEC003FABFE /* harfbuzz.framework in Embed Frameworks */,
-				22B7510E21FCA53200241F27 /* awk.framework in Embed Frameworks */,
-				22B7511221FCA53200241F27 /* curl_ios.framework in Embed Frameworks */,
-				22B7511421FCA53200241F27 /* files.framework in Embed Frameworks */,
-				22B7512621FCA53200241F27 /* network_ios.framework in Embed Frameworks */,
-				22623B3D225B6B0E0002DB71 /* python3_ios.framework in Embed Frameworks */,
+				222450B224D40D47008C9CA3 /* ios_system.xcframework in Embed Frameworks */,
+				222450A324D40BAD008C9CA3 /* libssh2.xcframework in Embed Frameworks */,
+				222450B424D40D6F008C9CA3 /* curl_ios.xcframework in Embed Frameworks */,
+				222450B524D40D83008C9CA3 /* files.xcframework in Embed Frameworks */,
+				222450A424D40BB0008C9CA3 /* openssl.xcframework in Embed Frameworks */,
+				222450B324D40D58008C9CA3 /* awk.xcframework in Embed Frameworks */,
+				222450B624D40DA6008C9CA3 /* shell.xcframework in Embed Frameworks */,
+				222450B724D40DB9008C9CA3 /* ssh_cmd.xcframework in Embed Frameworks */,
+				222450B824D40DC6008C9CA3 /* tar.xcframework in Embed Frameworks */,
+				222450B924D40DD0008C9CA3 /* text.xcframework in Embed Frameworks */,
+				222450BE24D40E50008C9CA3 /* network_ios.xcframework in Embed Frameworks */,
+				222450C524D40F4F008C9CA3 /* openblas.xcframework in Embed Frameworks */,
+				222450C624D40F59008C9CA3 /* freetype.xcframework in Embed Frameworks */,
+				222450C724D40F64008C9CA3 /* harfbuzz.xcframework in Embed Frameworks */,
+				222450D624D410F4008C9CA3 /* pythonE.xcframework in Embed Frameworks */,
+				222450D524D410F4008C9CA3 /* pythonD.xcframework in Embed Frameworks */,
+				222450D424D410F4008C9CA3 /* pythonC.xcframework in Embed Frameworks */,
+				222450D324D410F4008C9CA3 /* pythonB.xcframework in Embed Frameworks */,
+				222450D224D410F4008C9CA3 /* pythonA.xcframework in Embed Frameworks */,
+				222450D124D410F4008C9CA3 /* python3_ios.xcframework in Embed Frameworks */,
 				22623B7A225B8ACE0002DB71 /* python3_ios-kiwisolver.framework in Embed Frameworks */,
 				22EF1EA4225BE6090058BEAA /* python3_ios-numpy.core._multiarray_umath.framework in Embed Frameworks */,
 				22EF1EAA225BE6090058BEAA /* python3_ios-numpy.linalg.lapack_lite.framework in Embed Frameworks */,
@@ -628,7 +633,6 @@
 				221BB1C122625B14000AF355 /* python3_ios-matplotlib.backends._backend_agg.framework in Embed Frameworks */,
 				221BB1C222625B14000AF355 /* python3_ios-matplotlib.ft2font.framework in Embed Frameworks */,
 				221BB1C322625B14000AF355 /* python3_ios-matplotlib.ttconv.framework in Embed Frameworks */,
-				22623B3F225B6B0E0002DB71 /* pythonA.framework in Embed Frameworks */,
 				22623B6B225B87C60002DB71 /* pythonA-kiwisolver.framework in Embed Frameworks */,
 				22EF1E4E225BE1C40058BEAA /* pythonA-numpy.linalg._umath_linalg.framework in Embed Frameworks */,
 				22EF1E4A225BE1C40058BEAA /* pythonA-numpy.core._multiarray_umath.framework in Embed Frameworks */,
@@ -645,7 +649,6 @@
 				221BB1AF22625AF6000AF355 /* pythonA-matplotlib.backends._backend_agg.framework in Embed Frameworks */,
 				221BB1B022625AF6000AF355 /* pythonA-matplotlib.ft2font.framework in Embed Frameworks */,
 				221BB1B122625AF6000AF355 /* pythonA-matplotlib.ttconv.framework in Embed Frameworks */,
-				22623B41225B6B0E0002DB71 /* pythonB.framework in Embed Frameworks */,
 				22623B71225B8AAD0002DB71 /* pythonB-kiwisolver.framework in Embed Frameworks */,
 				22EF1E76225BE5E30058BEAA /* pythonB-numpy.random.mtrand.framework in Embed Frameworks */,
 				22EF1E74225BE5E30058BEAA /* pythonB-numpy.linalg.lapack_lite.framework in Embed Frameworks */,
@@ -662,7 +665,6 @@
 				221BB19D22625AE0000AF355 /* pythonB-matplotlib.backends._backend_agg.framework in Embed Frameworks */,
 				221BB19E22625AE0000AF355 /* pythonB-matplotlib.ft2font.framework in Embed Frameworks */,
 				221BB19F22625AE0000AF355 /* pythonB-matplotlib.ttconv.framework in Embed Frameworks */,
-				22623B43225B6B0E0002DB71 /* pythonC.framework in Embed Frameworks */,
 				22623B75225B8AAD0002DB71 /* pythonC-kiwisolver.framework in Embed Frameworks */,
 				22EF1E7E225BE5E30058BEAA /* pythonC-numpy.linalg._umath_linalg.framework in Embed Frameworks */,
 				22EF1E78225BE5E30058BEAA /* pythonC-numpy.core._dummy.framework in Embed Frameworks */,
@@ -679,7 +681,6 @@
 				221BB18B22625ACD000AF355 /* pythonC-matplotlib.backends._backend_agg.framework in Embed Frameworks */,
 				221BB18C22625ACD000AF355 /* pythonC-matplotlib.ft2font.framework in Embed Frameworks */,
 				221BB18D22625ACD000AF355 /* pythonC-matplotlib.ttconv.framework in Embed Frameworks */,
-				22623B45225B6B0E0002DB71 /* pythonD.framework in Embed Frameworks */,
 				22623B77225B8AAD0002DB71 /* pythonD-kiwisolver.framework in Embed Frameworks */,
 				22EF1E84225BE5E30058BEAA /* pythonD-numpy.core._dummy.framework in Embed Frameworks */,
 				22EF1E8C225BE5E40058BEAA /* pythonD-numpy.linalg.lapack_lite.framework in Embed Frameworks */,
@@ -696,7 +697,6 @@
 				221BB17922625AB3000AF355 /* pythonD-matplotlib.backends._backend_agg.framework in Embed Frameworks */,
 				221BB17A22625AB3000AF355 /* pythonD-matplotlib.ft2font.framework in Embed Frameworks */,
 				221BB17B22625AB3000AF355 /* pythonD-matplotlib.ttconv.framework in Embed Frameworks */,
-				22623B47225B6B0E0002DB71 /* pythonE.framework in Embed Frameworks */,
 				22623B73225B8AAD0002DB71 /* pythonE-kiwisolver.framework in Embed Frameworks */,
 				22EF1E9A225BE5E40058BEAA /* pythonE-numpy.random.mtrand.framework in Embed Frameworks */,
 				22EF1E98225BE5E40058BEAA /* pythonE-numpy.linalg.lapack_lite.framework in Embed Frameworks */,
@@ -1212,15 +1212,28 @@
 		221BB1B822625B0B000AF355 /* python3_ios-matplotlib._qhull.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-matplotlib._qhull.framework"; path = "Frameworks/python3_ios-matplotlib._qhull.framework"; sourceTree = "<group>"; };
 		221BB1B922625B0B000AF355 /* python3_ios-matplotlib._png.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-matplotlib._png.framework"; path = "Frameworks/python3_ios-matplotlib._png.framework"; sourceTree = "<group>"; };
 		221BB1BA22625B0B000AF355 /* python3_ios-matplotlib.ft2font.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "python3_ios-matplotlib.ft2font.framework"; path = "Frameworks/python3_ios-matplotlib.ft2font.framework"; sourceTree = "<group>"; };
-		22288E222212098C0081D86C /* openblas.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = openblas.framework; path = Frameworks/openblas.framework; sourceTree = "<group>"; };
+		222450A124D40BA5008C9CA3 /* libssh2.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libssh2.xcframework; path = "../../../Library/Developer/Xcode/DerivedData/Carnets-bdctrerwrqbsupepxgarvranjtsd/SourcePackages/artifacts/openssl/libssh2.xcframework"; sourceTree = "<group>"; };
+		222450A224D40BA5008C9CA3 /* openssl.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = openssl.xcframework; path = "../../../Library/Developer/Xcode/DerivedData/Carnets-bdctrerwrqbsupepxgarvranjtsd/SourcePackages/artifacts/openssl/openssl.xcframework"; sourceTree = "<group>"; };
+		222450A824D40D34008C9CA3 /* curl_ios.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = curl_ios.xcframework; path = "../../../Library/Developer/Xcode/DerivedData/Carnets-bdctrerwrqbsupepxgarvranjtsd/SourcePackages/artifacts/ios_system/curl_ios.xcframework"; sourceTree = "<group>"; };
+		222450A924D40D34008C9CA3 /* shell.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = shell.xcframework; path = "../../../Library/Developer/Xcode/DerivedData/Carnets-bdctrerwrqbsupepxgarvranjtsd/SourcePackages/artifacts/ios_system/shell.xcframework"; sourceTree = "<group>"; };
+		222450AA24D40D34008C9CA3 /* files.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = files.xcframework; path = "../../../Library/Developer/Xcode/DerivedData/Carnets-bdctrerwrqbsupepxgarvranjtsd/SourcePackages/artifacts/ios_system/files.xcframework"; sourceTree = "<group>"; };
+		222450AB24D40D34008C9CA3 /* awk.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = awk.xcframework; path = "../../../Library/Developer/Xcode/DerivedData/Carnets-bdctrerwrqbsupepxgarvranjtsd/SourcePackages/artifacts/ios_system/awk.xcframework"; sourceTree = "<group>"; };
+		222450AC24D40D34008C9CA3 /* text.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = text.xcframework; path = "../../../Library/Developer/Xcode/DerivedData/Carnets-bdctrerwrqbsupepxgarvranjtsd/SourcePackages/artifacts/ios_system/text.xcframework"; sourceTree = "<group>"; };
+		222450AD24D40D35008C9CA3 /* ssh_cmd.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = ssh_cmd.xcframework; path = "../../../Library/Developer/Xcode/DerivedData/Carnets-bdctrerwrqbsupepxgarvranjtsd/SourcePackages/artifacts/ios_system/ssh_cmd.xcframework"; sourceTree = "<group>"; };
+		222450AE24D40D35008C9CA3 /* ios_system.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = ios_system.xcframework; path = "../../../Library/Developer/Xcode/DerivedData/Carnets-bdctrerwrqbsupepxgarvranjtsd/SourcePackages/artifacts/ios_system/ios_system.xcframework"; sourceTree = "<group>"; };
+		222450B024D40D35008C9CA3 /* tar.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = tar.xcframework; path = "../../../Library/Developer/Xcode/DerivedData/Carnets-bdctrerwrqbsupepxgarvranjtsd/SourcePackages/artifacts/ios_system/tar.xcframework"; sourceTree = "<group>"; };
+		222450BD24D40E48008C9CA3 /* network_ios.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = network_ios.xcframework; path = "../../../Library/Developer/Xcode/DerivedData/Carnets-bdctrerwrqbsupepxgarvranjtsd/SourcePackages/artifacts/network_ios/network_ios.xcframework"; sourceTree = "<group>"; };
+		222450C224D40F42008C9CA3 /* openblas.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = openblas.xcframework; path = "../../../Library/Developer/Xcode/DerivedData/Carnets-bdctrerwrqbsupepxgarvranjtsd/SourcePackages/artifacts/Python-aux/openblas.xcframework"; sourceTree = "<group>"; };
+		222450C324D40F44008C9CA3 /* freetype.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = freetype.xcframework; path = "../../../Library/Developer/Xcode/DerivedData/Carnets-bdctrerwrqbsupepxgarvranjtsd/SourcePackages/artifacts/Python-aux/freetype.xcframework"; sourceTree = "<group>"; };
+		222450C424D40F47008C9CA3 /* harfbuzz.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = harfbuzz.xcframework; path = "../../../Library/Developer/Xcode/DerivedData/Carnets-bdctrerwrqbsupepxgarvranjtsd/SourcePackages/artifacts/Python-aux/harfbuzz.xcframework"; sourceTree = "<group>"; };
+		222450CB24D410ED008C9CA3 /* pythonE.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = pythonE.xcframework; path = "../../../Library/Developer/Xcode/DerivedData/Carnets-bdctrerwrqbsupepxgarvranjtsd/SourcePackages/artifacts/Python/pythonE.xcframework"; sourceTree = "<group>"; };
+		222450CC24D410ED008C9CA3 /* pythonA.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = pythonA.xcframework; path = "../../../Library/Developer/Xcode/DerivedData/Carnets-bdctrerwrqbsupepxgarvranjtsd/SourcePackages/artifacts/Python/pythonA.xcframework"; sourceTree = "<group>"; };
+		222450CD24D410EE008C9CA3 /* python3_ios.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = python3_ios.xcframework; path = "../../../Library/Developer/Xcode/DerivedData/Carnets-bdctrerwrqbsupepxgarvranjtsd/SourcePackages/artifacts/Python/python3_ios.xcframework"; sourceTree = "<group>"; };
+		222450CE24D410EE008C9CA3 /* pythonD.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = pythonD.xcframework; path = "../../../Library/Developer/Xcode/DerivedData/Carnets-bdctrerwrqbsupepxgarvranjtsd/SourcePackages/artifacts/Python/pythonD.xcframework"; sourceTree = "<group>"; };
+		222450CF24D410EE008C9CA3 /* pythonC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = pythonC.xcframework; path = "../../../Library/Developer/Xcode/DerivedData/Carnets-bdctrerwrqbsupepxgarvranjtsd/SourcePackages/artifacts/Python/pythonC.xcframework"; sourceTree = "<group>"; };
+		222450D024D410EE008C9CA3 /* pythonB.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = pythonB.xcframework; path = "../../../Library/Developer/Xcode/DerivedData/Carnets-bdctrerwrqbsupepxgarvranjtsd/SourcePackages/artifacts/Python/pythonB.xcframework"; sourceTree = "<group>"; };
 		222975B92288349C009D93ED /* ODR_extensions */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ODR_extensions; sourceTree = "<group>"; };
 		22557AA322B9474700FFBB49 /* WkWebViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WkWebViewExtension.swift; sourceTree = "<group>"; };
-		22623B36225B6B090002DB71 /* pythonE.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pythonE.framework; path = Frameworks/pythonE.framework; sourceTree = "<group>"; };
-		22623B37225B6B090002DB71 /* pythonC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pythonC.framework; path = Frameworks/pythonC.framework; sourceTree = "<group>"; };
-		22623B38225B6B090002DB71 /* pythonA.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pythonA.framework; path = Frameworks/pythonA.framework; sourceTree = "<group>"; };
-		22623B39225B6B090002DB71 /* pythonB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pythonB.framework; path = Frameworks/pythonB.framework; sourceTree = "<group>"; };
-		22623B3A225B6B090002DB71 /* pythonD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pythonD.framework; path = Frameworks/pythonD.framework; sourceTree = "<group>"; };
-		22623B3B225B6B090002DB71 /* python3_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = python3_ios.framework; path = Frameworks/python3_ios.framework; sourceTree = "<group>"; };
 		22623B69225B87C50002DB71 /* pythonA-kiwisolver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonA-kiwisolver.framework"; path = "Frameworks/pythonA-kiwisolver.framework"; sourceTree = "<group>"; };
 		22623B6C225B8AAB0002DB71 /* pythonB-kiwisolver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonB-kiwisolver.framework"; path = "Frameworks/pythonB-kiwisolver.framework"; sourceTree = "<group>"; };
 		22623B6D225B8AAC0002DB71 /* pythonE-kiwisolver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pythonE-kiwisolver.framework"; path = "Frameworks/pythonE-kiwisolver.framework"; sourceTree = "<group>"; };
@@ -1645,19 +1658,6 @@
 		22B750B621FC671900241F27 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		22B750B921FC671900241F27 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		22B750BB21FC671900241F27 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		22B750CF21FCA4CE00241F27 /* harfbuzz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = harfbuzz.framework; path = Frameworks/harfbuzz.framework; sourceTree = "<group>"; };
-		22B750D221FCA4CF00241F27 /* openssl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = openssl.framework; path = Frameworks/openssl.framework; sourceTree = "<group>"; };
-		22B750D621FCA4CF00241F27 /* curl_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = curl_ios.framework; path = Frameworks/curl_ios.framework; sourceTree = "<group>"; };
-		22B750D821FCA4CF00241F27 /* libssh2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libssh2.framework; path = Frameworks/libssh2.framework; sourceTree = "<group>"; };
-		22B750D921FCA4CF00241F27 /* ios_system.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ios_system.framework; path = Frameworks/ios_system.framework; sourceTree = "<group>"; };
-		22B750DA21FCA4CF00241F27 /* files.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = files.framework; path = Frameworks/files.framework; sourceTree = "<group>"; };
-		22B750DB21FCA4CF00241F27 /* awk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = awk.framework; path = Frameworks/awk.framework; sourceTree = "<group>"; };
-		22B750DC21FCA4CF00241F27 /* network_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = network_ios.framework; path = Frameworks/network_ios.framework; sourceTree = "<group>"; };
-		22B750DD21FCA4D000241F27 /* shell.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = shell.framework; path = Frameworks/shell.framework; sourceTree = "<group>"; };
-		22B750DE21FCA4D000241F27 /* text.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = text.framework; path = Frameworks/text.framework; sourceTree = "<group>"; };
-		22B750E621FCA4D100241F27 /* ssh_cmd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ssh_cmd.framework; path = Frameworks/ssh_cmd.framework; sourceTree = "<group>"; };
-		22B750E721FCA4D100241F27 /* tar.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = tar.framework; path = Frameworks/tar.framework; sourceTree = "<group>"; };
-		22B750EA21FCA4D100241F27 /* freetype.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = freetype.framework; path = Frameworks/freetype.framework; sourceTree = "<group>"; };
 		22B7514F21FCCB9F00241F27 /* commandDictionary.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = commandDictionary.plist; path = Resources/commandDictionary.plist; sourceTree = "<group>"; };
 		22B827F82288AC84001E91C3 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		22C9A7802236CEDD0016B538 /* Document.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
@@ -1753,7 +1753,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22288E312212099D0081D86C /* ios_system.framework in Frameworks */,
+				222450B124D40D3D008C9CA3 /* ios_system.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1906,12 +1906,12 @@
 		2273F6312269E30100256401 /* python */ = {
 			isa = PBXGroup;
 			children = (
-				22623B3B225B6B090002DB71 /* python3_ios.framework */,
-				22623B38225B6B090002DB71 /* pythonA.framework */,
-				22623B39225B6B090002DB71 /* pythonB.framework */,
-				22623B37225B6B090002DB71 /* pythonC.framework */,
-				22623B3A225B6B090002DB71 /* pythonD.framework */,
-				22623B36225B6B090002DB71 /* pythonE.framework */,
+				222450CD24D410EE008C9CA3 /* python3_ios.xcframework */,
+				222450CC24D410ED008C9CA3 /* pythonA.xcframework */,
+				222450D024D410EE008C9CA3 /* pythonB.xcframework */,
+				222450CF24D410EE008C9CA3 /* pythonC.xcframework */,
+				222450CE24D410EE008C9CA3 /* pythonD.xcframework */,
+				222450CB24D410ED008C9CA3 /* pythonE.xcframework */,
 			);
 			name = python;
 			sourceTree = "<group>";
@@ -2399,20 +2399,20 @@
 				2273F62F2269E2EE00256401 /* numpy */,
 				229BB8D52210DCA30070FD71 /* libc++.tbd */,
 				229BB8D32210DC8F0070FD71 /* libbz2.tbd */,
-				22288E222212098C0081D86C /* openblas.framework */,
-				22B750DB21FCA4CF00241F27 /* awk.framework */,
-				22B750D621FCA4CF00241F27 /* curl_ios.framework */,
-				22B750DA21FCA4CF00241F27 /* files.framework */,
-				22B750EA21FCA4D100241F27 /* freetype.framework */,
-				22B750CF21FCA4CE00241F27 /* harfbuzz.framework */,
-				22B750D921FCA4CF00241F27 /* ios_system.framework */,
-				22B750D821FCA4CF00241F27 /* libssh2.framework */,
-				22B750DC21FCA4CF00241F27 /* network_ios.framework */,
-				22B750D221FCA4CF00241F27 /* openssl.framework */,
-				22B750DD21FCA4D000241F27 /* shell.framework */,
-				22B750E621FCA4D100241F27 /* ssh_cmd.framework */,
-				22B750E721FCA4D100241F27 /* tar.framework */,
-				22B750DE21FCA4D000241F27 /* text.framework */,
+				222450A124D40BA5008C9CA3 /* libssh2.xcframework */,
+				222450A224D40BA5008C9CA3 /* openssl.xcframework */,
+				222450AB24D40D34008C9CA3 /* awk.xcframework */,
+				222450A824D40D34008C9CA3 /* curl_ios.xcframework */,
+				222450AA24D40D34008C9CA3 /* files.xcframework */,
+				222450AE24D40D35008C9CA3 /* ios_system.xcframework */,
+				222450A924D40D34008C9CA3 /* shell.xcframework */,
+				222450AD24D40D35008C9CA3 /* ssh_cmd.xcframework */,
+				222450B024D40D35008C9CA3 /* tar.xcframework */,
+				222450AC24D40D34008C9CA3 /* text.xcframework */,
+				222450BD24D40E48008C9CA3 /* network_ios.xcframework */,
+				222450C224D40F42008C9CA3 /* openblas.xcframework */,
+				222450C324D40F44008C9CA3 /* freetype.xcframework */,
+				222450C424D40F47008C9CA3 /* harfbuzz.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2483,6 +2483,8 @@
 			dependencies = (
 			);
 			name = Carnets;
+			packageProductDependencies = (
+			);
 			productName = Carnets;
 			productReference = 22B750AC21FC671700241F27 /* Carnets.app */;
 			productType = "com.apple.product-type.application";
@@ -2527,6 +2529,13 @@
 				Base,
 			);
 			mainGroup = 22B750A321FC671700241F27;
+			packageReferences = (
+				2224509E24D40B77008C9CA3 /* XCRemoteSwiftPackageReference "libssh2-for-iOS" */,
+				222450A524D40D19008C9CA3 /* XCRemoteSwiftPackageReference "ios_system" */,
+				222450BA24D40E2E008C9CA3 /* XCRemoteSwiftPackageReference "network_ios" */,
+				222450BF24D40F0E008C9CA3 /* XCRemoteSwiftPackageReference "Python-aux" */,
+				222450C824D410C9008C9CA3 /* XCRemoteSwiftPackageReference "python3_ios" */,
+			);
 			productRefGroup = 22B750AD21FC671700241F27 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -2810,6 +2819,49 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2224509E24D40B77008C9CA3 /* XCRemoteSwiftPackageReference "libssh2-for-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/holzschu/libssh2-for-iOS.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		222450A524D40D19008C9CA3 /* XCRemoteSwiftPackageReference "ios_system" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/holzschu/ios_system";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		222450BA24D40E2E008C9CA3 /* XCRemoteSwiftPackageReference "network_ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/holzschu/network_ios.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		222450BF24D40F0E008C9CA3 /* XCRemoteSwiftPackageReference "Python-aux" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/holzschu/Python-aux.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		222450C824D410C9008C9CA3 /* XCRemoteSwiftPackageReference "python3_ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/holzschu/python3_ios.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = 22B750A421FC671700241F27 /* Project object */;
 }
