@@ -615,7 +615,7 @@ if sys.platform == 'darwin':
                 url = 'file:'+url
 
             # iOS: 
-            if (platform.machine().startswith('iP')):
+            if (sys.platform == 'darwin' and platform.machine().startswith('iP')):
                 command = 'openurl %s' % url
                 rc = os.system(command)
                 return rc
@@ -652,7 +652,7 @@ if sys.platform == 'darwin':
 
         def open(self, url, new=0, autoraise=True):
             # iOS: 
-            if (platform.machine().startswith('iP')):
+            if (sys.platform == 'darwin' and platform.machine().startswith('iP')):
                 command = 'openurl "%s"' % url.replace('"', '%22')
                 rc = os.system(command)
                 return rc

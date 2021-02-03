@@ -299,22 +299,33 @@ define([
 
     KernelSelector.prototype.new_notebook = function (kernel_name) {
         
-        var w = window.open('', IPython._target);
+        // iOS: don't open the window until you know the URL
+        // var w = window.open('', IPython._target);
         // Create a new notebook in the same path as the current
         // notebook's path.
         var that = this;
         var parent = utils.url_path_split(that.notebook.notebook_path)[0];
         that.notebook.contents.new_untitled(parent, {type: "notebook"}).then(
             function (data) {
+                // iOS: warn iOS that we have created a notebook
+				if (window.webkit.messageHandlers.Carnets != undefined) {
+					window.webkit.messageHandlers.Carnets.postMessage("create:/"+data.path);
+				}
                 var url = utils.url_path_join(
                     that.notebook.base_url, 'notebooks',
-                    utils.encode_uri_components(data.path)
+                    data.path
+                    // iOS: no need to encode URI. New line above:
+                    // utils.encode_uri_components(data.path)
                 );
                 url += "?kernel_name=" + kernel_name;
-                w.location = url;
+                var w = window.open(url);
+                // w.location = url;
             },
             function(error) {
-                w.close();
+                // w.close(); // iOS: no need to close that which we didn't open
+				if (window.webkit.messageHandlers.Carnets != undefined) {
+					window.webkit.messageHandlers.Carnets.postMessage("exception:prototype.new_notebook"); 
+				}
                 dialog.modal({
                     title : i18n.msg._('Creating Notebook Failed'),
                     body : i18n.msg.sprintf(i18n.msg._("The error was: %s"), error.message),

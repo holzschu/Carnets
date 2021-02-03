@@ -603,7 +603,8 @@ def _execvpe(file, args, env=None):
         try:
             exec_func(fullname, *argrest)
             # iOS: we return from execs. That surprises python
-            return
+            if (sys.platform == 'darwin' and uname().machine.startswith('iP')):
+                return
         except (FileNotFoundError, NotADirectoryError) as e:
             last_exc = e
         except OSError as e:
@@ -1010,7 +1011,6 @@ class _wrap_close:
         if name == 'nt':
             return returncode
         else:
-            # ??? return None # iOS
             return returncode << 8  # Shift left to match old behavior
     def __enter__(self):
         return self

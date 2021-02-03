@@ -196,6 +196,10 @@ define([
             this.kernel._kernel_dead();
         }
 
+		/* iOS: send notice to Carnets that this kernel is killed */
+        if (window.webkit.messageHandlers.Carnets != undefined) {
+			window.webkit.messageHandlers.Carnets.postMessage("killingSession:" + this.session_url)
+		}
         utils.ajax(this.session_url, {
             processData: false,
             cache: false,
@@ -265,6 +269,10 @@ define([
         if (data && data.id) {
             this.id = data.id;
             this.session_url = utils.url_path_join(this.session_service_url, this.id);
+            /* iOS: send notice to Carnets that this kernel is created */
+			if (window.webkit.messageHandlers.Carnets != undefined) {
+				window.webkit.messageHandlers.Carnets.postMessage("loadingSession:" + this.session_url)
+			}
         }
         if (data && data.notebook) {
             this.notebook_model.path = data.path;

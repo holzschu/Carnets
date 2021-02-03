@@ -48,17 +48,26 @@ define([
         
         //  File
         this.element.find('#new-file').click(function () {
-            var w = window.open(undefined, IPython._target);
+        	// iOS: don't open a window until you know the URL
+            // var w = window.open(undefined, IPython._target);
             // Create a new file in the current directory
             var parent = utils.url_path_split(editor.file_path)[0];
             editor.contents.new_untitled(parent, {type: "file"}).then(
                 function (data) {
-                    w.location = utils.url_path_join(
-                        that.base_url, 'edit', utils.encode_uri_components(data.path)
+                    // w.location = utils.url_path_join(
+                    //     that.base_url, 'edit', utils.encode_uri_components(data.path)
+                    // );
+					// iOS, Carnets: warn other apps that we have created a file
+					if (window.webkit.messageHandlers.Carnets != undefined) {
+						window.webkit.messageHandlers.Carnets.postMessage("create:/"+data.path);
+					}
+					// iOS: now that we have an URL, open the window
+                    var w = window.open(utils.url_path_join(
+                        that.base_url, 'edit', utils.encode_uri_components(data.path))
                     );
                 },
                 function(error) {
-                    w.close();
+                    // w.close(); // iOS: no need to close, since we didn't open
                     dialog.modal({
                         title : 'Creating New File Failed',
                         body : "The error was: " + error.message,

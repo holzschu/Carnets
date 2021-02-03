@@ -251,20 +251,34 @@ define([
         if (!this.visible) {
             this.complete = $('<div/>').addClass('completions');
             this.complete.attr('id', 'complete');
+			// iOS: change keyboard extension, disable scaling (not always working)
+			if (window.webkit.messageHandlers.Carnets != undefined) {
+				window.webkit.messageHandlers.Carnets.postMessage("selector active")
+			}
+			disable_scaling();
 
             // Currently webkit doesn't use the size attr correctly. See:
             // https://code.google.com/p/chromium/issues/detail?id=4579
             this.sel = $('<select/>')
-                .attr('tabindex', -1)
-                .attr('multiple', 'true');
+                .attr('tabindex', -1);
+            // iOS: this line creates issues on touchscreen
+            //    .attr('multiple', 'true');
             this.complete.append(this.sel);
             this.visible = true;
             $('body').append(this.complete);
 
             //build the container
             var that = this;
-            this.sel.click(function () {
+            // iOS: (and touchscreens): click() is triggered as you touch the menu, 
+            // change() won't work if you select the currently selected option, 
+            // blur() is triggered as you leave the menu after it was brought up.
+            // this.sel.click(function () { // fails 
+            this.sel.change(function () { // works on iOS 13
                 that.pick();
+				if (window.webkit.messageHandlers.Carnets != undefined) {
+					window.webkit.messageHandlers.Carnets.postMessage("selector inactive");
+				}
+				enable_scaling();
                 that.editor.focus();
             });
             this._handle_keydown = function (cm, event) {
@@ -321,6 +335,9 @@ define([
         this.editor.off('keydown', this._handle_keydown);
         this.editor.off('keypress', this._handle_keypress);
         this.visible = false;
+		if (window.webkit.messageHandlers.Carnets != undefined) {
+			window.webkit.messageHandlers.Carnets.postMessage("selector inactive");
+		}
     };
 
     Completer.prototype.pick = function () {
@@ -331,10 +348,25 @@ define([
     Completer.prototype.keydown = function (event) {
         var code = event.keyCode;
 
+		// iOS: convert external keyboard events (arrows / escape key (if present)):
+		if (event.key === 'UIKeyInputUpArrow') { 
+			code = keycodes.up
+		} else if (event.key === 'UIKeyInputDownArrow') {
+			code = keycodes.down
+		}  else if  (event.key === 'UIKeyInputRightArrow') {
+			code = keycodes.right
+		} else if  (event.key === 'UIKeyInputLeftArrow') {
+			code = keycodes.left
+		} else if  (event.key === 'UIKeyInputEscape') {
+			code = keycodes.esc
+		}
         // Enter
         var options;
         var index;
         if (code == keycodes.enter) {
+			if (window.webkit.messageHandlers.Carnets != undefined) {
+				window.webkit.messageHandlers.Carnets.postMessage("enter key received");
+			}
             event.codemirrorIgnore = true;
             event._ipkmIgnore = true;
             event.preventDefault();

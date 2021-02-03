@@ -161,30 +161,34 @@ define([
             // trying to reconnect and we don't want to spam the user
             // with messages
             if (info.attempt === 1) {
+            	// iOS: present a standard alert, and a more explicit message:
+            	var msg =  i18n.msg._("Restarting server") + "\n" + 
+            		i18n.msg._("We are restarting the Jupyter server and client.");
+            	alert(msg);
 
-                var msg = i18n.msg._("A connection to the notebook server could not be established." +
-                        " The notebook will continue trying to reconnect. Check your" +
-                        " network connection or notebook server configuration.");
+                // var msg = i18n.msg._("A connection to the notebook server could not be established." +
+                //         " The notebook will continue trying to reconnect. Check your" +
+                //         " network connection or notebook server configuration.");
 
-                var the_dialog = dialog.kernel_modal({
-                    title: i18n.msg._("Connection failed"),
-                    body: msg,
-                    keyboard_manager: that.keyboard_manager,
-                    notebook: that.notebook,
-                    buttons : {
-                        "OK": {}
-                    }
-                });
+                // var the_dialog = dialog.kernel_modal({
+                //     title: i18n.msg._("Connection failed"),
+                //     body: msg,
+                //     keyboard_manager: that.keyboard_manager,
+                //     notebook: that.notebook,
+                //     buttons : {
+                //         "OK": {}
+                //     }
+                // });
 
-                // hide the dialog on reconnect if it's still visible
-                var dismiss = function () {
-                    the_dialog.modal('hide');
-                }
-                that.events.on("kernel_connected.Kernel", dismiss);
-                the_dialog.on("hidden.bs.modal", function () {
-                    // clear handler on dismiss
-                    that.events.off("kernel_connected.Kernel", dismiss);
-                });
+                // // hide the dialog on reconnect if it's still visible
+                // var dismiss = function () {
+                //     the_dialog.modal('hide');
+                // }
+                // that.events.on("kernel_connected.Kernel", dismiss);
+                // the_dialog.on("hidden.bs.modal", function () {
+                //     // clear handler on dismiss
+                //     that.events.off("kernel_connected.Kernel", dismiss);
+                // });
             }
         });
 

@@ -118,11 +118,16 @@ requirejs([
     var interval_id=0;
     // auto refresh every xx secondes, no need to be fast,
     //  update is done most of the time when page get focus
-    IPython.tree_time_refresh = 60; // in sec
+    // iOS: auto-refresh a bit more often, because files can/will be modified outside the app.
+    // and we don't want to enforce refresh from the Swift part of the code.
+    // IPython.tree_time_refresh = 60; // in sec
+    IPython.tree_time_refresh = 10; // in sec
 
     // limit refresh on focus at 1/10sec, otherwise this
     // can cause too frequent refresh on switching through windows or tabs.
-    IPython.min_delta_refresh = 10; // in sec
+    // iOS: slightly less
+    // IPython.min_delta_refresh = 10; // in sec
+    IPython.min_delta_refresh = 5; // in sec
 
     var _last_refresh = null;
 

@@ -46,15 +46,24 @@ define([
         if (event) {
             event.preventDefault();
         }
-        var w = window.open('#', IPython._target);
+        // iOS, Carnets: don't open a window until you know its URL.
+        // var w = window.open('#', IPython._target);
         var base_url = this.base_url;
         var settings = {
             type : "POST",
             dataType: "json",
             success : function (data, status, xhr) {
                 var name = data.name;
-                w.location = utils.url_path_join(base_url, 'terminals', 
+                // iOS:
+                var urlw = utils.url_path_join(base_url, 'terminals', 
                     utils.encode_uri_components(name));
+                if (window.webkit.messageHandlers.Carnets != undefined) {
+					window.webkit.messageHandlers.Carnets.postMessage(urlw); 
+				}
+                var w = window.open(urlw);
+                // not iOS:
+                // w.location = utils.url_path_join(base_url, 'terminals', 
+                //    utils.encode_uri_components(name));
             },
             error : function(jqXHR, status, error){
                 w.close();

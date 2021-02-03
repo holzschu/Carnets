@@ -37,6 +37,7 @@ def _get_package(package) -> ModuleType:
     If a name, the module is imported.  If the passed or imported module
     object is not a package, raise an exception.
     """
+    print("Entered _get_package, ", package)
     if hasattr(package, '__spec__'):
         if package.__spec__.submodule_search_locations is None:
             raise TypeError('{!r} is not a package'.format(

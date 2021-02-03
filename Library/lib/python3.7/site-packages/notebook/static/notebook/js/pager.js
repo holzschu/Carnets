@@ -31,6 +31,8 @@ define([
 
     Pager.prototype.create_button_area = function(){
         var that = this;
+        // iOS: disable the 'external window' button
+        /*        
         this.pager_button_area.append(
             $('<a>').attr('role', "button")
                     .attr('title',i18n.msg._("Open the pager in an external window"))
@@ -39,7 +41,7 @@ define([
                     .append(
                         $('<span>').addClass("ui-icon ui-icon-extlink")
                     )
-        );
+        ); */
         this.pager_button_area.append(
             $('<a>').attr('role', "button")
                     .attr('title',i18n.msg._("Close the pager"))
