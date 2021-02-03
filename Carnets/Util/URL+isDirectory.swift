@@ -39,11 +39,11 @@ extension URL {
         if (self.host != url!.host) { return false }
         if (self.port != url!.port) { return false }
         if (self.path != url!.path) { return false }
+        // TODO: if host = search engine, check entire url.
+        if (self.port == 8888) && (self.host == "localhost") {
+            return true
+        }
+        if (self.query != url!.query) { return false }
         return true
     }
-    
-
-    
-    
 }
-

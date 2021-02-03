@@ -12,7 +12,6 @@ import UserNotifications
 import ios_system
 import MobileCoreServices
 
-
 var serverAddress: URL!
 // $HOME/Documents
 public var documentsPath: String?
@@ -21,7 +20,7 @@ var lastModificationDate: Date?
 var appWebView: WKWebView!  // We need a single appWebView 
 var controller: ViewController? // for openURL_internal, bridging between C functions and ViewController class
 
-var bookmarks: [URL: Data] = [:]  // bookmarks, indexed by URL. So bookmarks[fileUrl] is a bookmark for the file fileUrl.
+var bookmarks: [String: Data] = [:]  // bookmarks, indexed by URL path. So bookmarks[fileUrl.path] is a bookmark for the file fileUrl.
 var distantFiles: [String: URL] = [:]  // correspondent between distant file and local file. distantFile = distantFiles[localFileURL.path]
 // indexed by path because indexing by URL creates issues (2 file URLs pointing to the same file can be different).
 
@@ -96,14 +95,23 @@ public func openURL_internal(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutab
     }
     var url: URL? = nil
     
-    if args.count == 2 {
-        url = URL(string: args[1])
+    if args.count <= 2 {
+        let urlLines = args[1].components(separatedBy: "\n")
+        url = URL(string: urlLines[0])
     }
     
     guard url != nil else {
         fputs(usage, thread_stderr)
         return 1
     }
+    
+    if (url!.scheme != "http") || (url!.host != "localhost") || (url!.port != 8888){
+        // It's not the server. We defer to the system:
+        NSLog("Opening \(url!) through iOS.")
+        UIApplication.shared.open(url!, options: [.universalLinksOnly: false], completionHandler: nil)
+        return 0
+    }
+    // The server started,
     NSLog("%@", "Server address is set to ".appending(args[1]))
     
     serverAddress = url
@@ -145,7 +153,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        let cmd:String = message.body as! String
+        guard let cmd:String = message.body as? String else { return }
         if (cmd == "save") {
             // if the file open is from another App, we copy the newly saved file too
             // print("We received a command to save the file")
@@ -203,7 +211,6 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                 if (distantFile != nil) {
                     // it's a distant notebook, update distantFiles dictionary:
                     distantFiles.removeValue(forKey: oldName)
-                    NSLog("Upadaing distantFiles with new name: \(newName)")
                     distantFiles.updateValue(distantFile!, forKey: newName)
                 }
                 // Also update kernelURL:
@@ -231,9 +238,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             newFileName.removeFirst("create:".count)
             let newFileURL = URL(fileURLWithPath: newFileName)
             let localDirectory = localDirectoryFrom(localFile: newFileURL)
-            // print("localDirectory found: \(localDirectory)")
             let distantFile = distantFiles[localDirectory.path]
-            // print("distantFile = \(distantFile)")
             if (distantFile != nil) {
                 var stale = false
                 // presentedItemURL corresponds to the directory that was opened last, or to the file localFileUrl
@@ -304,6 +309,44 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             DispatchQueue.main.async {
                 self.present(self.documentPicker, animated: true, completion: nil)
             }
+        } else if (cmd == "openWebpage") {
+            // User wants to browse the web to look for answers
+            // TODO:
+            // open alert, get address. If address is not URL, add http://
+            // if still not URL, open in search engine. Search engine customizable in preferences.
+            let alertController = UIAlertController(title: "Open web page", message: "Enter search term or website:", preferredStyle: .alert)
+            
+            alertController.addTextField { (textField) in
+                textField.text = ""
+            }
+
+            alertController.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (action) in
+            }))
+            
+            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                if let text = alertController.textFields?.first?.text {
+                    var url = URL(string: text)
+                    if !UIApplication.shared.canOpenURL(url! as URL) {
+                        // No valid schemes.
+                        url = URL(string: "https://" + text)
+                    }
+                    let host = url!.host
+                    let address = gethostbyname(host)
+                    if address != nil {
+                        self.webView.load(URLRequest(url: url!))
+                    } else {
+                        let searchEngine = UserDefaults.standard.string(forKey: "search_engine") ?? "https://docs.python.org/3/search.html?q="
+                        if let url = URL(string: searchEngine + text) {
+                            self.webView.load(URLRequest(url: url))
+                        }
+                    }
+                }
+            }))
+            
+            if let presenter = alertController.popoverPresentationController {
+                presenter.sourceView = self.view
+            }
+            self.present(alertController, animated: true, completion: nil)
         } else if (cmd.hasPrefix("convertFile:")) {
             // "Download as" from nbconvert
             var url = cmd
@@ -415,6 +458,14 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                     return
                 }
             }
+        } else if (cmd.hasPrefix("restartServer:")) {
+            let appDel: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+            // The server might still be running, but we can't talk to it, so we kill it:
+            NSLog("Restarting the jupyter notebook server:")
+            appDel.notebookServerRunning = false
+            ios_killpid(jupyterServerPid, SIGQUIT)
+            appDel.startNotebookServer()
+            // appDel.terminateServer() // too late, the socket is already closed.
         } else {
             // JS console:
             NSLog("JavaScript message: \(message.body)")
@@ -437,8 +488,14 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         // Present the Document View Controller for the first document that was picked.
         // If you support picking multiple items, make sure you handle them all.
         let newDirectory = urls[0]
+        // NSLog("newDirectory in documentPicker: \(newDirectory)")
         if (!newDirectory.isDirectory) { // on iOS 11-12, the user can select a file
             displayAlert(title: "Error", message: "Please select a directory")
+            return
+        }
+        if (insideSandbox(fileURL: newDirectory)) {
+            // Received permission for a file inside our own sandbox.
+            // NSLog("The directory \(newDirectory.path) is inside our own sandbox.")
             return
         }
         // NSLog("received DirectoryPermission for: \(newDirectory.path.replacingOccurrences(of: " ", with: "\\ "))")
@@ -458,105 +515,104 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             return
         }
         // Store the bookmark for this directory:
-        if (!isReadableWithoutSecurity) {
-            // Two possibilities:
-            // 1) we opened a file from this directory before -- copy everything in the directory and go
-            // 2) we opened a file from lower in the hierarchy. Copy everything in a different place, then transfer notebook.
-            // We have a directory. Did we open a file from this directory before?
-            // Store the bookmark for this object:
-            var fileBookmark: Data
-            do {
-                fileBookmark = try newDirectory.bookmarkData(options: [],
-                                                                 includingResourceValuesForKeys: nil,
-                                                                 relativeTo: nil)
-                bookmarks.updateValue(fileBookmark, forKey:newDirectory)
+        // if (!isReadableWithoutSecurity) {
+        // Two possibilities:
+        // 1) we opened a file from this directory before -- copy everything in the directory and go
+        // 2) we opened a file from lower in the hierarchy. Copy everything in a different place, then transfer notebook.
+        // We have a directory. Did we open a file from this directory before?
+        // Store the bookmark for this object:
+        var fileBookmark: Data
+        do {
+            fileBookmark = try newDirectory.bookmarkData(options: [],
+                                                         includingResourceValuesForKeys: nil,
+                                                         relativeTo: nil)
+            bookmarks.updateValue(fileBookmark, forKey:newDirectory.path)
+        }
+        catch {
+            NSLog("An error occured in getting bookmarkData for: \(newDirectory)")
+            if isSecuredURL { newDirectory.stopAccessingSecurityScopedResource() }
+            return
+        }
+        // Is the new directory a direct parent of the current notebook?
+        for (localFilePath, distantFileUrl) in distantFiles {
+            if (distantFileUrl == newDirectory) {
+                return // nothing to do here
             }
-            catch {
-                NSLog("An error occured in getting bookmarkData for: \(newDirectory)")
-                if isSecuredURL { newDirectory.stopAccessingSecurityScopedResource() }
-                return
-            }
-            // Is the new directory a direct parent of the current notebook?
-            for (localFilePath, distantFileUrl) in distantFiles {
-                if (distantFileUrl == newDirectory) {
-                    return // nothing to do here
-                }
-                let localFileUrlStored = URL(fileURLWithPath: localFilePath)
-                let distantDirectory = distantFileUrl.deletingLastPathComponent()
-                if (distantDirectory == newDirectory) {
-                    // Copy the content of the entire directory there:
-                    let localDirectory = localFileUrlStored.deletingLastPathComponent()
-                    do {
-                        for fileURL in try FileManager().contentsOfDirectory(at: newDirectory, includingPropertiesForKeys: []) {
-                            if (fileURL == distantFileUrl) { continue } // We already copied this one
-                            var suffix = fileURL.path
-                            suffix.removeFirst(distantDirectory.path.count)
-                            let newLocalFile = localDirectory.appendingPathComponent(suffix)
-                            do {
-                                try FileManager().copyItem(at: fileURL, to: newLocalFile)
-                            }
-                            catch {
-                                NSLog("An error occured in copying: \(fileURL). We keep going.")
-                            }
+            let localFileUrlStored = URL(fileURLWithPath: localFilePath)
+            let distantDirectory = distantFileUrl.deletingLastPathComponent()
+            if (distantDirectory == newDirectory) {
+                // Copy the content of the entire directory there:
+                let localDirectory = localFileUrlStored.deletingLastPathComponent()
+                do {
+                    for fileURL in try FileManager().contentsOfDirectory(at: newDirectory, includingPropertiesForKeys: []) {
+                        if (fileURL == distantFileUrl) { continue } // We already copied this one
+                        var suffix = fileURL.path
+                        suffix.removeFirst(distantDirectory.path.count)
+                        let newLocalFile = localDirectory.appendingPathComponent(suffix)
+                        do {
+                            try FileManager().copyItem(at: fileURL, to: newLocalFile)
+                        }
+                        catch {
+                            NSLog("An error occured in copying: \(fileURL). We keep going.")
                         }
                     }
-                    catch {
-                        NSLog("Could not get content of directory \(newDirectory)")
-                        return
-                    }
-                    notebookBookmark = fileBookmark
-                    // Store relationship between local and distant directories:
-                    NSLog("updating distantFiles in documentPicker: \(localDirectory.path)")
-                    distantFiles.updateValue(newDirectory, forKey: localDirectory.path)
-                    // reload the current web page (images probably became available)
-                    webView.reload()
+                }
+                catch {
+                    NSLog("Could not get content of directory \(newDirectory)")
                     return
                 }
-            }
-            // There are no existing files directly from this directory (it could be lower in the hierarchy)
-            // Create local directory, copy everything there.
-            let temporaryDirectory = try! FileManager().url(for: .itemReplacementDirectory,
-                                                            in: .userDomainMask,
-                                                            appropriateFor: URL(fileURLWithPath: documentsPath!),
-                                                            create: true)
-            // We need to make sure directories are stored as such, so we add a '/'
-            var destination = temporaryDirectory.appendingPathComponent(newDirectory.lastPathComponent)
-            // TODO: check this one, probably remove too.
-            if (!destination.path.hasSuffix("/")) {
-                destination = destination.appendingPathComponent("/")
-            }
-            NSLog("updating distantFiles in documentPicker(2): \(destination.path)")
-            distantFiles.updateValue(newDirectory, forKey: destination.path)
-            do {
-                try FileManager().copyItem(at: newDirectory, to: destination)
-                // Now that we have copied, is the file currently opened inside the directory we copied?
-                var currentNotebookLocalPath = self.webView!.url!.path
-                let isNotebook = currentNotebookLocalPath.hasPrefix("/notebooks/")
-                if (isNotebook) {
-                    currentNotebookLocalPath.removeFirst("/notebooks".count)
-                }
-                let currentNotebookLocalURL = URL(fileURLWithPath: currentNotebookLocalPath)
-                guard let currentNotebookDistantURL = distantFiles[currentNotebookLocalPath] else { return }
-                if (currentNotebookDistantURL.path.hasPrefix(newDirectory.path)) {
-                    // it is a notebook from a distant place
-                    // Remove the connection with the file already stored
-                    distantFiles.removeValue(forKey: currentNotebookLocalPath)
-                    // Reload the notebook; we will skip this page when going back:
-                    skippedURLs.append(self.webView!.url!)
-                    saveDistantFile()
-                    // Create and save bookmark for the new directory. Or do it before.
-                    kernelURL = urlFromFileURL(fileURL: currentNotebookDistantURL)
-                    notebookBookmark = fileBookmark
-                    webView.load(URLRequest(url: kernelURL!))
-                } else {
-                    NSLog("New directory \(newDirectory.path) is not a parent of \(localFileUrl)")
-                }
-            }
-            catch {
-                NSLog("An arror occured in copying: \(newDirectory)")
-                if isSecuredURL { newDirectory.stopAccessingSecurityScopedResource() }
+                notebookBookmark = fileBookmark
+                // Store relationship between local and distant directories:
+                distantFiles.updateValue(newDirectory, forKey: localDirectory.path)
+                // reload the current web page (images probably became available)
+                webView.reload()
+                return
             }
         }
+        // There are no existing files directly from this directory (it could be lower in the hierarchy)
+        // Create local directory, copy everything there.
+        let temporaryDirectory = try! FileManager().url(for: .itemReplacementDirectory,
+                                                        in: .userDomainMask,
+                                                        appropriateFor: URL(fileURLWithPath: documentsPath!),
+                                                        create: true)
+        // We need to make sure directories are stored as such, so we add a '/'
+        var destination = temporaryDirectory.appendingPathComponent(newDirectory.lastPathComponent)
+        // TODO: check this one, probably remove too.
+        if (!destination.path.hasSuffix("/")) {
+            destination = destination.appendingPathComponent("/")
+        }
+        NSLog("updating distantFiles in documentPicker(2): \(destination.path)")
+        distantFiles.updateValue(newDirectory, forKey: destination.path)
+        do {
+            try FileManager().copyItem(at: newDirectory, to: destination)
+            // Now that we have copied, is the file currently opened inside the directory we copied?
+            var currentNotebookLocalPath = self.webView!.url!.path
+            let isNotebook = currentNotebookLocalPath.hasPrefix("/notebooks/")
+            if (isNotebook) {
+                currentNotebookLocalPath.removeFirst("/notebooks".count)
+            }
+            let currentNotebookLocalURL = URL(fileURLWithPath: currentNotebookLocalPath)
+            guard let currentNotebookDistantURL = distantFiles[currentNotebookLocalPath] else { return }
+            if (currentNotebookDistantURL.path.hasPrefix(newDirectory.path)) {
+                // it is a notebook from a distant place
+                // Remove the connection with the file already stored
+                distantFiles.removeValue(forKey: currentNotebookLocalPath)
+                // Reload the notebook; we will skip this page when going back:
+                skippedURLs.append(self.webView!.url!)
+                saveDistantFile()
+                // Create and save bookmark for the new directory. Or do it before.
+                kernelURL = urlFromFileURL(fileURL: currentNotebookDistantURL)
+                notebookBookmark = fileBookmark
+                webView.load(URLRequest(url: kernelURL!))
+            } else {
+                NSLog("New directory \(newDirectory.path) is not a parent of \(localFileUrl)")
+            }
+        }
+        catch {
+            NSLog("An arror occured in copying: \(newDirectory)")
+        }
+        if isSecuredURL { newDirectory.stopAccessingSecurityScopedResource() }
+        // } // isReadableWithoutFileSecurity
     }
     
     var webView: WKWebView!
@@ -644,7 +700,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         if (!insideSandbox(fileURL: fileURL)) {
             // Non-local file. Copy into ~/tmp/ and open
             // first, is that the last file we opened?
-            // print("non-local file.")
+            print("non-local file.")
             var fileURLToOpen:URL?
             var destination:URL?
             if (notebookBookmark == nil) {
@@ -656,7 +712,8 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                         if (!stale && (previousURL.path == fileURL.path)) {
                             // They are the same, but the one from the bookmark still has the authorization
                             fileURLToOpen = previousURL
-                            bookmarks.updateValue(notebookBookmark!, forKey:fileURLToOpen!)
+                            print("Opening file using lastOpenUrlBookmark.")
+                            bookmarks.updateValue(notebookBookmark!, forKey:fileURLToOpen!.path)
                         }
                     } catch {
                         NSLog("Could not resolve the bookmark to previous URL")
@@ -666,16 +723,17 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             }
             if (fileURLToOpen == nil) {
                 // Not the bookmark stored in UserDefaults, maybe in the dictionary?
-                if (bookmarks[fileURL] != nil) {
+                if (bookmarks[fileURL.path] != nil) {
                     // We've met this one before
                     // print("bookmarked before in bookmarks[fileURL]")
                     var stale = false
                     do {
-                        let previousURL = try URL(resolvingBookmarkData: bookmarks[fileURL]!, bookmarkDataIsStale: &stale)
+                        let previousURL = try URL(resolvingBookmarkData: bookmarks[fileURL.path]!, bookmarkDataIsStale: &stale)
                         if (!stale && (previousURL.path == fileURL.path)) {
                             // We did this URL before, and still have the bookmark for it
                             fileURLToOpen = previousURL
-                            notebookBookmark = bookmarks[fileURL]
+                            notebookBookmark = bookmarks[fileURL.path]
+                            print("Opening file using bookmark from dictionary.")
                         }
                     } catch {
                         NSLog("Could not resolve the bookmark to previous URL")
@@ -688,10 +746,12 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                 fileURLToOpen = fileURL
                 notebookBookmark = nil  // if we're there, we don't have a bookmark
             }
+            // Where are we going to copy the distant file?
             for (localFilePathStored, distantFileUrl) in distantFiles {
                 let localFileUrlStored = URL(fileURLWithPath: localFilePathStored)
+                // If it's already been opened, we keep the existing location
                 if (distantFileUrl == fileURLToOpen) {
-                    // print("Already opened in distantFiles")
+                    NSLog("Already opened in distantFiles")
                     destination = localFileUrlStored
                     break
                 }
@@ -699,13 +759,13 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                     // This distant file is a directory. Is the file we want to open part of this directory?
                     // If so, no need to recreate the bookmark.
                     if (fileURLToOpen!.path.hasPrefix(distantFileUrl.path)) {
-                        // print("We found a directory above the file: \(distantFileUrl) for \(fileURLToOpen!)")
-                        notebookBookmark = bookmarks[distantFileUrl]
+                        print("We found a directory above the file: \(distantFileUrl) for \(fileURLToOpen!)")
+                        notebookBookmark = bookmarks[distantFileUrl.path]
                         var suffix = fileURLToOpen!.path
                         suffix.removeFirst(distantFileUrl.path.count)
                         var newPath = localFileUrlStored.path
                         newPath.append(suffix)
-                        // print("Going to write at \(newPath)")
+                        print("Going to write at \(newPath)")
                         destination = URL(fileURLWithPath: newPath)
                     }
                 } else {
@@ -713,15 +773,91 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                     // If so, we open this file in the same directory. So links between notebooks actually work.
                     if (!fileURLToOpen!.isDirectory &&
                         (distantFileUrl.deletingLastPathComponent() == fileURLToOpen?.deletingLastPathComponent())) {
-                        // print("Parent directory exists in distantFiles: \( distantFileUrl.deletingLastPathComponent() )")
+                        NSLog("Parent directory exists in distantFiles: \( distantFileUrl.deletingLastPathComponent() )")
                         destination = localFileUrlStored.deletingLastPathComponent().appendingPathComponent(fileURLToOpen!.lastPathComponent)
                         break
                     }
                 }
             }
+            // We do not have a local file storage in distantFiles. Do we have a bookmark for a directory above the file?
             if (destination == nil) {
-                // do we have a local file storage:
-                // print("So far, no existing location")
+                for (distantDirPath, bookmark) in bookmarks {
+                    if (!fileURLToOpen!.path.hasPrefix(distantDirPath)) {
+                        continue
+                    }
+                    let distantDirURL = URL(fileURLWithPath: distantDirPath)
+                    if (!distantDirURL.isDirectory) {
+                        continue
+                    }
+                    // We have a bookmark for a directory containing this file
+                    print("We have a bookmark for a directory containing this file: \(distantDirPath) is a parent of \(fileURLToOpen)")
+                    var stale = false
+                    do {
+                        let storedURL = try URL(resolvingBookmarkData: bookmark, bookmarkDataIsStale: &stale)
+                        if (stale) {
+                            continue
+                        }
+                        if (storedURL.path != distantDirPath) {
+                            continue
+                        }
+                        let isSecuredURL = storedURL.startAccessingSecurityScopedResource() == true
+                        // print("startAccessingSecurityScopedResource")
+                        if (!downloadRemoteFile(fileURL: storedURL)) {
+                            if (isSecuredURL) {
+                                storedURL.stopAccessingSecurityScopedResource()
+                            }
+                            continue
+                        }
+                        // We opened this directory before, and still have a valid bookmark for it
+                        print("The bookmark is still valid, copying directory.")
+                        // Create local directory, copy everything there.
+                        let temporaryDirectory = try FileManager().url(for: .itemReplacementDirectory,
+                                                                       in: .userDomainMask,
+                                                                       appropriateFor: URL(fileURLWithPath: documentsPath!),
+                                                                       create: true)
+                        // We need to make sure directories are stored as such, so we add a '/'
+                        destination = temporaryDirectory.appendingPathComponent(distantDirURL.lastPathComponent)
+                        // TODO: check this one, probably remove too.
+                        if (!destination!.path.hasSuffix("/")) {
+                            destination = destination!.appendingPathComponent("/")
+                        }
+                        do {
+                            // Copy the directory:
+                            try FileManager().copyItem(at: distantDirURL, to: destination!)
+                        }
+                        catch {
+                            NSLog("An arror occured in copying: \(distantDirPath)")
+                            if isSecuredURL { storedURL.stopAccessingSecurityScopedResource() }
+                            continue
+                        }
+                        NSLog("updating distantFiles for new directory in urlfromfileurl: \(destination!.path)")
+                        // Store directory in distantFiles:
+                        distantFiles.updateValue(distantDirURL, forKey: destination!.path)
+                        notebookBookmark = bookmarks[distantDirPath]
+                        // Now create the location for the file we open:
+                        var suffix = fileURLToOpen!.path
+                        suffix.removeFirst(distantDirPath.count)
+                        print("Suffix = \(suffix)")
+                        if (suffix.hasPrefix("/")) {
+                            suffix.removeFirst("/".count)
+                        }
+                        destination = destination!.appendingPathComponent(suffix)
+                        print("destination = \(destination)")
+                        if (isSecuredURL) {
+                            storedURL.stopAccessingSecurityScopedResource()
+                        }
+                        // No need to continue searching:
+                        break
+                    } catch {
+                        NSLog("Could not resolve the bookmark to previous directory")
+                        print(error)
+                    }
+                }
+            }
+            // We still haven't found a good place to open this file.
+            if (destination == nil) {
+                // Create a local file storage:
+                print("So far, no existing location using distantFiles")
                 let temporaryDirectory = try! FileManager().url(for: .itemReplacementDirectory,
                                                                 in: .userDomainMask,
                                                                 appropriateFor: URL(fileURLWithPath: documentsPath!),
@@ -751,13 +887,13 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                     notebookBookmark = try fileURLToOpen!.bookmarkData(options: [],
                                                                        includingResourceValuesForKeys: nil,
                                                                        relativeTo: nil)
-                    bookmarks.updateValue(notebookBookmark!, forKey:fileURLToOpen!)
+                    bookmarks.updateValue(notebookBookmark!, forKey:fileURLToOpen!.path)
                 }
                 UserDefaults.standard.set(notebookBookmark, forKey: "lastOpenUrlBookmark")
                 if (FileManager().fileExists(atPath: destination!.path)) {
                     try FileManager().removeItem(atPath: destination!.path)
                 }
-                // print("Copy file:")
+                print("Copying file:")
                 try FileManager().copyItem(at: fileURLToOpen!, to: destination!)
             }
             catch {
@@ -787,9 +923,11 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         // local files.
         if (filePath.hasPrefix("/")) { filePath = String(filePath.dropFirst()) }
         while (serverAddress == nil) {  }
+        print("Server has started")
         var fileAddressUrl = serverAddress!
         // Notebook or python file: open as notebook
-        if (filePath.hasSuffix(".ipynb") || filePath.hasSuffix(".py")) {
+        // Recent Jupyter don't accept Python files as notebooks anymore. 
+        if (filePath.hasSuffix(".ipynb") /* || filePath.hasSuffix(".py")*/ ) {
             fileAddressUrl = fileAddressUrl.appendingPathComponent("notebooks")
         } else if (destinationIsDirectory) {
             fileAddressUrl = fileAddressUrl.appendingPathComponent("tree")
@@ -848,11 +986,18 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         if (distantFile == nil) {
             localDirectory = localDirectory.deletingLastPathComponent()
             distantFile = distantFiles[localDirectory.path]
+            let countBefore = localDirectory.pathComponents.count
             while ((distantFile == nil) && (localDirectory.pathComponents.count > 7)) {
+                print("localDirectory: \(localDirectory) components: \(localDirectory.pathComponents.count) ")
                 // "7" corresponds to: /private/var/mobile/Containers/Data/Application/4AA730AE-A7CF-4A6F-BA65-BD2ADA01F8B4/tmp/
                 // plus or minus "/private"
                 localDirectory = localDirectory.deletingLastPathComponent()
+                // print("testing distantFiles with \(localDirectory.path)")
                 distantFile = distantFiles[localDirectory.path]
+                if (localDirectory.pathComponents.count > countBefore) {
+                    // deletingLastPathComponent is increasing the number of components. Not a good thing.
+                    break
+                }
             }
         }
         // If there is no directory, is the file itself bookmarked?
@@ -919,7 +1064,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         }
         catch {
             print(error)
-            NSLog("Could not resolve boox@kmark for \(notebookBookmark!)")
+            NSLog("Could not resolve bookmark for \(notebookBookmark!)")
         }
     }
 
@@ -1021,7 +1166,6 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                                                             create: true)
             var destination = temporaryDirectory
             destination = destination.appendingPathComponent(localFile.lastPathComponent)
-            print("destination = \(destination)")
             try FileManager().copyItem(at: localFile, to: destination)
             // securedURL is the *directory* for which we have the writing permission.
             // we reconstruct the path to the *file*
@@ -1276,6 +1420,17 @@ extension ViewController: WKUIDelegate {
         return nil
     }
     
+    // iOS 14: allow javascript evaluation
+    @available(iOS 13.0, *)
+    func webView(_ webView: WKWebView,
+          decidePolicyFor navigationAction: WKNavigationAction,
+              preferences: WKWebpagePreferences,
+              decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
+            preferences.allowsContentJavaScript = true // The default value is true, but let's make sure.
+        decisionHandler(.allow, preferences)
+    }
+
+    
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         NSLog("finished loading, title= \(webView.title), url=\(webView.url?.path)")
         if (webView.url != nil) {
@@ -1326,8 +1481,19 @@ extension ViewController: WKUIDelegate {
             ios_system("cd '\(directoryURL.path)'")
             // TODO: move to ios_switchSession (required when multiple notebooks are active at the same time)
             presentedItemURL = distantFiles[fileUrl.path] // check wheter it's a distant file
-            if (presentedItemURL == nil) { // it's a local file:
-                presentedItemURL = fileUrl
+            if (presentedItemURL == nil) { // No direct file-to-file correspondance
+                let localDirectory = localDirectoryFrom(localFile: fileUrl)
+                if (localDirectory == fileUrl) {
+                    presentedItemURL = fileUrl
+                } else {
+                    var suffix = fileUrl.path
+                    suffix.removeFirst(localDirectory.path.count)
+                    if (suffix.hasPrefix("/")) {
+                        suffix.removeFirst("/".count)
+                    }
+                    presentedItemURL = distantFiles[localDirectory.path]
+                    presentedItemURL?.appendPathComponent(suffix)
+                }
             }
             UserDefaults.standard.set(presentedItemURL, forKey: "lastOpenUrl")
             setSessionAccessTime(url: webView.url!)
@@ -1339,8 +1505,12 @@ extension ViewController: WKUIDelegate {
                  completionHandler: @escaping () -> Void) {
         
         let arguments = message.components(separatedBy: "\n")
-
-        let alertController = UIAlertController(title: arguments[0], message: arguments[1], preferredStyle: .alert)
+        var ourMessage = ""
+        if (arguments.count > 1) {
+            ourMessage = arguments[1]
+        }
+        
+        let alertController = UIAlertController(title: arguments[0], message: ourMessage, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
             completionHandler()
         }))
@@ -1357,21 +1527,33 @@ extension ViewController: WKUIDelegate {
                  completionHandler: @escaping (Bool) -> Void) {
         
         let arguments = message.components(separatedBy: "\n")
+        var ourMessage = ""
+        if (arguments.count > 1) {
+            ourMessage = arguments[1]
+        }
+        var cancelTitle = "Cancel"
+        if (arguments.count > 2) {
+            cancelTitle = arguments[2]
+        }
+        var confirmTitle = "OK"
+        if (arguments.count > 3) {
+            confirmTitle = arguments[3]
+        }
+
+        let alertController = UIAlertController(title: arguments[0], message: ourMessage, preferredStyle: .alert)
         
-        let alertController = UIAlertController(title: arguments[0], message: arguments[1], preferredStyle: .alert)
-        
-        alertController.addAction(UIAlertAction(title: arguments[2], style: .cancel, handler: { (action) in
+        alertController.addAction(UIAlertAction(title: cancelTitle, style: .cancel, handler: { (action) in
             completionHandler(false)
         }))
         
-        if (arguments[3].hasPrefix("btn-danger")) {
-            var newLabel = arguments[3]
+        if (confirmTitle.hasPrefix("btn-danger")) {
+            var newLabel = confirmTitle
             newLabel.removeFirst("btn-danger".count)
             alertController.addAction(UIAlertAction(title: newLabel, style: .destructive, handler: { (action) in
                 completionHandler(true)
             }))
         } else {
-            alertController.addAction(UIAlertAction(title: arguments[3], style: .default, handler: { (action) in
+            alertController.addAction(UIAlertAction(title: confirmTitle, style: .default, handler: { (action) in
                 completionHandler(true)
             }))
         }
@@ -1388,17 +1570,30 @@ extension ViewController: WKUIDelegate {
                  completionHandler: @escaping (String?) -> Void) {
         
         let arguments = prompt.components(separatedBy: "\n")
-        let alertController = UIAlertController(title: arguments[0], message: arguments[1], preferredStyle: .alert)
+        var ourMessage = ""
+        if (arguments.count > 1) {
+            ourMessage = arguments[1]
+        }
+        var cancelTitle = "Cancel"
+        if (arguments.count > 2) {
+            cancelTitle = arguments[2]
+        }
+        var confirmTitle = "OK"
+        if (arguments.count > 3) {
+            confirmTitle = arguments[3]
+        }
+
+        let alertController = UIAlertController(title: arguments[0], message: ourMessage, preferredStyle: .alert)
         
         alertController.addTextField { (textField) in
             textField.text = defaultText
         }
 
-        alertController.addAction(UIAlertAction(title: arguments[2], style: .default, handler: { (action) in
+        alertController.addAction(UIAlertAction(title: cancelTitle, style: .default, handler: { (action) in
             completionHandler(nil)
         }))
         
-        alertController.addAction(UIAlertAction(title: arguments[3], style: .default, handler: { (action) in
+        alertController.addAction(UIAlertAction(title: confirmTitle, style: .default, handler: { (action) in
             if let text = alertController.textFields?.first?.text {
                 completionHandler(text)
             } else {

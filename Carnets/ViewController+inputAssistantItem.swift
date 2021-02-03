@@ -585,7 +585,9 @@ extension ViewController {
             return
         }
         kernelURL = urlFromFileURL(fileURL: presentedItemURL!)
-        webView.load(URLRequest(url: kernelURL!))
+        var UrlRequest = URLRequest(url: kernelURL!)
+        UrlRequest.setValue(serverAddress.absoluteString, forHTTPHeaderField: "Referer")
+        webView.load(UrlRequest)
     }
     
     @objc private func autocompleteAction(_ sender: UIBarButtonItem) {
@@ -857,15 +859,16 @@ extension ViewController {
         if (!UIDevice.current.modelName.hasPrefix("iPad")) {
             // iPhones and iPod touch (3)
             if (info != nil) {
-                let keyboardFrame: CGRect = (info![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-                // iPhones or iPads: there is a toolbar at the bottom:
-                if (keyboardFrame.size.height <= toolbarHeight) {
-                    // Only the toolbar is left, hide it:
-                    self.editorToolbar.isHidden = true
-                    self.editorToolbar.isUserInteractionEnabled = false
-                } else {
-                    self.editorToolbar.isHidden = false
-                    self.editorToolbar.isUserInteractionEnabled = true
+                if let keyboardFrame: CGRect = (info![UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+                    // iPhones or iPads: there is a toolbar at the bottom:
+                    if (keyboardFrame.size.height <= toolbarHeight) {
+                        // Only the toolbar is left, hide it:
+                        self.editorToolbar.isHidden = true
+                        self.editorToolbar.isUserInteractionEnabled = false
+                    } else {
+                        self.editorToolbar.isHidden = false
+                        self.editorToolbar.isUserInteractionEnabled = true
+                    }
                 }
             }
             if (selectorActive) {
@@ -894,8 +897,9 @@ extension ViewController {
             // "keyboardFrameEnd" is a CGRect corresponding to the size of the keyboard plus the button bar.
             // It's 55 when there is an external keyboard connected, 300+ without.
             // Actual values may vary depending on device, but 60 seems a good threshold.
-            let keyboardFrame: CGRect = (info![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-            externalKeyboardPresent = keyboardFrame.size.height < 60
+            if let keyboardFrame: CGRect = (info![UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+                externalKeyboardPresent = keyboardFrame.size.height < 60
+            }
         }
         
         if (kernelURL!.path.hasPrefix("/notebooks") || kernelURL!.path.hasPrefix("/tree")) {

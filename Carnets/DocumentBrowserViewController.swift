@@ -23,14 +23,11 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
         documentViewController.modalPresentationStyle = UIModalPresentationStyle.fullScreen;
         
         let lastPageVisited = UserDefaults.standard.url(forKey: "lastOpenUrl")
-
+        NSLog("lastPageVisited: \(lastPageVisited)")
         // Reopen where we were last time, but only if it is a notebook:
         if (lastPageVisited != nil) && (lastPageVisited!.path != "/tree")
-            && lastPageVisited!.isFileURL && lastPageVisited!.path.hasPrefix("/notebooks") {
-            documentViewController.presentedItemURL = lastPageVisited
-            NSFileCoordinator.addFilePresenter(documentViewController)
-            // print("presentedItemURL (DocumentBrowserViewController) = \(documentViewController.presentedItemURL)")
-            present(documentViewController, animated: true, completion: nil)
+            && lastPageVisited!.isFileURL {
+            presentDocument(at: lastPageVisited!)
         }
 
         // let types = [kUTTypeText as String, kUTTypeDirectory as String]
@@ -81,7 +78,7 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
       "name": "python",
       "nbconvert_exporter": "python",
       "pygments_lexer": "ipython3",
-      "version": "3.7.1"
+      "version": "3.9.0"
     }
   },
   "nbformat": 4,
@@ -131,6 +128,7 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
         NSFileCoordinator.addFilePresenter(documentViewController)
         notebookViewerActive = true
         // print("presentedItemURL (DocumentBrowserViewController presentDocument) = \(documentViewController.presentedItemURL)")
+        NSLog("Set lastOpenUrl to \(documentURL)")
         UserDefaults.standard.set(documentURL, forKey: "lastOpenUrl")
         let navigationController = UINavigationController(rootViewController: documentViewController)
         navigationController.modalPresentationStyle = UIModalPresentationStyle.fullScreen;

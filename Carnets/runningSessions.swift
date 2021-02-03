@@ -30,13 +30,13 @@ func addRunningSession(session: String, url: URL) {
     if (sessionID.hasPrefix("/")) {
         sessionID = String(sessionID.dropFirst())
     }
-    print("Storing session url: \(url).")
+    // print("Storing session url: \(url).")
     runningSessions.updateValue(sessionID, forKey: url)
     sessionAccessTime.updateValue(Date(), forKey: url)
 }
 
 func removeRunningSession(url: URL) {
-    print("Removing session url: \(url)")
+    // print("Removing session url: \(url)")
     if (runningSessions.removeValue(forKey: url) == nil) {
         NSLog("Warning - removing notebook that was not started: \(url)")
     }
@@ -70,16 +70,8 @@ func oldestRunningSessionURL() -> URL {
     return sessionURL!
 }
 
-func removeOldestSession() {
-    var oldestSessionURL = oldestRunningSessionURL()
-    var oldestSessionID = sessionID(url: oldestSessionURL)
-    while (oldestSessionID == nil) {
-        NSLog("Oldest session URL was not stored. Taking the next one")
-        removeRunningSession(url: oldestSessionURL)
-        oldestSessionURL = oldestRunningSessionURL()
-        oldestSessionID = sessionID(url: oldestSessionURL)
-    }
-    let urlDelete = serverAddress!.appendingPathComponent(oldestSessionID!)
+func closeSession(session: String, url: URL) {
+    let urlDelete = serverAddress!.appendingPathComponent(session)
     var urlDeleteRequest = URLRequest(url: urlDelete)
     urlDeleteRequest.httpMethod = "DELETE"
     urlDeleteRequest.setValue("json", forHTTPHeaderField: "dataType")
@@ -90,13 +82,33 @@ func removeOldestSession() {
         }
         guard let response = response as? HTTPURLResponse,
             (200...299).contains(response.statusCode) else {
-                removeRunningSession(url: oldestSessionURL) // session not found. Probably renamed.
+                removeRunningSession(url: url) // session not found. Probably renamed.
                 NSLog ("Server error on DELETE")
                 return
         }
-        removeRunningSession(url: oldestSessionURL)
+        removeRunningSession(url: url)
     }
     task.resume()
+}
+
+func closeAllRunningSessions() {
+    for (url, sessionID) in runningSessions {
+        NSLog("Calling closeSession on \(sessionID)")
+        closeSession(session: sessionID, url: url)
+    }
+}
+
+
+func removeOldestSession() {
+    var oldestSessionURL = oldestRunningSessionURL()
+    var oldestSessionID = sessionID(url: oldestSessionURL)
+    while (oldestSessionID == nil) {
+        NSLog("Oldest session URL was not stored. Taking the next one")
+        removeRunningSession(url: oldestSessionURL)
+        oldestSessionURL = oldestRunningSessionURL()
+        oldestSessionID = sessionID(url: oldestSessionURL)
+    }
+    closeSession(session: oldestSessionID!, url: oldestSessionURL)
 }
 
 func sessionID(url: URL) -> String? {

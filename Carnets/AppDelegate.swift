@@ -9,29 +9,27 @@
 import UIKit
 import ios_system
 import UserNotifications
+import BackgroundTasks
+
+var jupyterServerPid: pid_t = 0
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    
     var window: UIWindow?
     private let jupyterQueue = DispatchQueue(label: "Jupyter-notebook", qos: .userInteractive) // high priority
-    private let moveFilesQueue = DispatchQueue(label: "moveFiles", qos: .utility) // low priority
+    private let extensionsQueue = DispatchQueue(label: "nbextensions", qos: .utility) // high priority
     var notebookServerRunning: Bool = false
     var shutdownRequest: Bool = false
     var mustRecompilePythonFiles: Bool = false
     var applicationInBackground: Bool = false
     // shutdown tasks:
-    var shutdownTimer: Timer!
-    var alertShutdownTimer: Timer!
     var urlShutdownRequest: URLRequest!
-    var shutdownTaskIdentifier: UIBackgroundTaskIdentifier!
+    var shutdownTaskIdentifier = UIBackgroundTaskIdentifier.invalid
     // on-demand resources, barrier booleans for synchronization:
-    var versionUpToDate = true
-    var libraryFilesUpToDate = true
     var updateExtensionsRunning = false
+    var terminateServerRunning = false
     let jupyterServerSession = "jupyterServerSession"
     // Which version of the app are we running? Carnets, Carnets mini, Carnets scipy, Carnets Julia...?
-
     var appVersion: String? {
         // Bundle.main.infoDictionary?["CFBundleDisplayName"] = Carnets
         // Bundle.main.infoDictionary?["CFBundleIdentifier"] = AsheKube.Carnets
@@ -92,42 +90,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         })
     }
     
-    func linkedFileExists(directory: URL, fileName: String) -> Bool {
-        // Check whether the file linked by fileName in directory actually exists
-        // (if fileName does not exist, we also return false)
-        // NSLog("Checking existence of \(fileName)")
-        if (!FileManager().fileExists(atPath: directory.appendingPathComponent("lib").path)) {
-            // NSLog("no to fileExists \(directory.appendingPathComponent("lib").path)")
-            return false
-        }
-        let fileLocation = directory.appendingPathComponent(fileName)
-        do {
-            let fileAttribute = try FileManager().attributesOfItem(atPath: fileLocation.path)
-            if (!(fileAttribute[FileAttributeKey.type] as? String == FileAttributeType.typeSymbolicLink.rawValue)) { return false }
-            // NSLog("It's a symbolic link")
-            let destination = try FileManager().destinationOfSymbolicLink(atPath: fileLocation.path)
-            // NSLog("Destination = \(destination) exists = \(FileManager().fileExists(atPath: destination))")
-            return FileManager().fileExists(atPath: destination)
-        }
-        catch {
-            NSLog("\(fileName) generated an error: \(error)")
-            return false
-        }
-    }
-    
-    func needToUpdatePythonFiles() -> Bool {
+    func versionNumberIncreased() -> Bool {
         // do it with UserDefaults, not storing in files
         UserDefaults.standard.register(defaults: ["versionInstalled" : "0.0"])
         let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
         let currentBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as! String
-        let libraryURL = try! FileManager().url(for: .libraryDirectory,
-                                                in: .userDomainMask,
-                                                appropriateFor: nil,
-                                                create: true)
-        if (!linkedFileExists(directory: libraryURL, fileName: PythonFiles[0])) {
-            return true
-        }
-        // Python files are present. Which version?
         let currentVersionNumbers = currentVersion.split(separator: ".")
         let majorCurrent = Int(currentVersionNumbers[0])!
         let minorCurrent = Int(currentVersionNumbers[1])!
@@ -142,278 +109,78 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             ((majorInstalled == majorCurrent) && (minorInstalled == minorCurrent) &&
                 (buildNumberInstalled < currentBuildInt))
     }
-    
-    func clearOldDirectories() {
-        // packages installed in previous versions. Must remove before anything else or they mess things up.
-        let oldPythonDirectories = ["Library/lib/python3.7/site-packages/numpy-1.16.0-py3.7-macosx-12.1-iPad6,7.egg",
-                                    "Library/lib/python3.7/site-packages/matplotlib-3.0.2-py3.7.egg",
-                                    "Library/lib/python3.7/site-packages/kiwisolver-1.0.1-py3.7-macosx-12.1-iPad6,7.egg",
-                                    // Sympy files that disappeared with 1.5.1:
-                                    "Library/lib/python3.7/site-packages/sympy/integrals/rubi/rubi.py",
-                                    "Library/lib/python3.7/site-packages/sympy/physics/units/definitions.py",
-                                    "Library/lib/python3.7/site-packages/sympy/physics/unitsystems.py",
-                                    "Library/lib/python3.7/site-packages/sympy-1.3-py3.7.egg-info/",
-                                    ]
-        let documentsUrl = try! FileManager().url(for: .documentDirectory,
-                                                  in: .userDomainMask,
-                                                  appropriateFor: nil,
-                                                  create: true)
-        let homeUrl = documentsUrl.deletingLastPathComponent()
-        for directoryName in oldPythonDirectories {
-            let homeDirectory = homeUrl.appendingPathComponent(directoryName)
-            // "fileExists" fails (replies false even if the directory/file does exist)
-            // So we always remove the items, and catch the exceptions.
-            do {
-                try FileManager().removeItem(at: homeDirectory)
-            }
-            catch {
-                NSLog("Could not remove \(homeDirectory). ")
-            }
+
+    func needToRemovePython37Files() -> Bool {
+            // Check that the old python files are present:
+            let libraryURL = try! FileManager().url(for: .libraryDirectory,
+                                                    in: .userDomainMask,
+                                                    appropriateFor: nil,
+                                                    create: true)
+        let fileLocation = libraryURL.appendingPathComponent(PythonFiles[0])
+        // fileExists(atPath:) will answer false, because the linked file does not exist.
+        do {
+            let fileAttribute = try FileManager().attributesOfItem(atPath: fileLocation.path)
+            return true
+        }
+        catch {
+            // The file does not exist, we already cleaned up Python3.7
+            return false
         }
     }
     
-    func queueUpdatingPythonFiles() {
-        // This operation (copy the files from the bundle directory to the $HOME/Library)
-        // has two benefits:
-        // 1- all python files are in a user-writeable directory, so the user can install
-        // more modules as needed
-        // 2- we remove the .pyc files from the application archive, bringing its size
-        // under the 150 MB limit.
-        // Possible trouble: the user *can* screw up the directory. We should detect that,
-        // and offer (through user preference) the possibility to reset the install.
-        // Maybe: major version = erase everything (except site-packages?), minor version = just copy?
-        NSLog("Updating python files")
-        let bundleUrl = URL(fileURLWithPath: Bundle.main.resourcePath!).appendingPathComponent("Library")
-        // setting up PYTHONPATH (temporary) so Jupyter can start while we copy items:
-        let originalPythonpath = getenv("PYTHONPATH")
-        let mainPythonUrl = bundleUrl.appendingPathComponent("lib/python3.7")
-        var newPythonPath = mainPythonUrl.path
-        var pythonDirectories = ["lib/python3.7/site-packages",
-                                 "lib/python3.7/site-packages/cffi-1.11.5-py3.7-macosx-12.1-iPad6,7.egg",
-                                 "lib/python3.7/site-packages/cycler-0.10.0-py3.7.egg",
-                                 "lib/python3.7/site-packages/kiwisolver-1.0.1-py3.7-macosx-10.9-x86_64.egg",
-                                 "lib/python3.7/site-packages/matplotlib-3.0.3-py3.7-macosx-10.9-x86_64.egg",
-                                 "lib/python3.7/site-packages/numpy-1.16.0-py3.7-macosx-10.9-x86_64.egg",
-                                 "lib/python3.7/site-packages/pyparsing-2.3.1-py3.7.egg",
-                                 "lib/python3.7/site-packages/setuptools-40.8.0-py3.7.egg",
-                                 "lib/python3.7/site-packages/tornado-6.0.1-py3.7-macosx-12.1-iPad6,7.egg",
-                                 "lib/python3.7/site-packages/jupyter_nbextensions_configurator-0.4.1-py3.7.egg",
-                                 "lib/python3.7/site-packages/jupyter_contrib_core-0.3.3-py3.7.egg",
-                                 "lib/python3.7/site-packages/jupyter_contrib_nbextensions-0.5.1-py3.7.egg",
-                                 "lib/python3.7/site-packages/jupyter_highlight_selected_word-0.2.0-py3.7.egg",
-                                 "lib/python3.7/site-packages/jupyter_latex_envs-1.4.6-py3.7.egg",
-                                 "lib/python3.7/site-packages/Pillow-6.0.0-py3.7-macosx-10.9-x86_64.egg",
-                                 "lib/python3.7/site-packages/cryptography-2.7-py3.7-macosx-10.9-x86_64.egg",
-                                 "lib/python3.7/site-packages/lxml-4.4.2-py3.7-macosx-10.9-x86_64.egg",
-                                 "lib/python3.7/site-packages/bokeh-1.4.0-py3.7.egg",
-                                 "lib/python3.7/site-packages/packaging-20.1-py3.7.egg",
-                                 "Library/lib/python3.7/site-packages/astropy-4.0-py3.7-macosx-10.9-x86_64.egg",
-        ]
-
-        if (appVersion != "Carnets mini") {
-            pythonDirectories.append("lib/python3.7/site-packages/pandas-0.24.2-py3.7-macosx-10.9-x86_64.egg")
-        }
-        
-        for otherPythonDirectory in pythonDirectories {
-            let secondaryPythonUrl = bundleUrl.appendingPathComponent(otherPythonDirectory)
-            newPythonPath = newPythonPath.appending(":").appending(secondaryPythonUrl.path)
-        }
-        if (originalPythonpath != nil) {
-            newPythonPath = newPythonPath.appending(":").appending(String(cString: originalPythonpath!))
-        }
-        setenv("PYTHONPATH", newPythonPath.toCString(), 1)
-        //
+    func removePython37Files() {
+        // This operation removes the copy of the Python 3.7 directory that was kept in $HOME/Library.
+        NSLog("Removing python 3.7 files")
         let documentsUrl = try! FileManager().url(for: .documentDirectory,
                                                   in: .userDomainMask,
                                                   appropriateFor: nil,
                                                   create: true)
         let homeUrl = documentsUrl.deletingLastPathComponent().appendingPathComponent("Library")
-        var fileList = PythonFiles
-        if (appVersion != "Carnets mini") {
-            fileList.append(contentsOf: PythonPandasFiles)
-        }
+        let fileList = PythonFiles
         for fileName in fileList {
-            let bundleFile = bundleUrl.appendingPathComponent(fileName)
-            if (!FileManager().fileExists(atPath: bundleFile.path)) {
-                NSLog("queueUpdatingPythonFiles: requested file \(bundleFile.path) does not exist")
-                continue
+            let homeFile = homeUrl.appendingPathComponent(fileName)
+            do {
+                try FileManager().removeItem(at: homeFile)
             }
-            // Symbolic links are both faster to create and use less disk space.
-            // We just have to make sure the destination exists
-            moveFilesQueue.async{
-                let homeFile = homeUrl.appendingPathComponent(fileName)
-                let homeDirectory = homeFile.deletingLastPathComponent()
-                try! FileManager().createDirectory(atPath: homeDirectory.path, withIntermediateDirectories: true)
-                do {
-                    let firstFileAttribute = try FileManager().attributesOfItem(atPath: homeFile.path)
-                    if (firstFileAttribute[FileAttributeKey.type] as? String == FileAttributeType.typeSymbolicLink.rawValue) {
-                        // It's a symbolic link, does the destination exist?
-                        let destination = try! FileManager().destinationOfSymbolicLink(atPath: homeFile.path)
-                        if (!FileManager().fileExists(atPath: destination)) {
-                            try! FileManager().removeItem(at: homeFile)
-                            try! FileManager().createSymbolicLink(at: homeFile, withDestinationURL: bundleFile)
-                        }
-                    } else {
-                        // Not a symbolic link, replace:
-                        try! FileManager().removeItem(at: homeFile)
-                        try! FileManager().createSymbolicLink(at: homeFile, withDestinationURL: bundleFile)
-                    }
-                }
-                catch {
-                    do {
-                        try FileManager().createSymbolicLink(at: homeFile, withDestinationURL: bundleFile)
-                    }
-                    catch {
-                        NSLog("Can't create file: \(homeFile.path): \(error)")
-                    }
-                }
+            catch {
+                NSLog("Can't remove file: \(homeFile.path): \(error)")
             }
         }
-        // Done, now update the installed version:
-        moveFilesQueue.async{
-            NSLog("Finished updating python files.")
-            if (originalPythonpath != nil) {
-                setenv("PYTHONPATH", originalPythonpath, 1)
-            } else {
-                let returnValue = unsetenv("PYTHONPATH")
-                if (returnValue == -1) { NSLog("Could not unsetenv PYTHONPATH") }
-            }
-            self.libraryFilesUpToDate = true
-        }
-        // Compiling seems to take a toll on interactivity. We disable it.
-        /*
-        for fileName in PythonFiles {
-            moveFilesQueue.async{
-                let homeFile = homeUrl.appendingPathComponent(fileName)
-                if (FileManager().fileExists(atPath: homeFile.path)) { // should always be true
-                    var compileCommand = "python3 -m compileall "
-                    compileCommand.append(homeFile.path)
-                    compileCommand.append(" > /dev/null")
-                    ios_switchSession(&self.moveFilesQueue);
-                    ios_system(compileCommand.cString(using: String.Encoding.utf8))
-                }
-            }
-        }
-        moveFilesQueue.async{
-            NSLog("Finished compiling python files.")
-        }
-        */
     }
-    
+
     func updateExtensionsIfNeeded() {
         if (updateExtensionsRunning) { return } // Don't run this more than once
         updateExtensionsRunning = true
-        let documentsUrl = try! FileManager().url(for: .documentDirectory,
-                                                  in: .userDomainMask,
-                                                  appropriateFor: nil,
-                                                  create: true)
-        let homeUrl = documentsUrl.deletingLastPathComponent().appendingPathComponent("Library")
-        let libraryURL = try! FileManager().url(for: .libraryDirectory,
-                                                in: .userDomainMask,
-                                                appropriateFor: nil,
-                                                create: true)
-        // If the files exist, no need to continue:
-        // (unless we had to update the Library files too)
-        if (versionUpToDate) {
-            if (FileManager().fileExists(atPath: libraryURL.appendingPathComponent("Jupyter/nbextensions/rubberband/icon.png").path)) {
-                updateExtensionsRunning = false
-                return
-            }
-            if (linkedFileExists(directory: libraryURL, fileName: extensionsFiles[0])) {
-                updateExtensionsRunning = false
-                return
-            }
+        extensionsQueue.async {
+            NSLog("Installing extensions.")
+            // TODO: switch session back to install session before each command.
+            // TODO: do I need to remove everything to reinstall?
+            var pid:pid_t = ios_fork()
+            ios_system("jupyter-contrib nbextension install --user")
+            ios_waitpid(pid)
+            NSLog("Installing widgets.")
+            pid = ios_fork()
+            ios_system("jupyter-nbextension install --user --py ipysheet")
+            ios_waitpid(pid)
+            pid = ios_fork()
+            ios_system("jupyter-nbextension enable --user --py ipysheet")
+            ios_waitpid(pid)
+            pid = ios_fork()
+            ios_system("jupyter-nbextension install --user --py widgetsnbextension")
+            ios_waitpid(pid)
+            pid = ios_fork()
+            ios_system("jupyter-nbextension enable --user --py widgetsnbextension")
+            ios_waitpid(pid)
+            UserDefaults.standard.set(true, forKey: "widgetsEnabled")
+            NSLog("Done upgrading extensions and widgets.")
+            let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
+            UserDefaults.standard.set(currentVersion, forKey: "versionInstalled")
+            let currentBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as! String
+            UserDefaults.standard.set(currentBuild, forKey: "buildNumber")
+            self.updateExtensionsRunning = false
         }
-        // The symbolic links have to be recreated every time we restart the app, but the data does not need to be downloaded.
-        // download the resource from the iTunes store:
-        let extensionsBundleResource = NSBundleResourceRequest(tags: ["extensions"])
-        NSLog("Begin downloading extensions resources")
-        extensionsBundleResource.beginAccessingResources(completionHandler: { (error) in
-            if let error = error {
-                var message = "Error in downloading extensions resource: "
-                message.append(error.localizedDescription)
-                NSLog(message)
-                self.updateExtensionsRunning = false
-            } else {
-                NSLog("extensions resource succesfully downloaded")
-                for fileName in extensionsFiles {
-                    var fullFileName = "ODR_extensions/"
-                    fullFileName.append(fileName)
-                    let extensionsFileLocation = extensionsBundleResource.bundle.path(forResource: fullFileName, ofType: nil)
-                    if (extensionsFileLocation == nil) {
-                        NSLog("updateExtensionsIfNeeded: file \(fileName) not found")
-                        continue
-                    }
-                    self.moveFilesQueue.async{
-                        let homeFile = homeUrl.appendingPathComponent(fileName)
-                        let homeDirectory = homeFile.deletingLastPathComponent()
-                        try! FileManager().createDirectory(atPath: homeDirectory.path, withIntermediateDirectories: true)
-                        do {
-                            let firstFileAttribute = try FileManager().attributesOfItem(atPath: homeFile.path)
-                            if (firstFileAttribute[FileAttributeKey.type] as? String == FileAttributeType.typeSymbolicLink.rawValue) {
-                                let destination = try! FileManager().destinationOfSymbolicLink(atPath: homeFile.path)
-                                if (!FileManager().fileExists(atPath: destination)) {
-                                    try! FileManager().removeItem(at: homeFile)
-                                    try! FileManager().createSymbolicLink(atPath: homeFile.path, withDestinationPath: extensionsFileLocation!)
-                                }
-                            } else {
-                                // Not a symbolic link:
-                                try! FileManager().removeItem(at: homeFile)
-                                try! FileManager().createSymbolicLink(atPath: homeFile.path, withDestinationPath: extensionsFileLocation!)
-                            }
-                        }
-                        catch {
-                            do {
-                                try FileManager().createSymbolicLink(atPath: homeFile.path, withDestinationPath: extensionsFileLocation!)
-                            }
-                            catch {
-                                NSLog("Can't create file: \(homeFile.path): \(error)")
-                            }
-                        }
-                    }
-                }
-                self.moveFilesQueue.async{
-                    NSLog("Done linking files.")
-                    // wait until Python files have been updated, if needed:
-                    while (!self.libraryFilesUpToDate) { }
-                    NSLog("Installing extensions.")
-                    // TODO: switch session back to install session before each command.
-                    var pid:pid_t = ios_fork()
-                    ios_system("jupyter-contrib nbextension install --user")
-                    ios_waitpid(pid)
-                    pid = ios_fork()
-                    NSLog("Installing widgets.")
-                    ios_system("jupyter-nbextension install --user --py ipysheet.renderer_nbext")
-                    ios_waitpid(pid)
-                    pid = ios_fork()
-                    ios_system("jupyter-nbextension enable --user --py ipysheet.renderer_nbext")
-                    ios_waitpid(pid)
-                    pid = ios_fork()
-                    ios_system("jupyter-nbextension install --user --py ipysheet")
-                    ios_waitpid(pid)
-                    pid = ios_fork()
-                    ios_system("jupyter-nbextension enable --user --py ipysheet")
-                    ios_waitpid(pid)
-                    pid = ios_fork()
-                    ios_system("jupyter-nbextension install --user --py widgetsnbextension")
-                    ios_waitpid(pid)
-                    pid = ios_fork()
-                    ios_system("jupyter-nbextension enable --user --py widgetsnbextension")
-                    ios_waitpid(pid)
-                    UserDefaults.standard.set(true, forKey: "widgetsEnabled")
-                    NSLog("Done upgrading Python files, extensions and widgets.")
-                    let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
-                    UserDefaults.standard.set(currentVersion, forKey: "versionInstalled")
-                    let currentBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as! String
-                    UserDefaults.standard.set(currentBuild, forKey: "buildNumber")
-                    self.versionUpToDate = true
-                    extensionsBundleResource.endAccessingResources()
-                    self.updateExtensionsRunning = false
-                    // for debugging:
-                    // numPythonInterpreters = 3
-               }
-            }
-        })
+        // for debugging:
+        // numPythonInterpreters = 3
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -426,32 +193,68 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setenv("LC_CTYPE", "UTF-8", 1);
         setenv("LC_ALL", "UTF-8", 1);
         setenv("CLICOLOR_FORCE", "1", 1)  // color ls
+        setenv("TZ", TimeZone.current.identifier, 1) // TimeZone information, since "systemsetup -gettimezone" won't work.
+        setenv("OPENBLAS_NUM_THREADS", "1", 1) // disable multi-threading OpenBLAS (also set at compile time).
         // TODO: have more languages
-        // Current options are: fr_FR or zh_CN (or english as default)
+        // Current options are: fr_FR, zh_CN or zh_TW (or english as default)
         let language = UserDefaults.standard.string(forKey: "language_preference")
         if (language != nil) {
             setenv("LANGUAGE", language, 1);
         }
         setlocale(LC_CTYPE, "UTF-8");
         setlocale(LC_ALL, "UTF-8");
-        clearOldDirectories()
-        // Loading on-demand resources:
-        // welcome = welcome message, copied to iCloud folder (can be unloaded)
-        // nbextensions = Python extensions
-        if (needToUpdatePythonFiles()) {
-            // start copying python files from App bundle to $HOME/Library
-            // queue the copy operation so we can continue working.
-            versionUpToDate = false
-            libraryFilesUpToDate = false
-            queueUpdatingPythonFiles()
+        let libraryURL = try! FileManager().url(for: .libraryDirectory,
+                                                in: .userDomainMask,
+                                                appropriateFor: nil,
+                                                create: true)
+        // Clear old Python 3.7 files, keep user extensions:
+        if (needToRemovePython37Files()) {
+            // Remove files and directories created with Python 3.7
+            removePython37Files()
+            // Also remove packages with multiple versions installed:
+            // This one even causes a crash:
+            var pid = ios_fork()
+            ios_system("rm -rf " + libraryURL.path + "/lib/python3.7/site-packages/idna*")
+            ios_waitpid(pid)
+            pid = ios_fork()
+            ios_system("rm -rf " + libraryURL.path + "/lib/python3.7/site-packages/jupyter_core*")
+            ios_waitpid(pid)
+            pid = ios_fork()
+            ios_system("rm -rf " + libraryURL.path + "/lib/python3.7/site-packages/Pygments*")
+            ios_waitpid(pid)
+            // Move all remaining packages to $HOME/Library/lib/python3.9/site-packages/
+            pid = ios_fork()
+            ios_system("mkdir -p " + libraryURL.path + "/lib/python3.9/site-packages/")
+            ios_waitpid(pid)
+            pid = ios_fork()
+            ios_system("mv -n " + libraryURL.path + "/lib/python3.7/site-packages/* " + libraryURL.path + "/lib/python3.9/site-packages/")
+            ios_waitpid(pid)
+            // Erase the old directory
+            pid = ios_fork()
+            ios_system("rm -rf " + libraryURL.path + "/lib/python3.7/")
+            ios_waitpid(pid)
         }
-        updateExtensionsIfNeeded()
+        if (versionNumberIncreased()) {
+            // The version number changed, so the App has been re-installed. Clean all pre-compiled Python files:
+            NSLog("Cleaning __pycache__")
+            let pid = ios_fork()
+            ios_system("rm -rf " + libraryURL.path + "/__pycache__/*")
+            ios_waitpid(pid)
+        }
+        // The shutdown alert is now useless, iOS 14 kills the process at 30s.
+        // TODO: Remove it entirely?
         let center = UNUserNotificationCenter.current()
         // Request permission to display alerts and play sounds.
         center.requestAuthorization(options: [.alert, .sound])
         { (granted, error) in
             // Enable or disable features based on authorization.
         }
+        // Main Python install: $APPDIR/Library/lib/python3.x
+        let bundleUrl = URL(fileURLWithPath: Bundle.main.resourcePath!).appendingPathComponent("Library")
+        setenv("PYTHONHOME", bundleUrl.path.toCString(), 1)
+        // Compiled files: ~/Library/__pycache__
+        setenv("PYTHONPYCACHEPREFIX", (libraryURL.appendingPathComponent("__pycache__")).path.toCString(), 1)
+        setenv("PYTHONUSERBASE", libraryURL.path.toCString(), 1)
         // Detect changes in user defaults:
         NotificationCenter.default.addObserver(self, selector: #selector(self.settingsChanged), name: UserDefaults.didChangeNotification, object: nil)
         // add our own function "openurl"
@@ -460,14 +263,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If it crashes, it doesn't. So we do some cleanup before the start.
         ios_system("rm -f $HOME/Library/Jupyter/runtime/*.html")
         ios_system("rm -f $HOME/Library/Jupyter/runtime/*.json")
-        ios_system("rm -rf $HOME/tmp/(A*")
+        ios_system("rm -rf $HOME/tmp/*")
+        if (versionNumberIncreased()) {
+            updateExtensionsIfNeeded()
+        }
         // SSL certificate location:
-        let libraryURL = try! FileManager().url(for: .libraryDirectory,
-                                                in: .userDomainMask,
-                                                appropriateFor: nil,
-                                                create: true)
-        let sslCertLocation = libraryURL.appendingPathComponent("lib/python3.7/site-packages/certifi/cacert.pem")
-        setenv("SSL_CERT_FILE", sslCertLocation.path, 1); // SLL cacert.pem in ~/Library/ib/python3.7/site-packages/certifi/cacert.pem
+        let sslCertLocation = bundleUrl.appendingPathComponent("lib/python3.9/site-packages/certifi/cacert.pem")
+        let sslCertDir = bundleUrl.appendingPathComponent("lib/python3.9/site-packages/certifi/")
+        setenv("SSL_CERT_FILE", sslCertLocation.path, 1); // SLL cacert.pem in $APPDIR/Library/lib/python3.9/site-packages/certifi/cacert.pem
+        setenv("SSL_CERT_DIR", sslCertDir.path, 1); // SLL cacert.pem in $APPDIR/Library/lib/python3.9/site-packages/certifi/cacert.pem
+        setenv("REQUESTS_CA_BUNDLE", sslCertLocation.path, 1); // SLL cacert.pem in $APPDIR/Library/lib/python3.9/site-packages/certifi/cacert.pem
         // iCloud abilities:
         // We check whether the user has iCloud ability here, and that the container exists
         let currentiCloudToken = FileManager().ubiquityIdentityToken
@@ -475,6 +280,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             copyWelcomeFileToiCloud()
         }
         // print("Available fonts: \(UIFont.familyNames)");
+        // Register a background execution:
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "AsheKube.Carnets.cleanupApplication", using: nil) { task in
+            self.handleBackgroundCleanup(task: task as! BGAppRefreshTask)
+        }
         return true
     }
 
@@ -504,7 +313,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    func startNotebookServer() {
+    @objc func startNotebookServer() {
         if (notebookServerRunning) { return }
         if (applicationInBackground) { return }
         // start the server:
@@ -516,25 +325,101 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         documentsPath = documentsURL.path
         // NSLog("Documents directory = \(documentsPath)")
         jupyterQueue.async {
-            self.notebookServerRunning = true
             // start the Jupyter notebook server:
             // (the server will call openURL with the name of the local file)
+            self.notebookServerRunning = true
             ios_switchSession(self.jupyterServerSession)
             NSLog("Starting jupyter notebook server")
+            joinMainThread = true
+            jupyterServerPid = ios_fork()
             let shellCommand = "jupyter-notebook --notebook-dir /"
             ios_system(shellCommand)
+            NSLog("Terminated jupyter notebook server")
             DispatchQueue.main.async {
                 self.notebookServerTerminated()
             }
         }
     }
+
+    func completeShutdown() {
+        // terminate the app by calling exit():
+        // Other termination methods leave 0MQ sockets hanging, resulting in a crash later.
+        // (not always, but often enough for it to be a nuisance).
+        let handle = dlopen("libc.dylib", RTLD_LAZY | RTLD_GLOBAL)
+        let function = dlsym(handle, "exit")
+        typealias randomFunc = @convention(c) (CInt) -> Void
+        let libc_exit = unsafeBitCast(function, to: randomFunc.self)
+        NSLog("Calling exit in completeShutdown: Time left = %f ", UIApplication.shared.backgroundTimeRemaining)
+        libc_exit(0) // calls exit(0), terminating all threads.
+        dlclose(handle) // not reached, but hey.
+    }
     
+    func handleBackgroundCleanup(task: BGAppRefreshTask) {
+        // Called after 10 mn in background
+        NSLog("Background cleanup called after 10+ mn")
+        task.expirationHandler = {
+            task.setTaskCompleted(success: true)
+        }
+        // It would make more sense to call the actual server shutdown here, rather than exit():
+        let handle = dlopen("libc.dylib", RTLD_LAZY | RTLD_GLOBAL)
+        let function = dlsym(handle, "exit")
+        typealias randomFunc = @convention(c) (CInt) -> Void
+        let libc_exit = unsafeBitCast(function, to: randomFunc.self)
+        libc_exit(0) // calls exit(0), terminating all threads.
+        dlclose(handle) // not reached, but hey.
+        task.setTaskCompleted(success: true)
+    }
     
     @objc func terminateServer() {
+        // Called after 30s in background: terminate all sessions except the front one:
+        // Only run this function once at a time
+        if (terminateServerRunning) {
+            return
+        }
+        terminateServerRunning = true
         let app = UIApplication.shared
         let timeLeft = app.backgroundTimeRemaining
         NSLog("Terminating server. Time left = %f ", timeLeft)
+        // New system: terminate all sessions not in foreground:
+        var currentNumberOfRunningSessions = numberOfRunningSessions()
+        while (currentNumberOfRunningSessions > 1) {
+            removeOldestSession()
+            // Wait for the session to be effectively terminated:
+            while (numberOfRunningSessions() == currentNumberOfRunningSessions) {
+                usleep(10) // The loop needs to be non-empty, otherwise there's a crash.
+            }
+            currentNumberOfRunningSessions = numberOfRunningSessions()
+        }
+        // cancel the alert (if it was set):
+        let notificationCenter = UNUserNotificationCenter.current()
+        if (shutdownTaskIdentifier != .invalid) {
+            app.endBackgroundTask(shutdownTaskIdentifier)
+            shutdownTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+        }
+        terminateServerRunning = false
+        NSLog("Done closing sessions. Time left = %f ", timeLeft)
+        return
+        //
+        if (numberOfRunningSessions() > 0) {
+            NSLog("Closing all sessions:")
+            closeAllRunningSessions()
+            // Now, we wait for all these deletions to be effective:
+            // Yes, parallelism is difficult, see examples below:
+            while (numberOfRunningSessions() > 0) {
+                usleep(10) // The loop needs to be non-empty, otherwise there's a crash.
+            }
+            sleep(1) // Required too. Gives time for the sessions to be actually terminated
+            NSLog("Terminating server.")
+        }
         // shutdown Jupyter server and notebooks (takes about 7s with notebooks open)
+        // cancel the alert (if it was set):
+        if (shutdownTaskIdentifier != .invalid) {
+            app.endBackgroundTask(shutdownTaskIdentifier)
+            shutdownTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+        }
+        shutdownRequested()
+        completeShutdown()
+        // TODO: remove the rest of the function. This code is not executed if completeShutdown() does its job.
         let task = URLSession.shared.dataTask(with: urlShutdownRequest) { data, response, error in
             if let error = error {
                 NSLog ("Error on shutdown server: \(error)")
@@ -545,73 +430,77 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     NSLog ("Server error on shutdown")
                     return
             }
+            NSLog("Server is now terminated: Time left = %f ", app.backgroundTimeRemaining)
             clearAllRunningSessions()
+            self.terminateServerRunning = false
+            NSLog("Cleanup done: Time left = %f ", app.backgroundTimeRemaining)
+            let handle = dlopen("libc.dylib", RTLD_LAZY | RTLD_GLOBAL)
+            let function = dlsym(handle, "exit")
+            typealias randomFunc = @convention(c) (CInt) -> Void
+            let libc_exit = unsafeBitCast(function, to: randomFunc.self)
+            if (app.backgroundTimeRemaining > 1) {
+                sleep(1) // Wait 1 more s
+            }
+            NSLog("Calling exit in terminateServer: Time left = %f ", app.backgroundTimeRemaining)
+            libc_exit(0) // calls exit(0), terminating all threads.
+            dlclose(handle) // not reached, but hey.
         }
         task.resume()
-        // cancel the alert (if it was set):
-        let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.removeDeliveredNotifications(withIdentifiers: ["CarnetsShutdownAlert"])
-        shutdownTimer = nil
-        app.endBackgroundTask(shutdownTaskIdentifier)
-        shutdownTaskIdentifier = UIBackgroundTaskIdentifier.invalid
     }
 
+    func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
+        NSLog("Carnets: received memory warning")
+        if (!applicationInBackground) {
+            // Don't remove the session currently in the foreground:
+            if (numberOfRunningSessions() > 1) {
+                removeOldestSession()
+            }
+        } else {
+            completeShutdown()
+        }
+    }
+    
+    func applicationProtectedDataWillBecomeUnavailable(_ application: UIApplication) {
+        // iPhone/iPad being turned off. Let's release everything:
+        NSLog("Carnets: received protected data warning")
+        if (applicationInBackground) {
+            completeShutdown()
+        }
+    }
     
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
         NSLog("Carnets: applicationWillResignActive")
+        // store the bookmarks for future use:
+        UserDefaults.standard.set(bookmarks, forKey: "storedBookmarks")
+        // 10 mn from now, clear up the entire application:
+        let request = BGAppRefreshTaskRequest(identifier: "AsheKube.Carnets.cleanupApplication")
+        // "earliestBeginDate should not be set too far in the future." Try 5.
+        // 10 mn: called after 13 mn, 11 mn 6 s, works at 11 mn, 10mn.
+        // 5 mn: called after 8 mn, works (application killed, nothing happens till then)
+        // 0 mn: called after 7 to 10 mn, works (as in: kills the application)
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 10 * 60)
+        do {
+            try BGTaskScheduler.shared.submit(request)
+            NSLog("successfully scheduled background task, earliest begin date is: \(request.earliestBeginDate as Any))")
+        } catch {
+            NSLog("Could not schedule cleanupApplication: \(error)")
+        }
         if (!applicationInBackground) {
             applicationDidEnterBackground(application)
         }
-        // 3 min to close current process. Don't shutdown until 2 mn 45 s
-        guard (serverAddress != nil) else { return }
-        let app = UIApplication.shared
-        shutdownTaskIdentifier = app.beginBackgroundTask(expirationHandler: self.terminateServer)
+        guard (serverAddress != nil) else {
+            return
+        }
         let urlPost = serverAddress!.appendingPathComponent("api/shutdown")
         urlShutdownRequest = URLRequest(url: urlPost)
         urlShutdownRequest.httpMethod = "POST"
-        // Configure the alert (if needed) at 2:15 mn:
-        if (UserDefaults.standard.bool(forKey: "alert_preference")) {
-            let notificationCenter = UNUserNotificationCenter.current()
-            notificationCenter.getNotificationSettings { (settings) in
-                if (settings.authorizationStatus == .authorized) {
-                    let shutdownAlertContent = UNMutableNotificationContent()
-                    if settings.alertSetting == .enabled {
-                        shutdownAlertContent.title = NSString.localizedUserNotificationString(forKey: "Carnets shutdown alert", arguments: nil)
-                        shutdownAlertContent.body = NSString.localizedUserNotificationString(forKey: "Carnets is about to terminate. Click here if you want to continue.", arguments: nil)
-                    }
-                    if settings.soundSetting == .enabled {
-                        shutdownAlertContent.sound = UNNotificationSound.default
-                    }
-                    let localShutdownNotification = UNNotificationRequest(identifier: "CarnetsShutdownAlert",
-                                                                          content: shutdownAlertContent,
-                                                                          trigger: UNTimeIntervalNotificationTrigger(timeInterval: (135), repeats: false))
-                    notificationCenter.add(localShutdownNotification, withCompletionHandler: { (error) in
-                        if let error = error {
-                            var message = "Error in setting up the alert: "
-                            message.append(error.localizedDescription)
-                            NSLog(message)
-                        }
-                    })
-                }
-            }
-        }
-        // Set up a timer to close everything at 2:45 mn
-        if (shutdownTimer != nil) {
-            shutdownTimer.invalidate()
-            shutdownTimer = nil
-        }
-        // Multiple timers being started???
-        DispatchQueue.main.async {
-            self.shutdownTimer = Timer.scheduledTimer(timeInterval: 165,
-                                                      target: self,
-                                                      selector: #selector(self.terminateServer),
-                                                      userInfo: nil,
-                                                      repeats: false)
-        }
+        let app = UIApplication.shared
+        shutdownTaskIdentifier = app.beginBackgroundTask(withName:"cleanupSessions", expirationHandler: self.terminateServer)
     }
 
+    
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
@@ -621,8 +510,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
             let documentViewController = storyBoard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
             NSFileCoordinator.removeFilePresenter(documentViewController)
-            applicationInBackground = true
         }
+        applicationInBackground = true
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -641,21 +530,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         NSLog("Carnets: applicationDidBecomeActive")
+        // retrieve the bookmarks:
+        let storedBookmarksDictionary = UserDefaults.standard.dictionary(forKey: "storedBookmarks") as? [String: Data]
+        bookmarks = storedBookmarksDictionary ?? [:]
+        BGTaskScheduler.shared.getPendingTaskRequests(completionHandler: { taskRequests in
+            NSLog("Unexecuted tasksRequests: \(taskRequests)")
+        })
+        BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: "AsheKube.Carnets.cleanupApplication")
         if (applicationInBackground) {
             applicationWillEnterForeground(application)
         }
         // cancel the alert:
         let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.removePendingNotificationRequests(withIdentifiers: ["CarnetsShutdownAlert"])
         // cancel the termination:
-        if ((shutdownTaskIdentifier != nil) && (shutdownTaskIdentifier != UIBackgroundTaskIdentifier.invalid)) {
+        if (shutdownTaskIdentifier != UIBackgroundTaskIdentifier.invalid) {
             let app = UIApplication.shared
             app.endBackgroundTask(shutdownTaskIdentifier)
             shutdownTaskIdentifier = UIBackgroundTaskIdentifier.invalid
-        }
-        if (shutdownTimer != nil) {
-            shutdownTimer.invalidate()
-            shutdownTimer = nil
         }
         startNotebookServer()
     }
@@ -679,6 +570,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 NSLog("Failed to reveal the document at URL \(inputURL) with error: '\(error)'")
                 return
             }
+            guard (revealedDocumentURL != nil) else {
+                return
+            }
             self.startNotebookServer()
             // NSLog("Received document to open: \(revealedDocumentURL)")
             // Present the Document View Controller for the revealed URL
@@ -698,4 +592,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 }
-
