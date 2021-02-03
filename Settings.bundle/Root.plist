@@ -10,16 +10,6 @@
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 			<key>Title</key>
-			<string>Show alert before shutdown</string>
-			<key>Key</key>
-			<string>alert_preference</string>
-			<key>DefaultValue</key>
-			<false/>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-			<key>Title</key>
 			<string>Caps-Lock = Escape</string>
 			<key>Key</key>
 			<string>escape_preference</string>
@@ -48,6 +38,36 @@
 				<string>fr_FR</string>
 				<string>zh_CN</string>
 				<string>zh_TW</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Search engine:</string>
+			<key>Key</key>
+			<string>search_engine</string>
+			<key>DefaultValue</key>
+			<string>https://docs.python.org/3/search.html?q=</string>
+			<key>Titles</key>
+			<array>
+				<string>Python Docs</string>
+				<string>Google</string>
+				<string>Duck Duck Go</string>
+				<string>Bing</string>
+				<string>Yahoo</string>
+				<string>Baidu</string>
+				<string>Sogou</string>
+			</array>
+			<key>Values</key>
+			<array>
+				<string>https://docs.python.org/3/search.html?q=</string>
+				<string>https://www.google.com/search?q=</string>
+				<string>https://duckduckgo.com/search?q=</string>
+				<string>https://www.bing.com/search?q=</string>
+				<string>https://search.yahoo.com/search?q=</string>
+				<string>http://www.baidu.com/s?wd=</string>
+				<string>https://www.sogou.com/web?query=</string>
 			</array>
 		</dict>
 	</array>
