@@ -2,6 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>alias</key>
+	<array>
+		<string>SELF</string>
+		<string>alias_main</string>
+		<string>h</string>
+		<string>no</string>
+	</array>
 	<key>awk</key>
 	<array>
 		<string>awk.framework/awk</string>
@@ -37,7 +44,7 @@
 		<string>HLPRfhv</string>
 		<string>file</string>
 	</array>
-	<key>chksum</key>
+	<key>cksum</key>
 	<array>
 		<string>files.framework/files</string>
 		<string>chksum_main</string>
@@ -282,6 +289,13 @@
 		<string>3bBc:dEhiJm:OQ:RsStuUvVW:xX?</string>
 		<string>no</string>
 	</array>
+	<key>python3.9</key>
+	<array>
+		<string>python3_ios.framework/python3_ios</string>
+		<string>Py_BytesMain</string>
+		<string>3bBc:dEhiJm:OQ:RsStuUvVW:xX?</string>
+		<string>file</string>
+	</array>
 	<key>python</key>
 	<array>
 		<string>python3_ios.framework/python3_ios</string>
@@ -380,6 +394,13 @@
 		<string></string>
 		<string>no</string>
 	</array>
+	<key>export</key>
+	<array>
+		<string>shell.framework/shell</string>
+		<string>export_main</string>
+		<string></string>
+		<string>no</string>
+	</array>
 	<key>sftp</key>
 	<array>
 		<string>curl_ios.framework/curl_ios</string>
@@ -471,6 +492,13 @@
 		<string>Ccdsu</string>
 		<string>no</string>
 	</array>
+	<key>unalias</key>
+	<array>
+		<string>SELF</string>
+		<string>unalias_main</string>
+		<string>a</string>
+		<string>no</string>
+	</array>
 	<key>uname</key>
 	<array>
 		<string>shell.framework/shell</string>
@@ -540,6 +568,20 @@
 		<string>xargs_main</string>
 		<string>0E:I:J:L:n:oP:pR:s:tx</string>
 		<string>no</string>
+	</array>
+	<key>wol</key>
+	<array>
+		<string>network_ios.framework/network_ios</string>
+		<string>_Z8wol_mainiPKPc</string>
+		<string>hqb:p:d:</string>
+		<string>no</string>
+	</array>
+	<key>sleep</key>
+	<array>
+		<string>shell.framework/shell</string>
+		<string>sleep_main</string>
+		<string></string>
+		<string>none</string>
 	</array>
 </dict>
 </plist>

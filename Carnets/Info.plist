@@ -83,7 +83,7 @@
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
-	<string>APPL</string>
+	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
@@ -117,20 +117,6 @@
 	<string>Carnets would like to access to your photo library to upload images</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Carnets would like to access to your photo library to upload photos</string>
-	<key>NSUbiquitousContainerIsDocumentScopePublic</key>
-	<true/>
-	<key>NSUbiquitousContainers</key>
-	<dict>
-		<key>iCloud.AsheKube.Carnets</key>
-		<dict>
-			<key>NSUbiquitousContainerIsDocumentScopePublic</key>
-			<true/>
-			<key>NSUbiquitousContainerName</key>
-			<string>Carnets</string>
-			<key>NSUbiquitousContainerSupportedFolderLevels</key>
-			<string>Any</string>
-		</dict>
-	</dict>
 	<key>UIAppFonts</key>
 	<array>
 		<string>FontAwesome.otf</string>
@@ -197,7 +183,9 @@
 			<key>UTTypeIconFiles</key>
 			<array/>
 			<key>UTTypeIdentifier</key>
-			<string>public.folder</string>
+			<string>public.folders</string>
+			<key>UTTypeTagSpecification</key>
+			<dict/>
 		</dict>
 	</array>
 </dict>

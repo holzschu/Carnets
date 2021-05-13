@@ -105,10 +105,13 @@ public func openURL_internal(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutab
         return 1
     }
     
-    if (url!.scheme != "http") || (url!.host != "localhost") || (url!.port != 8888){
+    if (url!.scheme != "http") || (url!.host != "localhost") || ((url!.port != 8888) && (url!.port != 8889)) {
         // It's not the server. We defer to the system:
         NSLog("Opening \(url!) through iOS.")
-        UIApplication.shared.open(url!, options: [.universalLinksOnly: false], completionHandler: nil)
+        NSLog("scheme: \(url?.scheme) host: \(url?.host) port: \(url?.port)")
+        DispatchQueue.main.async {
+            UIApplication.shared.open(url!, options: [.universalLinksOnly: false], completionHandler: nil)
+        }
         return 0
     }
     // The server started,
@@ -149,7 +152,9 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         kernelURL = urlFromFileURL(fileURL: presentedItemURL!)
         guard (appWebView != nil) else { return }
         notebookViewerActive = true
-        appWebView.load(URLRequest(url: kernelURL!))
+        DispatchQueue.main.async {
+            appWebView.load(URLRequest(url: self.kernelURL!))
+        }
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {

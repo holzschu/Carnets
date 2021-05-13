@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var updateExtensionsRunning = false
     var terminateServerRunning = false
     let jupyterServerSession = "jupyterServerSession"
-    // Which version of the app are we running? Carnets, Carnets mini, Carnets scipy, Carnets Julia...?
+    // Which version of the app are we running? Carnets, Carnets mini, Carnets Pro, Carnets Julia...?
     var appVersion: String? {
         // Bundle.main.infoDictionary?["CFBundleDisplayName"] = Carnets
         // Bundle.main.infoDictionary?["CFBundleIdentifier"] = AsheKube.Carnets
@@ -195,6 +195,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setenv("CLICOLOR_FORCE", "1", 1)  // color ls
         setenv("TZ", TimeZone.current.identifier, 1) // TimeZone information, since "systemsetup -gettimezone" won't work.
         setenv("OPENBLAS_NUM_THREADS", "1", 1) // disable multi-threading OpenBLAS (also set at compile time).
+        setenv("PYFFTW_NUM_THREADS", "1", 1) // disable multi-threading with PyFFTW.
+        setenv("JOBLIB_MULTIPROCESSING", "0", 1) // deactivate multiprocessing in joblib:
+        setenv("QUTIP_NUM_PROCESSES", "1", 1) // number of processors in qutip
         // TODO: have more languages
         // Current options are: fr_FR, zh_CN or zh_TW (or english as default)
         let language = UserDefaults.standard.string(forKey: "language_preference")
@@ -241,14 +244,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             ios_system("rm -rf " + libraryURL.path + "/__pycache__/*")
             ios_waitpid(pid)
         }
-        // The shutdown alert is now useless, iOS 14 kills the process at 30s.
-        // TODO: Remove it entirely?
-        let center = UNUserNotificationCenter.current()
-        // Request permission to display alerts and play sounds.
-        center.requestAuthorization(options: [.alert, .sound])
-        { (granted, error) in
-            // Enable or disable features based on authorization.
-        }
         // Main Python install: $APPDIR/Library/lib/python3.x
         let bundleUrl = URL(fileURLWithPath: Bundle.main.resourcePath!).appendingPathComponent("Library")
         setenv("PYTHONHOME", bundleUrl.path.toCString(), 1)
@@ -273,6 +268,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setenv("SSL_CERT_FILE", sslCertLocation.path, 1); // SLL cacert.pem in $APPDIR/Library/lib/python3.9/site-packages/certifi/cacert.pem
         setenv("SSL_CERT_DIR", sslCertDir.path, 1); // SLL cacert.pem in $APPDIR/Library/lib/python3.9/site-packages/certifi/cacert.pem
         setenv("REQUESTS_CA_BUNDLE", sslCertLocation.path, 1); // SLL cacert.pem in $APPDIR/Library/lib/python3.9/site-packages/certifi/cacert.pem
+        // Help aiohttp install itself:
+        setenv("YARL_NO_EXTENSIONS", "1", 1)
+        setenv("MULTIDICT_NO_EXTENSIONS", "1", 1)
+        // This one is not required, but it helps:
+        setenv("DISABLE_SQLALCHEMY_CEXT", "1", 1)
+        // Carnets Pro (with scipy) only: specify data location using env var:
+        if (appVersion == "Carnets-sci") {
+            let seabornData = libraryURL.appendingPathComponent("seaborn-data")
+            setenv("SEABORN_DATA", seabornData.path, 1)
+            let sklearnData = libraryURL.appendingPathComponent("scikit_learn_data")
+            setenv("SCIKIT_LEARN_DATA", sklearnData.path, 1)
+        }
         // iCloud abilities:
         // We check whether the user has iCloud ability here, and that the container exists
         let currentiCloudToken = FileManager().ubiquityIdentityToken
@@ -390,8 +397,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             currentNumberOfRunningSessions = numberOfRunningSessions()
         }
-        // cancel the alert (if it was set):
-        let notificationCenter = UNUserNotificationCenter.current()
+        // cancel the shutdown task (if it was set):
         if (shutdownTaskIdentifier != .invalid) {
             app.endBackgroundTask(shutdownTaskIdentifier)
             shutdownTaskIdentifier = UIBackgroundTaskIdentifier.invalid
@@ -447,13 +453,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         task.resume()
     }
-
+    
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
         NSLog("Carnets: received memory warning")
         if (!applicationInBackground) {
             // Don't remove the session currently in the foreground:
             if (numberOfRunningSessions() > 1) {
                 removeOldestSession()
+            } else {
+                // A single session is taking too much memory. Kill it, and show an alert.
+                // How to kill? If the running operation is the one taking too much memory and continuing, not much we can do.
+                // Kill all processes except server? doesn't work
+                let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+                let documentViewController = storyBoard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
+                documentViewController.displayAlert(title:"Memory Warning", message: "The current session is using too much memory. It will be terminated.")
+                removeOldestSession() // Will terminate the current session if it's not active
             }
         } else {
             completeShutdown()
@@ -540,8 +554,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if (applicationInBackground) {
             applicationWillEnterForeground(application)
         }
-        // cancel the alert:
-        let notificationCenter = UNUserNotificationCenter.current()
         // cancel the termination:
         if (shutdownTaskIdentifier != UIBackgroundTaskIdentifier.invalid) {
             let app = UIApplication.shared
