@@ -57,7 +57,7 @@ func removeRunningSessionWithID(session: String) {
     NSLog("Could not find a URL associated with session ID: \(session)")
 }
 
-func oldestRunningSessionURL() -> URL {
+func oldestRunningSessionURL() -> URL? {
     var oldestSessionTime = Date()
     var sessionURL: URL?
     for (url, date) in sessionAccessTime {
@@ -67,7 +67,7 @@ func oldestRunningSessionURL() -> URL {
         }
     }
     NSLog("Oldest session found: \(sessionURL)")
-    return sessionURL!
+    return sessionURL
 }
 
 func closeSession(session: String, url: URL) {
@@ -100,12 +100,13 @@ func closeAllRunningSessions() {
 
 
 func removeOldestSession() {
-    var oldestSessionURL = oldestRunningSessionURL()
+    guard var oldestSessionURL = oldestRunningSessionURL() else { return }
     var oldestSessionID = sessionID(url: oldestSessionURL)
     while (oldestSessionID == nil) {
         NSLog("Oldest session URL was not stored. Taking the next one")
         removeRunningSession(url: oldestSessionURL)
-        oldestSessionURL = oldestRunningSessionURL()
+        guard let newUrl = oldestRunningSessionURL() else { return }
+        oldestSessionURL = newUrl
         oldestSessionID = sessionID(url: oldestSessionURL)
     }
     closeSession(session: oldestSessionID!, url: oldestSessionURL)
