@@ -35,7 +35,7 @@
 		<string>SELF</string>
 		<string>cd_main</string>
 		<string></string>
-		<string>directory</string>
+		<string>no</string>
 	</array>
 	<key>chflags</key>
 	<array>
@@ -582,6 +582,20 @@
 		<string>sleep_main</string>
 		<string></string>
 		<string>none</string>
+	</array>
+	<key>cbc</key>
+	<array>
+		<string>cbc.framework/cbc</string>
+		<string>main</string>
+		<string></string>
+		<string>none</string>
+	</array>
+	<key>ffmpeg</key>
+	<array>
+		<string>ffmpeg.framework/ffmpeg</string>
+		<string>main</string>
+		<string></string>
+		<string>file</string>
 	</array>
 </dict>
 </plist>
