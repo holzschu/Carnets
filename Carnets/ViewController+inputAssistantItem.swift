@@ -222,13 +222,24 @@ extension ViewController {
         saveButton.setTitleTextAttributes(
             [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: saveSize)!,
              NSAttributedString.Key.foregroundColor : tintColor,], for: .normal)
+        if #available(iOS 15.0, *) {
+            // make the save icon as gray as the rest of the icons, since I can't make them black
+            let newTintColor = UIColor.tertiaryLabel.resolvedColor(with: self.traitCollection);
+            saveButton.setTitleTextAttributes(
+                [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: saveSize)!,
+                 NSAttributedString.Key.foregroundColor : newTintColor,], for: .normal)
+        }
         return saveButton
     }
     
     var addButton: UIBarButtonItem {
-        if #available(iOS 13.0, *) {
+        if #available(iOS 15.0, *) {
+            let configuration = UIImage.SymbolConfiguration(hierarchicalColor: .tintColor)
+            let addButton = UIBarButtonItem(image: UIImage(systemName: "plus", withConfiguration: configuration)!, style: .plain, target: self, action: #selector(addAction(_:)))
+            return addButton
+        } else if #available(iOS 13.0, *) {
             let configuration = UIImage.SymbolConfiguration(pointSize: fontSize, weight: .regular)
-            return UIBarButtonItem(image: UIImage(systemName: "plus")!.withConfiguration(configuration), style: .plain, target: self, action: #selector(addAction(_:)))
+            return UIBarButtonItem(image: UIImage(systemName: "plus", withConfiguration: configuration)!, style: .plain, target: self, action: #selector(addAction(_:)))
         } else {
             let addButton = UIBarButtonItem(title: "\u{f067}", style: .plain, target: self, action: #selector(addAction(_:)))
             addButton.setTitleTextAttributes(
@@ -239,7 +250,10 @@ extension ViewController {
     }
     
     var cutButton: UIBarButtonItem {
-        if #available(iOS 13.0, *) {
+        if #available(iOS 15.0, *) {
+            let configuration = UIImage.SymbolConfiguration(hierarchicalColor: .tintColor)
+            return UIBarButtonItem(image: UIImage(systemName: "scissors", withConfiguration: configuration)!, style: .plain, target: self, action: #selector(addAction(_:)))
+        } else if #available(iOS 13.0, *) {
             let configuration = UIImage.SymbolConfiguration(pointSize: fontSize, weight: .regular)
             return UIBarButtonItem(image: UIImage(systemName: "scissors")!.withConfiguration(configuration), style: .plain, target: self, action: #selector(cutAction(_:)))
         } else {
@@ -359,7 +373,7 @@ extension ViewController {
         // UIFont.systemFont(ofSize: 1.5*fontSize),
         tabButton.setTitleTextAttributes(
             [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 1.8*fontSize),
-             NSAttributedString.Key.foregroundColor : tintColor,], for: .normal)
+             NSAttributedString.Key.foregroundColor : tintColor], for: .normal)
         return tabButton
         }
     }
@@ -532,6 +546,77 @@ extension ViewController {
         }
     }
 
+    @objc func openWebPage(_ sender: UIBarButtonItem) {
+        // User wants to browse the web to look for answers
+        // TODO:
+        // open alert, get address. If address is not URL, add http://
+        // if still not URL, open in search engine. Search engine customizable in preferences.
+        let alertController = UIAlertController(title: "Open web page", message: "Enter search term or website:", preferredStyle: .alert)
+        
+        alertController.addTextField { (textField) in
+            textField.text = ""
+        }
+        
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (action) in
+        }))
+        
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+            if let text = alertController.textFields?.first?.text {
+                var url = URL(string: text)
+                if !UIApplication.shared.canOpenURL(url! as URL) {
+                    // No valid schemes.
+                    url = URL(string: "https://" + text)
+                }
+                let host = url!.host
+                let address = gethostbyname(host)
+                if address != nil {
+                    self.webView.load(URLRequest(url: url!))
+                } else {
+                    let searchEngine = UserDefaults.standard.string(forKey: "search_engine") ?? "https://docs.python.org/3/search.html?q="
+                    if let url = URL(string: searchEngine + text) {
+                        self.webView.load(URLRequest(url: url))
+                    }
+                }
+            }
+        }))
+        
+        if let presenter = alertController.popoverPresentationController {
+            presenter.sourceView = self.view
+        }
+        self.present(alertController, animated: true, completion: nil)
+    }
+
+    
+    var safariButton: UIBarButtonItem {
+        if #available(iOS 13.0, *) {
+            let configuration = UIImage.SymbolConfiguration(pointSize: fontSize, weight: .bold)
+            let forwardButton = UIBarButtonItem(image: UIImage(systemName: "safari")!.withConfiguration(configuration), style: .plain, target: self, action: #selector(openWebPage(_:)))
+            forwardButton.tintColor = .systemBlue
+            return forwardButton
+        } else {
+            let forwardButton = UIBarButtonItem(title: "\u{f267}", style: .plain, target: self, action: #selector(goForwardAction(_:)))
+            forwardButton.setTitleTextAttributes(
+                [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
+                 NSAttributedString.Key.foregroundColor : UIColor.systemBlue,], for: .normal)
+            return forwardButton
+        }
+    }
+    
+    var unlockFolderButton: UIBarButtonItem {
+        if #available(iOS 13.0, *) {
+            let configuration = UIImage.SymbolConfiguration(pointSize: fontSize, weight: .bold)
+            let forwardButton = UIBarButtonItem(image: UIImage(named: "custom.unlock.folder")!.withConfiguration(configuration), style: .plain, target: self, action: #selector(pickFolder(_:)))
+            forwardButton.tintColor = .systemBlue
+            return forwardButton
+        } else {
+            let forwardButton = UIBarButtonItem(title: "\u{f07c}", style: .plain, target: self, action: #selector(goForwardAction(_:)))
+            forwardButton.setTitleTextAttributes(
+                [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
+                 NSAttributedString.Key.foregroundColor : UIColor.systemBlue,], for: .normal)
+            return forwardButton
+        }
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         // Add navigation bar at the top: back, title, forward
         if #available(iOS 13, *) {
@@ -547,7 +632,7 @@ extension ViewController {
         }
         navigationItem.largeTitleDisplayMode = .never
         navigationItem.leftBarButtonItem = backButton
-        navigationItem.rightBarButtonItem = forwardButton
+        navigationItem.rightBarButtonItems = [forwardButton, unlockFolderButton, safariButton]
         navigationController?.navigationBar.isHidden = false
         navigationController?.hidesBarsOnSwipe = true
         navigationController?.navigationBar.isTranslucent = false // isTranslucent plays with the color, and it doesn't match the rest of the UI
@@ -622,7 +707,7 @@ extension ViewController {
         }
     }
     
-    @objc func cutAction(_ sender: UIBarButtonItem) {
+    @objc private func cutAction(_ sender: UIBarButtonItem) {
         // edit mode cut (works)
         webView.evaluateJavaScript("document.execCommand('cut');") { (result, error) in
             if error != nil {
@@ -724,6 +809,19 @@ extension ViewController {
         }
     }
     
+    @objc func runSingleCell(_ sender: UIBarButtonItem) {
+        if (notebookCellInsertMode) {
+            webView.evaluateJavaScript("Jupyter.notebook.execute_cell(); Jupyter.notebook.edit_mode();") { (result, error) in
+                if error != nil {
+                    // print(error)
+                }
+                if (result != nil) {
+                    // print(result)
+                }
+            }
+        }
+    }
+
     @objc private func upAction(_ sender: UIBarButtonItem) {
         if (notebookCellInsertMode) {
             webView.evaluateJavaScript("Jupyter.notebook.select_prev(true); Jupyter.notebook.focus_cell(); Jupyter.notebook.edit_mode();") { (result, error) in
@@ -901,7 +999,7 @@ extension ViewController {
                 externalKeyboardPresent = keyboardFrame.size.height < 60
             }
         }
-        
+                
         if (kernelURL!.path.hasPrefix("/notebooks") || kernelURL!.path.hasPrefix("/tree")) {
             if ((externalKeyboardPresent ?? false) || !(multiCharLanguageWithSuggestions ?? false)) {
                 var leadingButtons: [UIBarButtonItem] =  [doneButton]
@@ -917,7 +1015,7 @@ extension ViewController {
                 }
                 leadingButtons.append(saveButton)
                 leadingButtons.append(addButton)
-             
+                addButton.tintColor = .black
                 // We need "representativeItem: nil" otherwise iOS compress the buttons into the representative item
                 contentView?.inputAssistantItem.leadingBarButtonGroups = [UIBarButtonItemGroup(barButtonItems:
                     leadingButtons, representativeItem: nil)]

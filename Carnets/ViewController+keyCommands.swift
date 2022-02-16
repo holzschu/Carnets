@@ -24,23 +24,88 @@ extension ViewController {
             }
         }
     }
+    
+    @objc private func pasteAction() {
+        if (notebookCellInsertMode) {
+            // edit mode paste (works)
+            if let pastedString = UIPasteboard.general.string {
+                webView.paste(pastedString)
+            }
+        } else {
+            // command mode paste (works)
+            webView.evaluateJavaScript("Jupyter.notebook.paste_cell_below();") { (result, error) in
+                if error != nil {
+                    print(error)
+                    print(result)
+                }
+            }
+        }
+    }
+
+    @objc private func copyAction() {
+        if (notebookCellInsertMode) {
+            // edit mode copy (works)
+            webView.evaluateJavaScript("document.execCommand('copy');") { (result, error) in
+                if error != nil {
+                    // print(error)
+                }
+                if (result != nil) {
+                    // print(result)
+                }
+            }
+        } else {
+            // command mode copy (works)
+            // javascript code to copy cell
+            webView.evaluateJavaScript("Jupyter.notebook.copy_cell();") { (result, error) in
+                if error != nil {
+                    print(error)
+                    print(result)
+                }
+            }
+        }
+    }
+
+    @objc private func cutAction() {
+        // edit mode cut (works)
+        if (notebookCellInsertMode) {
+            webView.evaluateJavaScript("document.execCommand('cut');") { (result, error) in
+                if error != nil {
+                    print(error)
+                }
+                if (result != nil) {
+                    print(result)
+                }
+            }
+        } else {
+            // command mode cut (works)
+            webView.evaluateJavaScript("var index = Jupyter.notebook.get_selected_index(); Jupyter.notebook.cut_cell(); Jupyter.notebook.select(index);"){ (result, error) in
+                if error != nil {
+                    print(error)
+                    print(result)
+                }
+            }
+        }
+    }
 
     override var keyCommands: [UIKeyCommand]? {
         var basicKeyCommands = [
             UIKeyCommand(input: UIKeyCommand.inputEscape, modifierFlags: [], action: #selector(escapeKey), discoverabilityTitle: "Escape Key"),
-            // Cmd-Z is reserved by Apple. We can register it, but it won't work
-            // Removed discoverabilityTitle until it works.
-            UIKeyCommand(input: "z", modifierFlags: .command, action: #selector(undoAction)),  // discoverabilityTitle: "Undo"),
-            UIKeyCommand(input: "z", modifierFlags: [.command, .shift], action: #selector(redoAction)), // discoverabilityTitle: "Redo"),
+            // Cmd-Z works on iOS 15b2
+            UIKeyCommand(input: "z", modifierFlags: .command, action: #selector(undoAction),  discoverabilityTitle: "Undo"),
+            UIKeyCommand(input: "z", modifierFlags: [.command, .shift], action: #selector(redoAction), discoverabilityTitle: "Redo"),
             // control-Z is available
             UIKeyCommand(input: "z", modifierFlags: .control, action: #selector(undoAction), discoverabilityTitle: "Undo"),
             UIKeyCommand(input: "z", modifierFlags: [.control, .shift], action: #selector(redoAction), discoverabilityTitle: "Redo"),
             // Cmd-S is not reserved, so this works:
             UIKeyCommand(input: "s", modifierFlags: .command, action: #selector(saveAction), discoverabilityTitle: "Save"),
+            UIKeyCommand(input: "x", modifierFlags: .command, action: #selector(cutAction), discoverabilityTitle: "Cut"),
+            UIKeyCommand(input: "c", modifierFlags: .command, action: #selector(copyAction), discoverabilityTitle: "Copy"),
+            UIKeyCommand(input: "v", modifierFlags: .command, action: #selector(pasteAction), discoverabilityTitle: "Paste"),
             // Ctrl-Enter: does not work (intercepted/not seen by JS)
             // Alt-Enter: managed by JS
-            // Cmd-Enter: run cell, insert below (run Action)
-            UIKeyCommand(input: "\r", modifierFlags:.command,  action: #selector(runAction), discoverabilityTitle: "Run cell, select next"),
+            // Shift-Enter: managed by JS
+            // Cmd-Enter: run cell (but not insert below) (run runSingleCell)
+            UIKeyCommand(input: "\r", modifierFlags:.command,  action: #selector(runSingleCell), discoverabilityTitle: "Run cell"),
             // Tab key in edit mode: does not work with external keyboard (but alt-tab works). But it should ("\t")
         ]
         /* Caps Lock remapped to escape -- only if in a notebook, in insert mode: */

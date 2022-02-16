@@ -53,4 +53,16 @@ extension WKWebView {
         let customInputAccessory = objc_getAssociatedObject(superWebView, &ToolbarHandle)
         return customInputAccessory as? UIView
     }
+    
+    open override func copy(_ : Any?) {
+        // edit mode copy (works)
+        self.evaluateJavaScript("document.execCommand('copy');") { (result, error) in
+            if error != nil {
+                // print(error)
+            }
+            if (result != nil) {
+                // print(result)
+            }
+        }
+    }
 }

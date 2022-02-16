@@ -17,7 +17,9 @@ var serverAddress: URL!
 public var documentsPath: String?
 public var iCloudDocumentsURL: URL?
 var lastModificationDate: Date?
-var appWebView: WKWebView!  // We need a single appWebView 
+var appWebView: WKWebView!  // We need a single appWebView (until we switch to Scenes)
+private var javascriptRunning = false // We can't execute JS while we are already executing JS.
+
 var controller: ViewController? // for openURL_internal, bridging between C functions and ViewController class
 
 var bookmarks: [String: Data] = [:]  // bookmarks, indexed by URL path. So bookmarks[fileUrl.path] is a bookmark for the file fileUrl.
@@ -29,7 +31,6 @@ var multiCharLanguageWithSuggestions: Bool?
 let toolbarHeight: CGFloat = 35
 // Checking on members of ViewController does not tell us whether the viewController is active or the document browser.
 var notebookViewerActive = false // are we using the notebook viewer (viewController), or the documentBrowserViewController?
-
 
 // is this file URL inside the App sandbox or not? (do we need to copy it locally?)
 func insideSandbox(fileURL: URL) -> Bool {
@@ -157,6 +158,18 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         }
     }
 
+    @objc func pickFolder(_ sender: UIBarButtonItem) {
+        // User has requested permission access to a directory
+        // https://developer.apple.com/documentation/uikit/view_controllers/providing_access_to_directories
+        documentPicker.allowsMultipleSelection = true
+        documentPicker.delegate = self
+        
+        // Present the document picker.
+        DispatchQueue.main.async {
+            self.present(self.documentPicker, animated: true, completion: nil)
+        }
+    }
+    
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         guard let cmd:String = message.body as? String else { return }
         if (cmd == "save") {
@@ -291,6 +304,8 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             addRunningSession(session: cmd, url: self.webView!.url!)
             // This should be a configureable option. Or running pip / python causes the removal of the oldest session?
             // With 6 (maxPythonInterpreters), this leaves 1 server + 3 clients running simultaneously, so 4 process.
+            // With 4 (numPythonInterpreters), each new session removes the oldest one.
+            // TODO: keep 3 "python" interpreters and 3 "xpython", so we can have multiple sessions.
             // Probably a good limit.
             if (numberOfRunningSessions() > numPythonInterpreters - 3) { // Keep 1 for the server and 2 for running pip inside the notebook
                 NSLog("More than \(numPythonInterpreters - 2) notebooks running (including this one). Time to cleanup.")
@@ -493,6 +508,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         // Present the Document View Controller for the first document that was picked.
         // If you support picking multiple items, make sure you handle them all.
         let newDirectory = urls[0]
+        ios_switchSession(jupyterServerSession)
         // NSLog("newDirectory in documentPicker: \(newDirectory)")
         if (!newDirectory.isDirectory) { // on iOS 11-12, the user can select a file
             displayAlert(title: "Error", message: "Please select a directory")
@@ -564,6 +580,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                 }
                 catch {
                     NSLog("Could not get content of directory \(newDirectory)")
+                    displayAlert(title: "Could not get content of directory \(newDirectory)", message:"")
                     return
                 }
                 notebookBookmark = fileBookmark
@@ -924,7 +941,10 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         }
         // print("Changing directory to \(directoryURL.path)")
         // FileManager().changeCurrentDirectoryPath(directoryURL.path)
-        ios_system("cd '\(directoryURL.path)'")
+        ios_switchSession(jupyterServerSession)
+        chdir("\(directoryURL.path)")
+        newPreviousDirectory()
+        // ios_system("cd '\(directoryURL.path)'")
         // local files.
         if (filePath.hasPrefix("/")) { filePath = String(filePath.dropFirst()) }
         while (serverAddress == nil) {  }
@@ -993,7 +1013,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             distantFile = distantFiles[localDirectory.path]
             let countBefore = localDirectory.pathComponents.count
             while ((distantFile == nil) && (localDirectory.pathComponents.count > 7)) {
-                print("localDirectory: \(localDirectory) components: \(localDirectory.pathComponents.count) ")
+                // print("localDirectory: \(localDirectory) components: \(localDirectory.pathComponents.count) ")
                 // "7" corresponds to: /private/var/mobile/Containers/Data/Application/4AA730AE-A7CF-4A6F-BA65-BD2ADA01F8B4/tmp/
                 // plus or minus "/private"
                 localDirectory = localDirectory.deletingLastPathComponent()
@@ -1050,16 +1070,54 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             if (presentedItemURL != nil) {
                 // save the actual file to its remote directory:
                 replaceFileWithBookmark(securedURL: presentedItemURL, localFile: localFileUrl, localDirectory: localDirectory)
-                // Scanning for changes in local directory (except current file):
-                let key = [URLResourceKey.contentModificationDateKey]
-                if let dirContents = FileManager.default.enumerator(at: localDirectory.resolvingSymlinksInPath(), includingPropertiesForKeys: key) {
-                    // the loop will be empty if it's a file, not a directory.
-                    for case let url as URL in dirContents {
-                        if (url == localFileUrl) { continue } // It's the actual file, we did it already.
-                        // Allow 5 seconds for margin of error (checkpoint files are saved within +/- 1 second)
-                        // print("Copying \(url), age=\(url.contentModificationDate) - \(localFileUrl.contentModificationDate)")
-                        if (url.contentModificationDate + 5 > localFileUrl.contentModificationDate) {
-                            replaceFileWithBookmark(securedURL: presentedItemURL, localFile: url, localDirectory: localDirectory)
+                if (presentedItemURL!.isDirectory) {
+                    // Scanning for changes in local directory (except current file):
+                    let key = [URLResourceKey.contentModificationDateKey]
+                    if let dirContents = FileManager.default.enumerator(at: localDirectory.resolvingSymlinksInPath(), includingPropertiesForKeys: key) {
+                        // the loop will be empty if it's a file, not a directory.
+                        for case let url as URL in dirContents {
+                            if (url == localFileUrl) { continue } // It's the actual file, we did it already.
+                            // Allow 5 seconds for margin of error (checkpoint files are saved within +/- 1 second)
+                            // print("Copying \(url), age=\(url.contentModificationDate) - \(localFileUrl.contentModificationDate)")
+                            if (url.contentModificationDate + 5 > localFileUrl.contentModificationDate) {
+                                replaceFileWithBookmark(securedURL: presentedItemURL, localFile: url, localDirectory: localDirectory)
+                            }
+                        }
+                    }
+                } else {
+                    if (UserDefaults.standard.bool(forKey: "file_access")) {
+                        // If we have a bookmark for a file, and the user has created files locally, warn them:
+                        // (assuming they want to)
+                        let localDirectory = localFileUrl.deletingLastPathComponent()
+                        let key = [URLResourceKey.contentModificationDateKey]
+                        if let dirContents = FileManager.default.enumerator(at: localDirectory.resolvingSymlinksInPath(), includingPropertiesForKeys: key) {
+                            for case let url as URL in dirContents {
+                                if (url == localFileUrl) { continue } // It's the actual file, we did it already.
+                                let newFileName = url.lastPathComponent
+                                if (newFileName.hasPrefix(".")) { continue } // Don't do this with hidden files (because of .ipynb_checkpoints)
+                                var localFileName = url.path
+                                localFileName.removeFirst(localDirectory.path.count)
+                                while (localFileName.hasPrefix("/")) { localFileName.removeFirst() }
+                                if (localFileName.hasPrefix(".")) { continue } // Files inside a hidden directory, also don't do.
+                                // Allow 1 seconds for margin of error
+                                if (url.contentModificationDate + 1 > localFileUrl.contentModificationDate) {
+                                    // We have a new file, modified, that we cannot save. Warn the user:
+                                    // Options: Thanks, Don't tell me again (stored as preference)
+                                    DispatchQueue.main.async {
+                                        // We could not copy the file, warn the user
+                                        let alertController = UIAlertController(title: "The notebook has created another file: \(localFileName)", message: "If you want this file to be saved, you need to grant Carnets access to the enclosing directory (click on the folder button).", preferredStyle: .alert)
+                                        alertController.addAction(UIAlertAction(title: "Don't tell again", style: .default, handler: { (action) in
+                                            UserDefaults.standard.set(false, forKey: "file_access")
+                                        }))
+                                        alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                                        if let presenter = alertController.popoverPresentationController {
+                                            presenter.sourceView = self.view
+                                        }
+                                        self.present(alertController, animated: true, completion: nil)
+                                    }
+                                    break
+                                }
+                            }
                         }
                     }
                 }
@@ -1069,6 +1127,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         }
         catch {
             print(error)
+            displayAlert(title: "No valid bookmark for \(distantFile?.lastPathComponent)", message: "We could not save this file. Try reactivating the bookmark by clicking on the folder button.")
             NSLog("Could not resolve bookmark for \(notebookBookmark!)")
         }
     }
@@ -1193,9 +1252,10 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                 securedURL!.stopAccessingSecurityScopedResource()
             }
             try FileManager().removeItem(at: temporaryDirectory)
-            NSLog("Saved distant file \(distantFilePath!)")
+            NSLog("Saved distant file \(distantFilePath!.path)")
         }
         catch {
+            displayAlert(title: "Error saving file \(localFile)", message: "Could not save file \(localFile) in directory \(securedURL?.deletingLastPathComponent()): \(error).")
             print(error)
             NSLog("Error in replaceFileWithBookmark: distant dir = \(presentedItemURL!) local file = \(localFile) local dir = \(localDirectory)")
         }
@@ -1482,8 +1542,11 @@ extension ViewController: WKUIDelegate {
             fileLocation.removeFirst("/notebooks".count)
             let fileUrl = URL(fileURLWithPath: fileLocation)
             let directoryURL = fileUrl.deletingLastPathComponent()
+            ios_switchSession(jupyterServerSession)
             // set the working directory to the current notebook path:
-            ios_system("cd '\(directoryURL.path)'")
+            chdir("\(directoryURL.path)")
+            newPreviousDirectory()
+            // ios_system("cd '\(directoryURL.path)'")
             // TODO: move to ios_switchSession (required when multiple notebooks are active at the same time)
             presentedItemURL = distantFiles[fileUrl.path] // check wheter it's a distant file
             if (presentedItemURL == nil) { // No direct file-to-file correspondance
@@ -1569,7 +1632,6 @@ extension ViewController: WKUIDelegate {
         
         self.present(alertController, animated: true, completion: nil)
     }
-    
     
     func webView(_ webView: WKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?, initiatedByFrame frame: WKFrameInfo,
                  completionHandler: @escaping (String?) -> Void) {

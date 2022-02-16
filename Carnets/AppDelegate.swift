@@ -12,6 +12,7 @@ import UserNotifications
 import BackgroundTasks
 
 var jupyterServerPid: pid_t = 0
+let jupyterServerSession = "jupyterServerSession"
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -28,7 +29,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // on-demand resources, barrier booleans for synchronization:
     var updateExtensionsRunning = false
     var terminateServerRunning = false
-    let jupyterServerSession = "jupyterServerSession"
     // Which version of the app are we running? Carnets, Carnets mini, Carnets Pro, Carnets Julia...?
     var appVersion: String? {
         // Bundle.main.infoDictionary?["CFBundleDisplayName"] = Carnets
@@ -179,8 +179,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UserDefaults.standard.set(currentBuild, forKey: "buildNumber")
             self.updateExtensionsRunning = false
         }
-        // for debugging:
-        // numPythonInterpreters = 3
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -196,8 +194,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setenv("TZ", TimeZone.current.identifier, 1) // TimeZone information, since "systemsetup -gettimezone" won't work.
         setenv("OPENBLAS_NUM_THREADS", "1", 1) // disable multi-threading OpenBLAS (also set at compile time).
         setenv("PYFFTW_NUM_THREADS", "1", 1) // disable multi-threading with PyFFTW.
+        setenv("OMP_NUM_THREADS", "1", 1) // disable multi-threading with OpenMP
         setenv("JOBLIB_MULTIPROCESSING", "0", 1) // deactivate multiprocessing in joblib:
         setenv("QUTIP_NUM_PROCESSES", "1", 1) // number of processors in qutip
+        // for debugging, or since the number of frameworks appears to be limited:
+        numPythonInterpreters = 4
         // TODO: have more languages
         // Current options are: fr_FR, zh_CN or zh_TW (or english as default)
         let language = UserDefaults.standard.string(forKey: "language_preference")
@@ -244,21 +245,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             ios_system("rm -rf " + libraryURL.path + "/__pycache__/*")
             ios_waitpid(pid)
         }
+        UserDefaults.standard.register(defaults: ["file_access" : true])
         // Main Python install: $APPDIR/Library/lib/python3.x
         let bundleUrl = URL(fileURLWithPath: Bundle.main.resourcePath!).appendingPathComponent("Library")
         setenv("PYTHONHOME", bundleUrl.path.toCString(), 1)
         // Compiled files: ~/Library/__pycache__
         setenv("PYTHONPYCACHEPREFIX", (libraryURL.appendingPathComponent("__pycache__")).path.toCString(), 1)
         setenv("PYTHONUSERBASE", libraryURL.path.toCString(), 1)
+        setenv("PLATFORM", "iphone", 1) // prevents numpy.system_info from calling gcc
         // Detect changes in user defaults:
         NotificationCenter.default.addObserver(self, selector: #selector(self.settingsChanged), name: UserDefaults.didChangeNotification, object: nil)
         // add our own function "openurl"
         replaceCommand("openurl", "openURL_internal", true)
+        replaceCommand("deactivate", "deactivate", true)
         // When it quits normally, the Jupyter server removes these files
         // If it crashes, it doesn't. So we do some cleanup before the start.
+        var pid = ios_fork()
         ios_system("rm -f $HOME/Library/Jupyter/runtime/*.html")
+        ios_waitpid(pid)
+        pid = ios_fork()
         ios_system("rm -f $HOME/Library/Jupyter/runtime/*.json")
+        ios_waitpid(pid)
+        pid = ios_fork()
         ios_system("rm -rf $HOME/tmp/*")
+        ios_waitpid(pid)
         if (versionNumberIncreased()) {
             updateExtensionsIfNeeded()
         }
@@ -273,12 +283,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setenv("MULTIDICT_NO_EXTENSIONS", "1", 1)
         // This one is not required, but it helps:
         setenv("DISABLE_SQLALCHEMY_CEXT", "1", 1)
+        setenv("PYPROJ_GLOBAL_CONTEXT", "ON", 1) // This helps pyproj in cleaning up.
+        let documentsUrl = try! FileManager().url(for: .documentDirectory,
+                                                  in: .userDomainMask,
+                                                  appropriateFor: nil,
+                                                  create: true)
+        let nltkData = documentsUrl.appendingPathComponent("nltk_data")
+        setenv("NLTK_DATA", nltkData.path, 1)
+        let projDir = bundleUrl.appendingPathComponent("share/proj")
+        setenv("PROJ_LIB", projDir.path, 1)
         // Carnets Pro (with scipy) only: specify data location using env var:
         if (appVersion == "Carnets-sci") {
+            // GDAL_DATA?
             let seabornData = libraryURL.appendingPathComponent("seaborn-data")
             setenv("SEABORN_DATA", seabornData.path, 1)
             let sklearnData = libraryURL.appendingPathComponent("scikit_learn_data")
             setenv("SCIKIT_LEARN_DATA", sklearnData.path, 1)
+            let statsmodelsData = libraryURL.appendingPathComponent("statsmodels_data")
+            setenv("STATSMODELS_DATA", statsmodelsData.path, 1)
+            let pysalData = libraryURL.appendingPathComponent("pysal_data")
+            setenv("PYSALDATA", pysalData.path, 1)
         }
         // iCloud abilities:
         // We check whether the user has iCloud ability here, and that the container exists
@@ -335,12 +359,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // start the Jupyter notebook server:
             // (the server will call openURL with the name of the local file)
             self.notebookServerRunning = true
-            ios_switchSession(self.jupyterServerSession)
+            ios_switchSession(jupyterServerSession)
             NSLog("Starting jupyter notebook server")
             joinMainThread = true
             jupyterServerPid = ios_fork()
             let shellCommand = "jupyter-notebook --notebook-dir /"
             ios_system(shellCommand)
+            ios_waitpid(jupyterServerPid)
+            ios_releaseThreadId(jupyterServerPid)
             NSLog("Terminated jupyter notebook server")
             DispatchQueue.main.async {
                 self.notebookServerTerminated()
@@ -603,4 +629,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         return true
     }
+
 }
