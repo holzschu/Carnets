@@ -708,9 +708,213 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         NSFileCoordinator.addFilePresenter(self)
     }
     
+    // Open the file right where it is. It only works if the checkpoints are saved in ~/Documents/.ipynb_checkpoints and not locally.
+    func urlFromFileURLInPlace(fileURL: URL) -> URL {
+        var returnURL = serverAddress
+        if (kernelURL != nil) {
+            returnURL = kernelURL
+        }
+        guard (fileURL.isFileURL) else {
+            return returnURL!
+        }
+        var filePath = fileURL.path
+        if (!insideSandbox(fileURL: fileURL)) {
+            // Non-local file. Activate bookmarks above and open.
+            // first, is that the last file we opened?
+            NSLog("non-local file.")
+            var fileURLToOpen:URL?
+            if (notebookBookmark == nil) {
+                notebookBookmark = UserDefaults.standard.data(forKey: "lastOpenUrlBookmark")
+                if (notebookBookmark != nil) {
+                    var stale = false
+                    do {
+                        let previousURL = try URL(resolvingBookmarkData: notebookBookmark!, bookmarkDataIsStale: &stale)
+                        if (!stale && (previousURL.path == fileURL.path)) {
+                            // They are the same, but the one from the bookmark still has the authorization
+                            fileURLToOpen = previousURL
+                            NSLog("Opening file using lastOpenUrlBookmark.")
+                            bookmarks.updateValue(notebookBookmark!, forKey:fileURLToOpen!.path)
+                        }
+                    } catch {
+                        NSLog("Could not resolve the bookmark to previous URL")
+                        print(error)
+                    }
+                }
+            }
+            if (fileURLToOpen == nil) {
+                // Not the bookmark stored in UserDefaults, maybe in the dictionary?
+                if (bookmarks[fileURL.path] != nil) {
+                    // We've met this one before
+                    print("bookmarked before in bookmarks[fileURL]")
+                    var stale = false
+                    do {
+                        let previousURL = try URL(resolvingBookmarkData: bookmarks[fileURL.path]!, bookmarkDataIsStale: &stale)
+                        if (!stale && (previousURL.path == fileURL.path)) {
+                            // We did this URL before, and still have the bookmark for it
+                            fileURLToOpen = previousURL
+                            notebookBookmark = bookmarks[fileURL.path]
+                            print("Opening file using bookmark from dictionary.")
+                        }
+                    } catch {
+                        NSLog("Could not resolve the bookmark to previous URL")
+                        print(error)
+                    }
+                }
+            }
+            // no existing bookmarks, so we take the URL given:
+            if (fileURLToOpen == nil) {
+                fileURLToOpen = fileURL
+                notebookBookmark = nil  // if we're there, we don't have a bookmark
+            }
+            // Do we have a bookmark for a directory above the file?
+            for (distantDirPath, bookmark) in bookmarks {
+                if (!fileURLToOpen!.path.hasPrefix(distantDirPath)) {
+                    continue
+                }
+                let distantDirURL = URL(fileURLWithPath: distantDirPath)
+                if (!distantDirURL.isDirectory) {
+                    continue
+                }
+                // We have a bookmark for a directory containing this file:
+                print("We have a bookmark for a directory containing this file: \(distantDirPath) is a parent of \(fileURLToOpen)")
+                var stale = false
+                do {
+                    let storedURL = try URL(resolvingBookmarkData: bookmark, bookmarkDataIsStale: &stale)
+                    if (stale) {
+                        continue
+                    }
+                    if (storedURL.path != distantDirPath) {
+                        continue
+                    }
+                    let isSecuredURL = storedURL.startAccessingSecurityScopedResource() == true
+                    // print("startAccessingSecurityScopedResource")
+                    if (!downloadRemoteFile(fileURL: storedURL)) {
+                        if (isSecuredURL) {
+                            storedURL.stopAccessingSecurityScopedResource()
+                        }
+                        continue
+                    }
+                    // We opened this directory before, and still have a valid bookmark for it
+                    print("The bookmark is still valid.")
+                    notebookBookmark = bookmarks[distantDirPath]
+                    // No need to continue searching:
+                    break
+                } catch {
+                    NSLog("Could not resolve the bookmark to previous directory")
+                    print(error)
+                }
+            }
+            if (fileURLToOpen!.isDirectory) {
+                NSFileCoordinator.removeFilePresenter(self)
+                presentedItemURL = fileURLToOpen
+                NSFileCoordinator.addFilePresenter(self)
+            }
+            let isSecuredURL = fileURLToOpen!.startAccessingSecurityScopedResource() == true
+            // print("startAccessingSecurityScopedResource")
+            if (!downloadRemoteFile(fileURL: fileURL)) {
+                if (isSecuredURL) {
+                    fileURLToOpen!.stopAccessingSecurityScopedResource()
+                }
+                // print("stopAccessingSecurityScopedResource")
+                return returnURL!
+            }
+            do {
+                if (notebookBookmark == nil) {
+                    notebookBookmark = try fileURLToOpen!.bookmarkData(options: [],
+                                                                       includingResourceValuesForKeys: nil,
+                                                                       relativeTo: nil)
+                    bookmarks.updateValue(notebookBookmark!, forKey:fileURLToOpen!.path)
+                }
+                UserDefaults.standard.set(notebookBookmark, forKey: "lastOpenUrlBookmark")
+            }
+            catch {
+                NSLog("Failure opening file:")
+                print(error)
+                if (isSecuredURL) {
+                    // print("stopAccessingSecurityScopedResource")
+                    fileURLToOpen!.stopAccessingSecurityScopedResource()
+                }
+                return returnURL!
+            }
+        }
+        // change directory to folder enclosing destination:
+        var directoryURL = URL(fileURLWithPath: filePath)
+        let destinationIsDirectory = directoryURL.isDirectory
+        if (!destinationIsDirectory) {
+            directoryURL = directoryURL.deletingLastPathComponent()
+        }
+        print("Changing directory to \(directoryURL.path)")
+        ios_switchSession(jupyterServerSession)
+        if (chdir("\(directoryURL.path)") == 0) {
+            newPreviousDirectory()
+        } else {
+            // Could not change directory. Let's go to ~/Documents/
+            let documentsUrl = try! FileManager().url(for: .documentDirectory,
+                                                         in: .userDomainMask,
+                                                         appropriateFor: nil,
+                                                         create: true)
+            chdir("\(documentsUrl.path)")
+            newPreviousDirectory()
+        }
+        while (serverAddress == nil) {  }
+        print("Server has started")
+        var fileAddressUrl = serverAddress!
+        // Notebook or python file: open as notebook
+        // Recent Jupyter don't accept Python files as notebooks anymore.
+        if (filePath.hasSuffix(".ipynb") /* || filePath.hasSuffix(".py")*/ ) {
+            fileAddressUrl = fileAddressUrl.appendingPathComponent("notebooks")
+        } else if (destinationIsDirectory) {
+            fileAddressUrl = fileAddressUrl.appendingPathComponent("tree")
+        } else {
+            // We have been requested to open a file. Two actions: "view" or "edit", depending on file type.
+            let suffix = fileURL.pathExtension
+            // HTML files conform to both kUTTypeText and kUTTypeHTML
+            var action = "edit" // default action = edit the file as a text file
+            // Get the UTIs from the system:
+            let rawUtis = UTTypeCreateAllIdentifiersForTag(kUTTagClassFilenameExtension, suffix as CFString, nil)?.takeRetainedValue() as? [String]
+            if (rawUtis != nil) {
+                for rawUti in rawUtis! {
+                    // NSLog("\(suffix) has UTI \(rawUti)")
+                    // TODO: add more file types to the list
+                    if (UTTypeConformsTo(rawUti as CFString, kUTTypeImage)) { action = "direct" ; break;  }
+                    if (UTTypeConformsTo(rawUti as CFString, kUTTypeMovie)) { action = "view" ; break;  }
+                    if (UTTypeConformsTo(rawUti as CFString, kUTTypeAudio)) { action = "view" ; break;  }
+                    if (UTTypeConformsTo(rawUti as CFString, kUTTypeHTML)) { action = "view" ; break; }
+                    if (UTTypeConformsTo(rawUti as CFString, kUTTypeXML)) { action = "view" ; break;  } // discutable
+                    if (UTTypeConformsTo(rawUti as CFString, kUTTypePDF)) { action = "direct" ; break;  } // PDF
+                    if (rawUti.hasPrefix("com.apple.iwork")) { action = "direct" ; break;  } // iWork
+                    if (rawUti.hasPrefix("com.apple.keynote")) { action = "direct" ; break;  } // iWork
+                    if (rawUti.hasPrefix("org.openxmlformats.presentationml")) { action = "direct" ; break;  } // PPT
+                    if (rawUti.hasPrefix("org.openxmlformats.spreadsheetml")) { action = "view" ; break;  } // XLS
+                    if (rawUti.hasPrefix("org.openxmlformats.wordprocessingml")) { action = "view" ; break;  } // Word
+                    if (rawUti == "public.comma-separated-values-text") { action = "view" ; break;  } // CSV
+                    if (rawUti.hasPrefix("com.microsoft.")) { action = "view" ; break;  } // Microsoft Word, Excel, Powerpoint
+                    // if (rawUti.hasPrefix("dyn.age")) { action = "direct" ; break;  } // sQlite db, but also *.out
+                }
+            }
+            if (action == "direct") {
+                // Send the files directly to WKWebView instead of using .../view/...file
+                // (which uses view.html) as PDF files work better this way (and others are indifferent)
+                // CSV, Excel, MS Word + dark mode + direct view = all black (probably a WKWebView issue)
+                fileAddressUrl = URL(fileURLWithPath: "/")
+            } else {
+                // kernelAddress + /edit/ + fileName or kernelAddress + /view/ + fileName
+                fileAddressUrl = fileAddressUrl.appendingPathComponent(action)
+            }
+        }
+        fileAddressUrl = fileAddressUrl.appendingPathComponent(filePath)
+        // Set up the date as the time we loaded the file:
+        lastModificationDate = Date()
+        print("Returning from urlFromFileURL: \(fileAddressUrl) notebookBookmark: \(notebookBookmark)")
+        print("Current directory: \(FileManager().currentDirectoryPath)")
+        return fileAddressUrl
+    }
+    
     // File management:
     // load notebook sent by documentBrowser:
     func urlFromFileURL(fileURL: URL) -> URL {
+        // Experimental version, deactivate before shipping:
+        return urlFromFileURLInPlace(fileURL: fileURL)
         var returnURL = serverAddress
         if (kernelURL != nil) {
             returnURL = kernelURL
@@ -722,7 +926,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         if (!insideSandbox(fileURL: fileURL)) {
             // Non-local file. Copy into ~/tmp/ and open
             // first, is that the last file we opened?
-            print("non-local file.")
+            NSLog("non-local file.")
             var fileURLToOpen:URL?
             var destination:URL?
             if (notebookBookmark == nil) {
@@ -734,7 +938,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
                         if (!stale && (previousURL.path == fileURL.path)) {
                             // They are the same, but the one from the bookmark still has the authorization
                             fileURLToOpen = previousURL
-                            print("Opening file using lastOpenUrlBookmark.")
+                            NSLog("Opening file using lastOpenUrlBookmark.")
                             bookmarks.updateValue(notebookBookmark!, forKey:fileURLToOpen!.path)
                         }
                     } catch {
@@ -1054,7 +1258,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         //
         // This function saves the current notebook and all the files that were modified recently in the directory being accessed.
         // This is the best way to ensure that all files created by the notebook are saved.
-        // print("Entering saveDistantFile: \(kernelURL)")
+        print("Entering saveDistantFile: \(kernelURL), bookmark= \(notebookBookmark)")
         guard (kernelURL != nil) else { return }
         guard (notebookBookmark != nil) else { return }
         if (kernelURL!.path.hasPrefix("/tree")) { return } // If we're displaying a directory, disable this function.
@@ -1544,8 +1748,10 @@ extension ViewController: WKUIDelegate {
             let directoryURL = fileUrl.deletingLastPathComponent()
             ios_switchSession(jupyterServerSession)
             // set the working directory to the current notebook path:
-            chdir("\(directoryURL.path)")
-            newPreviousDirectory()
+            // TODO: change directory, but only if we have the rights on the directory (duh).
+            // Otherwise, change directory to $HOME/Documents/
+            // chdir("\(directoryURL.path)")
+            // newPreviousDirectory()
             // ios_system("cd '\(directoryURL.path)'")
             // TODO: move to ios_switchSession (required when multiple notebooks are active at the same time)
             presentedItemURL = distantFiles[fileUrl.path] // check wheter it's a distant file

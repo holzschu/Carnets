@@ -257,7 +257,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(self.settingsChanged), name: UserDefaults.didChangeNotification, object: nil)
         // add our own function "openurl"
         replaceCommand("openurl", "openURL_internal", true)
-        replaceCommand("deactivate", "deactivate", true)
         // When it quits normally, the Jupyter server removes these files
         // If it crashes, it doesn't. So we do some cleanup before the start.
         var pid = ios_fork()
@@ -487,16 +486,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if (numberOfRunningSessions() > 1) {
                 removeOldestSession()
             } else {
-                // A single session is taking too much memory. Kill it, and show an alert.
+                // A single session is taking too much memory.
+                // For now, we don't kill it, as it creates a lot of other issues
+                // In case, here is the code for showing an alert (the alert showing part doesn't work on iOS 15)
+                // Kill it, and show an alert.
                 // How to kill? If the running operation is the one taking too much memory and continuing, not much we can do.
                 // Kill all processes except server? doesn't work
-                let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-                let documentViewController = storyBoard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
-                documentViewController.displayAlert(title:"Memory Warning", message: "The current session is using too much memory. It will be terminated.")
-                removeOldestSession() // Will terminate the current session if it's not active
+                // let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+                // let documentViewController = storyBoard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
+                // documentViewController.displayAlert(title:"Memory Warning", message: "The current session is using too much memory. It will be terminated.")
+                // removeOldestSession() // Will terminate the current session if it's not active
             }
         } else {
-            completeShutdown()
+            // completeShutdown()
         }
     }
     

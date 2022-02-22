@@ -589,12 +589,12 @@ extension ViewController {
     
     var safariButton: UIBarButtonItem {
         if #available(iOS 13.0, *) {
-            let configuration = UIImage.SymbolConfiguration(pointSize: fontSize, weight: .bold)
+            let configuration = UIImage.SymbolConfiguration(pointSize: fontSize, weight: .regular)
             let forwardButton = UIBarButtonItem(image: UIImage(systemName: "safari")!.withConfiguration(configuration), style: .plain, target: self, action: #selector(openWebPage(_:)))
             forwardButton.tintColor = .systemBlue
             return forwardButton
         } else {
-            let forwardButton = UIBarButtonItem(title: "\u{f267}", style: .plain, target: self, action: #selector(goForwardAction(_:)))
+            let forwardButton = UIBarButtonItem(title: "\u{f267}", style: .plain, target: self, action: #selector(openWebPage(_:)))
             forwardButton.setTitleTextAttributes(
                 [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
                  NSAttributedString.Key.foregroundColor : UIColor.systemBlue,], for: .normal)
@@ -604,12 +604,12 @@ extension ViewController {
     
     var unlockFolderButton: UIBarButtonItem {
         if #available(iOS 13.0, *) {
-            let configuration = UIImage.SymbolConfiguration(pointSize: fontSize, weight: .bold)
+            let configuration = UIImage.SymbolConfiguration(pointSize: fontSize, weight: .regular)
             let forwardButton = UIBarButtonItem(image: UIImage(named: "custom.unlock.folder")!.withConfiguration(configuration), style: .plain, target: self, action: #selector(pickFolder(_:)))
             forwardButton.tintColor = .systemBlue
             return forwardButton
         } else {
-            let forwardButton = UIBarButtonItem(title: "\u{f07c}", style: .plain, target: self, action: #selector(goForwardAction(_:)))
+            let forwardButton = UIBarButtonItem(title: "\u{f07c}", style: .plain, target: self, action: #selector(pickFolder(_:)))
             forwardButton.setTitleTextAttributes(
                 [NSAttributedString.Key.font : UIFont(name: "FontAwesome", size: fontSize)!,
                  NSAttributedString.Key.foregroundColor : UIColor.systemBlue,], for: .normal)
