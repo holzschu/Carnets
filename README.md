@@ -12,6 +12,10 @@ If the link doesn't work, you can also send an [e-mail](mailto:carnets_jupyter@i
 # To build it yourself: 
 - clone the git repository
 - type `./get_frameworks.sh`
+- compile the Python frameworks: 
+    - change into the `cpython` directory: `cd cpython`
+    - `sh ./downloadAndCompile.sh` (this will download auxiliary frameworks, then compile cpython for OSX, iOS and Simulator)
+    - the compile script may need some tuning depending on the version of XCode installed on your machine. 
 - open Xcode, change the developer key, compile and install.
 
 # Known issues / things to do:
